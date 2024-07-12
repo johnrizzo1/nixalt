@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../nix"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../../home/jrizzo/Projects/github/dustinlyons-nixos-config"
+		},
+		{
+			"path": "../../home/jrizzo/Projects/github/jnsgruk-nixos-config"
+		},
+		{
+			"path": "../../home/jrizzo/Projects/github/mitchellh-nixos-config"
+		},
+		{
+			"path": "../../home/jrizzo/Projects/github/ryan4yin-nix-darwin"
+		}
+	]
+}
