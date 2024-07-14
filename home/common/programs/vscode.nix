@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   # for extension updates
   # ./nixpkgs/pkgs/applications/editors/vscode/extensions/update_installed_exts.sh
   programs.vscode = {
@@ -10,7 +8,7 @@
     mutableExtensionsDir = false;
 
     # Extensions
-    extensions = (with pkgs.vscode-extensions; [
+    extensions = with pkgs.vscode-extensions; [
       # Stable
       bierner.emojisense
       bierner.markdown-emoji
@@ -33,7 +31,7 @@
       visualstudioexptteam.vscodeintellicode
       vscodevim.vim
       yzhang.markdown-all-in-one
-    ]);
+    ];
     # TODO Fix this
     # ]) ++ (with pkgs.unstable.vscode-extensions; [
     #   # Unstable

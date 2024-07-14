@@ -7,8 +7,15 @@
   config,
   pkgs,
   modulesPath,
+  user_config,
+  host_config,
   ...
-}: {
+}: let
+  _trusted-users = host_config.coda.nix.settings.trusted-users; # [ "root" "@wheel" "jrizzo" ];
+  _allowedTCPPorts = host_config.coda.networking.firewall.allowedTCPPorts;
+  _allowedUDPPorts = host_config.coda.networking.firewall.allowedUDPPorts;
+  _hostname = host_config.coda.hostname;
+in {
   # You can import other NixOS modules here
   imports = [
     # If you want to use modules your own flake exports (from modules/nixos):
@@ -25,14 +32,14 @@
     ./common/nixos
   ];
 
-  nix.settings.trusted-users = [ "root" "@wheel" "jrizzo" ];
+  nix.settings.trusted-users = _trusted-users;
   nix.settings.extra-experimental-features = "nix-command flakes";
 
   # Enable networking
-  networking.hostName = "coda";
+  networking.hostName = _hostname;
 
-  networking.firewall.allowedTCPPorts = [];
-  networking.firewall.allowedUDPPorts = [];
+  networking.firewall.allowedTCPPorts = _allowedTCPPorts;
+  networking.firewall.allowedUDPPorts = _allowedUDPPorts;
   networking.firewall.enable = true;
 
   networking.networkmanager.enable = true;
@@ -42,13 +49,12 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-
   # Bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
   # Set your time zone.
-  time.timeZone = "America/New_York";
+  time.timeZone = host_config.coda.time.timeZone;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -65,16 +71,7 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  users.users = {
-    jrizzo = {
-      # initialPassword = "wh4t3fr";
-      isNormalUser = true;
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRRWDga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"
-      ];
-      extraGroups = ["networkmanager" "wheel" "docker"];
-    };
-  };
+  users.users.jrizzo = user_config.users.jrizzo;
 
   environment.systemPackages = with pkgs; [
     wget
@@ -83,7 +80,7 @@
     home-manager
     direnv
   ];
-
+  
   # Required for wayland support for vscode
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -138,23 +135,23 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = ["xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = ["kvm-intel"];
+  boot.extraModulePackages = [];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/e0fefbf5-cba9-42b1-8609-c1f9d1de9fae";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/e0fefbf5-cba9-42b1-8609-c1f9d1de9fae";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/EC5E-DF72";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/EC5E-DF72";
+    fsType = "vfat";
+    options = ["fmask=0022" "dmask=0022"];
+  };
 
-  swapDevices = [ ];
+  swapDevices = [];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

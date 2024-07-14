@@ -58,12 +58,38 @@
 
     # Default user settings
     user_config = {
-      username = "jrizzo";
-      useremail = "johnrizzo1@gmail.com";
-      fullname = "John Rizzo";
+      users = {
+        jrizzo = {
+          isNormalUser = true;
+          openssh.authorizedKeys.keys = [
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRRWDga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"
+          ];
+          extraGroups = ["networkmanager" "wheel" "docker"];
+        };
+
+        jrizzo_info = {
+          username = "jrizzo";
+          fullname = "John D. Rizzo";
+          useremail = "johnrizzo1@gmail.com";
+          environment.sessionVariables = {
+            NIXOS_OZONE_WL = "1";
+          };
+          git.default_branch = "main";
+        };
+      };
     };
 
-    defaultSpecialArgs = { inherit inputs outputs user_config; };
+    host_config = {
+      coda = {
+        hostname = "coda";
+        nix.settings.trusted-users = ["root" "@wheel"];
+        networking.firewall.allowedTCPPorts = [22];
+        networking.firewall.allowedUDPPorts = [];
+        time.timeZone = "America/New_York";
+      };
+    };
+
+    defaultSpecialArgs = {inherit inputs outputs user_config host_config;};
   in {
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
@@ -87,30 +113,26 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = let
-      specialArgs = defaultSpecialArgs // { inherit nix-colors; };
+      specialArgs = defaultSpecialArgs // {inherit nix-colors;};
     in {
       coda = nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
-          modules = [
-            # > Our main nixos configuration file <
-            ./host/coda.nix
-          ];
-        };
+        inherit specialArgs;
+        modules = [
+          # > Our main nixos configuration file <
+          ./host/coda.nix
+        ];
+      };
     };
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = let
-      user_config = {
-        username = "jrizzo";
-        fullname = "John D. Rizzo";
-      };
-      specialArgs = defaultSpecialArgs // { inherit user_config nix-colors; };
+      specialArgs = defaultSpecialArgs // {inherit nix-colors;};
+      user = "jrizzo";
     in {
       "jrizzo@coda" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = specialArgs;
-          # specialArgs // { inherit user_config nix-colors; };
+        extraSpecialArgs = specialArgs // {inherit user;};
         modules = [
           ./home/jrizzo.nix
         ];

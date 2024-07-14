@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   # A modern replacement for ‘ls’
   # useful in bash/zsh prompt, not in nushell.
   programs.eza = {

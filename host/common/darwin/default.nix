@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   imports = [];
 
   # List packages installed in system profile. To search by name, run:

@@ -1,8 +1,4 @@
-{
-  lib,
-  user_config,
-  ...
-}: {
+{lib, ...}: {
   # `programs.git` will generate the config file: ~/.config/git/config
   # to make git use this config file, `~/.gitconfig` should not exist!
   #
@@ -15,8 +11,7 @@
     enable = true;
     lfs.enable = true;
 
-    userName = user_config.username;
-    # userEmail = config.useremail;
+    userName = "jrizzo";
     userEmail = "johnrizzo1@gmail.com";
 
     # includes = [
@@ -34,8 +29,8 @@
     };
 
     # signing = {
-    #   key = "xxx";
-    #   signByDefault = true;
+    # key = "xxx";
+    # signByDefault = false;
     # };
 
     delta = {

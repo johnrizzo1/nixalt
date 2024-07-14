@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   # modern vim
   programs.neovim = {
     enable = true;
