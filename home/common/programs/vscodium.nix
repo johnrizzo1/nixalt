@@ -8,6 +8,8 @@
     enableUpdateCheck = false;
     enableExtensionUpdateCheck = false;
     mutableExtensionsDir = false;
+    package = pkgs.vscodium.fhs;
+    # package = pkgs.vscodium.fhsWithPackages (ps: with ps; [ rustup zlib ]);
 
     # Extensions
     extensions = (with pkgs.vscode-extensions; [
@@ -45,6 +47,7 @@
       # General
       "editor.fontSize" = 13;
       "editor.fontFamily" = "'Jetbrains Mono', 'monospace', monospace";
+      "editor.minimap.enabled" = false;
       "terminal.integrated.fontSize" = 13;
       "terminal.integrated.fontFamily" = "'JetBrainsMono Nerd Font', 'monospace', monospace";
       "window.zoomLevel" = 1;

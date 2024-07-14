@@ -19,7 +19,9 @@
 
     # You can also split up your configuration and import pieces of it here:
     ./common
-    ./common/programs/vscode.nix
+    # ./common/programs/vscode.nix
+    ./common/programs/vscodium.nix
+    ./common/programs/obsidian.nix
   ];
 
   # The color scheme for nix-colors
@@ -36,7 +38,9 @@
     # Add stuff for your user as you see fit:
     packages = with pkgs; [
       steam
-      vscode
+      vscodium.fhs
+      # vscode
+      obsidian
       # productivity
       glow # markdown previewer in terminal
       firefox
