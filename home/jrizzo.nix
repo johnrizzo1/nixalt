@@ -38,14 +38,24 @@
     # Add stuff for your user as you see fit:
     packages = with pkgs; [
       steam
-      vscodium.fhs
-      # vscode
       obsidian
       # productivity
       glow # markdown previewer in terminal
       firefox
+
+      #
+      # KDE Packages
       kdePackages.kmail
       kdePackages.kdepim-addons
+
+      #
+      # For vscode and the extensions to work
+      vscodium.fhs # or vscode
+      nodejs_20 # LTS or nodejs_22 Latest
+      nodePackages.yarn
+      nodePackages.vscode-json-languageserver
+      nodePackages.bash-language-server
+      shellcheck
     ];
   };
 }
