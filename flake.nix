@@ -63,7 +63,7 @@
           shell = "zsh";
           isNormalUser = true;
           openssh.authorizedKeys.keys = [
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRRWDga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIvMhfDwNu09O52SU7iftNAypNfPgQ8M8FQewdumQApW"
           ];
           extraGroups = ["networkmanager" "wheel" "docker"];
         };
