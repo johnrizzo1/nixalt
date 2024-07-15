@@ -1,4 +1,6 @@
 {pkgs, ...}: {
+  imports = [./programs/git.nix];
+
   home.packages = with pkgs; [
     nnn # terminal file manager
 
@@ -28,7 +30,20 @@
     gawk
     # zstd
     # caddy
-    # gnupg
+    gnupg
     # neovim
+    # productivity
+    glow # markdown previewer in terminal
+    git
+    _1password
+
+    nodejs_20 # LTS or nodejs_22 Latest
+    nodePackages.yarn
+    nodePackages.vscode-json-languageserver
+    nodePackages.bash-language-server
+    shellcheck
+
+    # ght
+    libnotify
   ];
 }

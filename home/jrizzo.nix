@@ -18,11 +18,10 @@ in {
 
     # Or modules exported from other flakes (such as nix-colors):
     inputs.nix-colors.homeManagerModules.default
+    inputs.catppuccin.homeManagerModules.catppuccin
 
     # You can also split up your configuration and import pieces of it here:
     ./common
-    ./common/programs/vscodium.nix # or vscode.nix
-    ./common/programs/obsidian.nix
   ];
 
   # The color scheme for nix-colors
@@ -34,27 +33,6 @@ in {
     username = _username;
 
     # Add stuff for your user as you see fit:
-    packages = with pkgs; [
-      steam
-      obsidian
-      # productivity
-      glow # markdown previewer in terminal
-      firefox
-      git
-
-      #
-      # KDE Packages
-      kdePackages.kmail
-      kdePackages.kdepim-addons
-
-      #
-      # For vscode and the extensions to work
-      vscodium.fhs # or vscode
-      nodejs_20 # LTS or nodejs_22 Latest
-      nodePackages.yarn
-      nodePackages.vscode-json-languageserver
-      nodePackages.bash-language-server
-      shellcheck
-    ];
+    # packages = with pkgs; [ ];
   };
 }

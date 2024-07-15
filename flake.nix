@@ -29,8 +29,8 @@
     #   inputs.nixpkgs.follows = "nixpkgs-darwin";
     # };
 
+    catppuccin.url = "github:catppuccin/nix";
     nix-colors.url = "github:misterio77/nix-colors";
-
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -60,6 +60,7 @@
     user_config = {
       users = {
         jrizzo = {
+          shell = "zsh";
           isNormalUser = true;
           openssh.authorizedKeys.keys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRRWDga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"

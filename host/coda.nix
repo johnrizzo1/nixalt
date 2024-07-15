@@ -11,7 +11,7 @@
   host_config,
   ...
 }: let
-  _trusted-users = host_config.coda.nix.settings.trusted-users; # [ "root" "@wheel" "jrizzo" ];
+  _trusted-users = host_config.coda.nix.settings.trusted-users;
   _allowedTCPPorts = host_config.coda.networking.firewall.allowedTCPPorts;
   _allowedUDPPorts = host_config.coda.networking.firewall.allowedUDPPorts;
   _hostname = host_config.coda.hostname;
@@ -36,18 +36,20 @@ in {
   nix.settings.extra-experimental-features = "nix-command flakes";
 
   # Enable networking
-  networking.hostName = _hostname;
+  networking = {
+    hostName = _hostname;
+    firewall = {
+      allowedTCPPorts = _allowedTCPPorts;
+      allowedUDPPorts = _allowedUDPPorts;
+      enable = true;
+    };
+    networkmanager.enable = true;
+    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  networking.firewall.allowedTCPPorts = _allowedTCPPorts;
-  networking.firewall.allowedUDPPorts = _allowedUDPPorts;
-  networking.firewall.enable = true;
-
-  networking.networkmanager.enable = true;
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    # Configure network proxy if necessary
+    # proxy.default = "http://user:password@proxy:port/";
+    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  };
 
   # Bluetooth
   hardware.bluetooth.enable = true;
@@ -71,16 +73,18 @@ in {
     LC_TIME = "en_US.UTF-8";
   };
 
-  users.users.jrizzo = user_config.users.jrizzo;
-
+  programs.zsh.enable = true;
+  users.users.jrizzo = user_config.users.jrizzo // {shell = pkgs.zsh;};
+  users.defaultUserShell = pkgs.zsh;
   environment.systemPackages = with pkgs; [
     wget
     vim
     curl
     home-manager
     direnv
+    zsh
   ];
-  
+
   # Required for wayland support for vscode
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 

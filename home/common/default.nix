@@ -9,7 +9,7 @@ in {
   imports = [
     ./core.nix
     ./shell.nix
-    ./programs/git.nix
+    ./desktop.nix
   ];
 
   home = {
