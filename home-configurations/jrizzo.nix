@@ -2,7 +2,6 @@
 # (it replaces ~/.config/nixpkgs/home.nix)
 {
   inputs,
-  outputs,
   lib,
   config,
   pkgs,
@@ -21,7 +20,6 @@ in {
     inputs.catppuccin.homeManagerModules.catppuccin
 
     # You can also split up your configuration and import pieces of it here:
-    ./common
   ];
 
   # The color scheme for nix-colors

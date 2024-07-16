@@ -34,28 +34,28 @@
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-darwin";
+    darwin = {
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
+
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
+    ez-configs.url = "github:ehllie/ez-configs";
+    devenv.url = "github:cachix/devenv";
+    devenv-root = {
+      url = "file+file:///dev/null";
+      flake = false;
+    };
+    nix2container.url = "github:nlewo/nix2container";
+    nix2container.inputs.nixpkgs.follows = "nixpkgs";
+    mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    nix-colors,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    # Supported systems for your flake packages, shell, etc.
-    systems = [
-      "aarch64-linux"
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    # This is a function that generates an attribute by calling a function you
-    # pass to it, with each system as an argument
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-
+  outputs = inputs: let
     # Default user settings
     user_config = {
       users = {
@@ -89,55 +89,92 @@
         time.timeZone = "America/New_York";
       };
     };
+  in
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        inputs.ez-configs.flakeModule
+        inputs.devenv.flakeModule
+      ];
 
-    defaultSpecialArgs = {inherit inputs outputs user_config host_config;};
-  in {
-    # Your custom packages
-    # Accessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      systems = ["x86_64-linux"];
 
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+      ezConfigs = {
+        root = ./.;
+        globalArgs = {inherit inputs user_config host_config;};
 
-    # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs;};
+        home = {
+          # configurationsDirectory = ./home;
+          # modulesDirectory = ./modules;
+          users = {
+            jrizzo = {importDefault = true;};
+            root = {importDefault = false;};
+          };
+        };
 
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
-    nixosModules = import ./modules/host;
+        nixos = {
+          # configurationsDirectory = ./host;
+          # modulesDirectory = ./host;
+          hosts = {
+            # coda = {
+            #   userHomeModules = ["jrizzo"];
+            # };
+          };
+        };
 
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ./modules/home;
+        # darwin.configurationsDirectory = ./host;
+        # darwin.modulesDirectory = ./modules/host/darwin;
+      };
 
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = let
-      specialArgs = defaultSpecialArgs // {inherit nix-colors;};
-    in {
-      coda = nixpkgs.lib.nixosSystem {
-        inherit specialArgs;
-        modules = [
-          # > Our main nixos configuration file <
-          ./host/coda.nix
-        ];
+      perSystem = {
+        config,
+        self',
+        inputs',
+        pkgs,
+        system,
+        ...
+      }: {
+        # Per-system attributes can be defined here. The self' and inputs'
+        # module parameters provide easy access to attributes of the same
+        # system.
+        # _module.args.pkgs = import inputs.nixpkgs {
+        #   inherit system;
+        #   # overlays = [ inputs.sops-nix.overlays.default ];
+        # };
+
+        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
+        packages.default = pkgs.hello;
+        formatter = pkgs.alejandra;
+
+        devenv.shells.default = {
+          devenv.root = let
+            devenvRootFileContent = builtins.readFile inputs.devenv-root.outPath;
+          in
+            pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
+          # devenv.root = ./.;
+
+          name = "my nix config";
+
+          imports = [
+            # This is just like the imports in devenv.nix.
+            # See https://devenv.sh/guides/using-with-flake-parts/#import-a-devenv-module
+            # ./devenv-foo.nix
+          ];
+
+          # https://devenv.sh/reference/options/
+          packages = [config.packages.default];
+
+          enterShell = ''
+            hello
+          '';
+
+          processes.hello.exec = "hello";
+        };
+      };
+
+      flake = {
+        # The usual flake attributes can be defined here, including system-
+        # agnostic ones like nixosModule and system-enumerating ones, although
+        # those are more easily expressed in perSystem.
       };
     };
-
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = let
-      specialArgs = defaultSpecialArgs // {inherit nix-colors;};
-      user = "jrizzo";
-    in {
-      "jrizzo@coda" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = specialArgs // {inherit user;};
-        modules = [
-          ./home/jrizzo.nix
-        ];
-      };
-    };
-  };
 }

@@ -29,7 +29,6 @@ in {
     # ./users.nix
 
     (modulesPath + "/installer/scan/not-detected.nix")
-    ./common/nixos
   ];
 
   nix.settings.trusted-users = _trusted-users;

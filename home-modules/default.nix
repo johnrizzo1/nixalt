@@ -1,15 +1,15 @@
 {
   user_config,
-  user,
   pkgs,
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin;
+  user = "jrizzo"; #TODO Fix this to be generic
 in {
   imports = [
-    ./core.nix
-    ./shell.nix
-    ./desktop.nix
+    ./common/core.nix
+    ./common/shell.nix
+    ./common/desktop.nix #TODO: make this only take effect if needed
   ];
 
   home = {

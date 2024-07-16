@@ -1,5 +1,5 @@
 # This file defines overlays
-{inputs, ...}: {
+{inputs, ...}: let
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs final.pkgs;
 
@@ -20,4 +20,10 @@
       config.allowUnfree = true;
     };
   };
+in {
+  nixpkgs.overlays = [
+    additions
+    modifications
+    unstable-packages
+  ];
 }
