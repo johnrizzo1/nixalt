@@ -82,7 +82,12 @@
 
     host_config = {
       coda = {
-        hostname = "coda";
+        nix.settings.trusted-users = ["root" "@wheel"];
+        networking.firewall.allowedTCPPorts = [22];
+        networking.firewall.allowedUDPPorts = [];
+        time.timeZone = "America/New_York";
+      };
+      irl = {
         nix.settings.trusted-users = ["root" "@wheel"];
         networking.firewall.allowedTCPPorts = [22];
         networking.firewall.allowedUDPPorts = [];
@@ -113,14 +118,26 @@
 
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = let
-      specialArgs = defaultSpecialArgs // {inherit nix-colors;};
-    in {
-      coda = nixpkgs.lib.nixosSystem {
+    nixosConfigurations = {
+      coda = let 
+        hostname = "coda";
+        specialArgs = defaultSpecialArgs // { inherit nix-colors hostname; };
+      in nixpkgs.lib.nixosSystem {
         inherit specialArgs;
         modules = [
           # > Our main nixos configuration file <
           ./host/coda.nix
+        ];
+      };
+
+      irl = let
+        hostname = "irl";
+        specialArgs = defaultSpecialArgs // { inherit nix-colors hostname; };
+      in nixpkgs.lib.nixosSystem {
+        inherit specialArgs;
+        modules = [
+          # > Our main nixos configuration file <
+          ./host/irl.nix
         ];
       };
     };
