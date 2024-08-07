@@ -11,9 +11,7 @@
 
   home = {
     username = "root";
+    stateVersion = "24.05";
     homeDirectory = osConfig.users.users.root.home;
   };
-
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  home.stateVersion = "24.05";
 }

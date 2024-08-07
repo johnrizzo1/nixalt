@@ -8,29 +8,18 @@
   user_config,
   ...
 }: let
-  _username = user_config.users.jrizzo_info.username;
+  inherit (pkgs.stdenv) isDarwin;
 in {
-  # You can import other home-manager modules here
-  imports = [
-    # If you want to use modules your own flake exports (from modules/home-manager):
-    # outputs.homeManagerModules.example
+  home = rec {
+    username = "jrizzo";
+    homeDirectory = 
+      if isDarwin
+      then "/Users/"
+      else "/home/" + username;
+  };
 
-    # Or modules exported from other flakes (such as nix-colors):
-    inputs.nix-colors.homeManagerModules.default
-    inputs.catppuccin.homeManagerModules.catppuccin
-
-    # You can also split up your configuration and import pieces of it here:
-  ];
-
-  # The color scheme for nix-colors
-  colorScheme = inputs.nix-colors.colorSchemes.paraiso;
-
-  nixpkgs.config.allowUnfree = true;
-
-  home = {
-    username = _username;
-
-    # Add stuff for your user as you see fit:
-    # packages = with pkgs; [ ];
+  programs.git = {
+    userName = "John Rizzo";
+    userEmail = "johnrizzo1@gmail.com";
   };
 }

@@ -20,10 +20,26 @@
       config.allowUnfree = true;
     };
   };
-in {
-  nixpkgs.overlays = [
-    additions
-    modifications
-    unstable-packages
-  ];
-}
+
+  stable-packages = final: _prev: {
+    stable = import inputs.nixpkgs-stable {
+      system = final.system;
+      config.allowUnfree = true;
+    };
+  };
+in [
+  additions
+  modifications
+  unstable-packages
+  stable-packages
+  inputs.nix.overlays.default
+]
+
+# {
+  # nixpkgs.overlays = [
+  #   additions
+  #   modifications
+  #   unstable-packages
+  #   stable-packages
+  # ];
+# }

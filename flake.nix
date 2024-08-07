@@ -7,7 +7,7 @@
   nixConfig = {
     substitutors = [
       # Query the mirror of USTC first, and then the official cache.
-      "https://mirrors.ustc.edu.cn/nix-channels/store"
+      # "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://cache.nixos.org"
     ];
   };
@@ -15,25 +15,25 @@
   # Inputs
   # https://nixos.org/manual/nix/unstable/command-ref/new-cli/nix3-flake.html#flake-inputs
   inputs = {
+    # Nix
+    nix.url = "github:NixOS/nix/2.24.1";
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-24.05-darwin";
-
-    # You can access packages and modules from different nixpkgs revs
-    # at the same time. Here's an working example:
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
 
-    # darwin = {
-    #   url = "github:lnl7/nix-darwin";
-    #   inputs.nixpkgs.follows = "nixpkgs-darwin";
-    # };
-
-    catppuccin.url = "github:catppuccin/nix";
-    nix-colors.url = "github:misterio77/nix-colors";
+    catppuccin.url = github:catppuccin/nix;
+    nix-colors.url = github:misterio77/nix-colors;
+    
     # Home manager
-    home-manager.url = "github:nix-community/home-manager/release-24.05";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs-darwin";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
+
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -44,12 +44,22 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
-    ez-configs.url = "github:ehllie/ez-configs";
+    flake-schemas.url = github:DeterminateSystems/flake-schemas/v0.1.5;
+
+    ez-configs = {
+      url = "github:ehllie/ez-configs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+      };
+    };
+
     devenv.url = "github:cachix/devenv";
     devenv-root = {
       url = "file+file:///dev/null";
       flake = false;
     };
+
     nix2container.url = "github:nlewo/nix2container";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
@@ -60,12 +70,13 @@
     user_config = {
       users = {
         jrizzo = {
-          shell = "zsh";
-          isNormalUser = true;
+          # shell = "zsh";
+          # isNormalUser = true;
           openssh.authorizedKeys.keys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIvMhfDwNu09O52SU7iftNAypNfPgQ8M8FQewdumQApW"
           ];
-          extraGroups = ["networkmanager" "wheel" "docker"];
+          # extraGroups = ["@wheel"];
+          # extraGroups = ["networkmanager" "wheel" "docker"];
         };
 
         jrizzo_info = {
@@ -81,8 +92,13 @@
     };
 
     host_config = {
+      tymnet = {
+        hostname = "tymnet";
+        host_platform = "aarch64-darwin";
+      };
       coda = {
         hostname = "coda";
+        host_platform = "x86_64-linux";
         nix.settings.trusted-users = ["root" "@wheel"];
         networking.firewall.allowedTCPPorts = [22];
         networking.firewall.allowedUDPPorts = [];
@@ -96,33 +112,20 @@
         inputs.devenv.flakeModule
       ];
 
-      systems = ["x86_64-linux"];
+      systems = [
+        "aarch64-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
 
       ezConfigs = {
         root = ./.;
         globalArgs = {inherit inputs user_config host_config;};
-
-        home = {
-          # configurationsDirectory = ./home;
-          # modulesDirectory = ./modules;
-          users = {
-            jrizzo = {importDefault = true;};
-            root = {importDefault = false;};
-          };
-        };
-
-        nixos = {
-          # configurationsDirectory = ./host;
-          # modulesDirectory = ./host;
-          hosts = {
-            # coda = {
-            #   userHomeModules = ["jrizzo"];
-            # };
-          };
-        };
-
-        # darwin.configurationsDirectory = ./host;
-        # darwin.modulesDirectory = ./modules/host/darwin;
+        home.users.jrizzo.importDefault = true;
+        home.users.root.importDefault = false;
+        # nixos.hosts.coda.userHomeModules = ["root" "jrizzo"];
+        darwin.hosts.tymnet.userHomeModules = ["jrizzo"];
       };
 
       perSystem = {
@@ -136,13 +139,14 @@
         # Per-system attributes can be defined here. The self' and inputs'
         # module parameters provide easy access to attributes of the same
         # system.
-        # _module.args.pkgs = import inputs.nixpkgs {
-        #   inherit system;
-        #   # overlays = [ inputs.sops-nix.overlays.default ];
-        # };
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit inputs system;
+          overlays = import ./overlays { inherit inputs system; };
+        };
 
         # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
         packages.default = pkgs.hello;
+        
         formatter = pkgs.alejandra;
 
         devenv.shells.default = {
@@ -152,7 +156,7 @@
             pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
           # devenv.root = ./.;
 
-          name = "my nix config";
+          name = "my nix dev shell";
 
           imports = [
             # This is just like the imports in devenv.nix.
@@ -175,6 +179,7 @@
         # The usual flake attributes can be defined here, including system-
         # agnostic ones like nixosModule and system-enumerating ones, although
         # those are more easily expressed in perSystem.
+        schemas = inputs.flake-schemas.schemas;
       };
     };
 }

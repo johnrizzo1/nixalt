@@ -6,7 +6,7 @@
   imports = lib.attrValues {
     inherit
       (ezModules)
-      alacritty
+      # alacritty
       
       builder-ssh
       catppuccin
@@ -22,11 +22,7 @@
       ;
   };
 
-  home = {
-    stateVersion = "24.05";
-  };
-
+  nixpkgs.config = import ../nixpkgs-config.nix;
   xdg.configFile."nixpkgs/config.nix".source = ../nixpkgs-config.nix;
   programs.home-manager.enable = true;
-  systemd.user.startServices = "sd-switch";
 }
