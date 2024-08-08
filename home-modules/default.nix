@@ -10,7 +10,7 @@
       # builder-ssh
       
       catppuccin
-      # neovim
+      neovim
       
       # nushell
       

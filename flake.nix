@@ -67,44 +67,44 @@
 
   outputs = inputs: let
     # Default user settings
-    user_config = {
-      users = {
-        jrizzo = {
-          # shell = "zsh";
-          # isNormalUser = true;
-          openssh.authorizedKeys.keys = [
-            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIvMhfDwNu09O52SU7iftNAypNfPgQ8M8FQewdumQApW"
-          ];
-          # extraGroups = ["@wheel"];
-          # extraGroups = ["networkmanager" "wheel" "docker"];
-        };
+    # user_config = {
+    #   users = {
+    #     jrizzo = {
+    #       # shell = "zsh";
+    #       # isNormalUser = true;
+    #       openssh.authorizedKeys.keys = [
+    #         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIvMhfDwNu09O52SU7iftNAypNfPgQ8M8FQewdumQApW"
+    #       ];
+    #       # extraGroups = ["@wheel"];
+    #       # extraGroups = ["networkmanager" "wheel" "docker"];
+    #     };
 
-        jrizzo_info = {
-          username = "jrizzo";
-          fullname = "John D. Rizzo";
-          useremail = "johnrizzo1@gmail.com";
-          environment.sessionVariables = {
-            NIXOS_OZONE_WL = "1";
-          };
-          git.default_branch = "main";
-        };
-      };
-    };
+    #     jrizzo_info = {
+    #       username = "jrizzo";
+    #       fullname = "John D. Rizzo";
+    #       useremail = "johnrizzo1@gmail.com";
+    #       environment.sessionVariables = {
+    #         NIXOS_OZONE_WL = "1";
+    #       };
+    #       git.default_branch = "main";
+    #     };
+    #   };
+    # };
 
-    host_config = {
-      tymnet = {
-        hostname = "tymnet";
-        host_platform = "aarch64-darwin";
-      };
-      coda = {
-        hostname = "coda";
-        host_platform = "x86_64-linux";
-        nix.settings.trusted-users = ["root" "@wheel"];
-        networking.firewall.allowedTCPPorts = [22];
-        networking.firewall.allowedUDPPorts = [];
-        time.timeZone = "America/New_York";
-      };
-    };
+    # host_config = {
+    #   tymnet = {
+    #     hostname = "tymnet";
+    #     host_platform = "aarch64-darwin";
+    #   };
+    #   coda = {
+    #     hostname = "coda";
+    #     host_platform = "x86_64-linux";
+    #     nix.settings.trusted-users = ["root" "@wheel"];
+    #     networking.firewall.allowedTCPPorts = [22];
+    #     networking.firewall.allowedUDPPorts = [];
+    #     time.timeZone = "America/New_York";
+    #   };
+    # };
   in
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
@@ -121,7 +121,7 @@
 
       ezConfigs = {
         root = ./.;
-        globalArgs = {inherit inputs user_config host_config;};
+        globalArgs = {inherit inputs ;}; # user_config host_config;};
         home.users.jrizzo.importDefault = true;
         home.users.root.importDefault = false;
         # nixos.hosts.coda.userHomeModules = ["root" "jrizzo"];

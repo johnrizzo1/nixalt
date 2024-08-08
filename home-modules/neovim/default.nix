@@ -9,20 +9,20 @@
   inherit (lib) optionals attrValues;
   inherit (config.home) homeDirectory;
 in {
-  xdg.configFile.nvim = {
-    recursive = true;
-    source = pkgs.substituteAllRec {
-      src = ./nvim;
-      nodejs = pkgs.nodejs;
-      prettierToml = prettier-plugin-toml;
-      repoDir = "${homeDirectory}/Projects/nix/nixalt/home-modules/neovim/nvim";
-      inherit (pkgs) gcc;
-      fontsize =
-        if isLinux
-        then 11
-        else 13;
-    };
-  };
+  # xdg.configFile.nvim = {
+  #   recursive = true;
+  #   source = pkgs.substituteAllRec {
+  #     src = ./nvim;
+  #     nodejs = pkgs.nodejs;
+  #     prettierToml = prettier-plugin-toml;
+  #     repoDir = "${homeDirectory}/Projects/nix/nixalt/home-modules/neovim/nvim";
+  #     inherit (pkgs) gcc;
+  #     fontsize =
+  #       if isLinux
+  #       then 11
+  #       else 13;
+  #   };
+  # };
 
   home = {
     packages =

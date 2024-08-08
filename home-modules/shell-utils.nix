@@ -6,27 +6,6 @@
 }: let
   inherit (pkgs.stdenv) isLinux;
   inherit (lib) optionals attrValues;
-  haskellPkgs = ps:
-    attrValues
-    {
-      inherit
-        (ps)
-        cabal-fmt
-        fourmolu
-        haskell-language-server
-        ;
-    }
-    ++ optionals isLinux (attrValues
-      {
-        inherit
-          (ps)
-          xmonad
-          xmonad-contrib
-          xmonad-extras
-          taffybar
-          ;
-      });
-
   pythonPkgs = ps:
     attrValues {
       inherit
@@ -76,7 +55,7 @@ in {
     }
     ++ [
       pkgs.nodePackages.pnpm
-      (pkgs.ghc.withPackages haskellPkgs)
+      # (pkgs.ghc.withPackages haskellPkgs)
       (pkgs.python3.withPackages pythonPkgs)
     ]
     ++ optionals isLinux [
@@ -84,11 +63,11 @@ in {
     ];
 
   programs = {
-    atuin = {
-      enable = true;
-      enableZshIntegration = true;
-      enableNushellIntegration = true;
-    };
+    # atuin = {
+    #   enable = true;
+    #   enableZshIntegration = true;
+    #   enableNushellIntegration = true;
+    # };
 
     carapace = {
       enable = true;
