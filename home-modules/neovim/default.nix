@@ -15,7 +15,7 @@ in {
       src = ./nvim;
       nodejs = pkgs.nodejs;
       prettierToml = prettier-plugin-toml;
-      repoDir = "${homeDirectory}/Code/dotfiles/home-modules/neovim/nvim";
+      repoDir = "${homeDirectory}/Projects/nix/nixalt/home-modules/neovim/nvim";
       inherit (pkgs) gcc;
       fontsize =
         if isLinux
@@ -66,7 +66,9 @@ in {
           bash-language-server
           yaml-language-server
           vscode-langservers-extracted
-          prisma-language-server
+          # prisma-language-server
+          
+          "@prisma/language-server"
           pyright
           volar
           typescript-language-server

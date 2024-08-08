@@ -26,7 +26,7 @@
 
     catppuccin.url = github:catppuccin/nix;
     nix-colors.url = github:misterio77/nix-colors;
-    
+
     # Home manager
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
@@ -141,12 +141,12 @@
         # system.
         _module.args.pkgs = import inputs.nixpkgs {
           inherit inputs system;
-          overlays = import ./overlays { inherit inputs system; };
+          overlays = import ./overlays {inherit inputs system;};
         };
 
         # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
         packages.default = pkgs.hello;
-        
+
         formatter = pkgs.alejandra;
 
         devenv.shells.default = {

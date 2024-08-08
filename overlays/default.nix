@@ -34,12 +34,12 @@ in [
   stable-packages
   inputs.nix.overlays.default
 ]
-
 # {
-  # nixpkgs.overlays = [
-  #   additions
-  #   modifications
-  #   unstable-packages
-  #   stable-packages
-  # ];
+# nixpkgs.overlays = [
+#   additions
+#   modifications
+#   unstable-packages
+#   stable-packages
+# ];
 # }
+

@@ -7,26 +7,25 @@
     inherit
       (ezModules)
       alacritty
+      # builder-ssh
       
-      builder-ssh
       catppuccin
-      neovim
+      # neovim
+      
       # nushell
       
       shell-generic
       shell-utils
       tmux
       xdg
-      yazi
+      # yazi
+      
       zsh
       ;
   };
 
-  home = {
-    stateVersion = "24.05";
-  };
-
-  xdg.configFile."nixpkgs/config.nix".source = ../nixpkgs-config.nix;
+  xdg.configFile."nixpkgs/config.nix".source =
+    ../nixpkgs-config.nix;
   programs.home-manager.enable = true;
   systemd.user.startServices = "sd-switch";
 }

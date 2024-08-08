@@ -3,10 +3,6 @@
   osConfig,
   ...
 }: {
-  # imports = [
-  #   ezModules.builder-ssh
-  # ];
-
   programs.ssh.enable = true;
 
   home = {
