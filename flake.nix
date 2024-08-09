@@ -81,11 +81,11 @@
     ezConfigs = {
       root = ./.;
       darwin.configurationsDirectory = ./hosts/darwin;
-      darwin.modulesDirectory = ./modules/darwin;
+      darwin.modulesDirectory = ./modules;
       home.configurationsDirectory = ./homes;
       home.modulesDirectory = ./modules/home;
       nixos.configurationsDirectory = ./hosts/nixos;
-      nixos.modulesDirectory = ./modules/nixos;
+      nixos.modulesDirectory = ./modules;
 
       globalArgs = {inherit inputs;}; # user_config host_config;};
       home.users.jrizzo.importDefault = true;
