@@ -65,121 +65,105 @@
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
   };
 
-  outputs = inputs: let
-    # Default user settings
-    # user_config = {
-    #   users = {
-    #     jrizzo = {
-    #       # shell = "zsh";
-    #       # isNormalUser = true;
-    #       openssh.authorizedKeys.keys = [
-    #         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIvMhfDwNu09O52SU7iftNAypNfPgQ8M8FQewdumQApW"
-    #       ];
-    #       # extraGroups = ["@wheel"];
-    #       # extraGroups = ["networkmanager" "wheel" "docker"];
-    #     };
+  outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+    imports = [
+      inputs.ez-configs.flakeModule
+      inputs.devenv.flakeModule
+    ];
 
-    #     jrizzo_info = {
-    #       username = "jrizzo";
-    #       fullname = "John D. Rizzo";
-    #       useremail = "johnrizzo1@gmail.com";
-    #       environment.sessionVariables = {
-    #         NIXOS_OZONE_WL = "1";
-    #       };
-    #       git.default_branch = "main";
-    #     };
-    #   };
-    # };
+    systems = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
 
-    # host_config = {
-    #   tymnet = {
-    #     hostname = "tymnet";
-    #     host_platform = "aarch64-darwin";
-    #   };
-    #   coda = {
-    #     hostname = "coda";
-    #     host_platform = "x86_64-linux";
-    #     nix.settings.trusted-users = ["root" "@wheel"];
-    #     networking.firewall.allowedTCPPorts = [22];
-    #     networking.firewall.allowedUDPPorts = [];
-    #     time.timeZone = "America/New_York";
-    #   };
-    # };
-  in
-    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [
-        inputs.ez-configs.flakeModule
-        inputs.devenv.flakeModule
-      ];
+    ezConfigs = {
+      root = ./.;
+      darwin.configurationsDirectory = ./hosts/darwin;
+      darwin.modulesDirectory = ./modules/darwin;
+      home.configurationsDirectory = ./homes;
+      home.modulesDirectory = ./modules/home;
+      nixos.configurationsDirectory = ./hosts/nixos;
+      nixos.modulesDirectory = ./modules/nixos;
 
-      systems = [
-        "aarch64-linux"
-        "x86_64-linux"
-        "aarch64-darwin"
-        "x86_64-darwin"
-      ];
+      globalArgs = {inherit inputs;}; # user_config host_config;};
+      home.users.jrizzo.importDefault = true;
+      home.users.root.importDefault = false;
+      # nixos.hosts.coda.userHomeModules = ["root" "jrizzo"];
+      darwin.hosts.tymnet.userHomeModules = ["jrizzo"];
+    };
 
-      ezConfigs = {
-        root = ./.;
-        globalArgs = {inherit inputs ;}; # user_config host_config;};
-        home.users.jrizzo.importDefault = true;
-        home.users.root.importDefault = false;
-        # nixos.hosts.coda.userHomeModules = ["root" "jrizzo"];
-        darwin.hosts.tymnet.userHomeModules = ["jrizzo"];
+    perSystem = {
+      config,
+      self',
+      inputs',
+      pkgs,
+      system,
+      ...
+    }: {
+      # Per-system attributes can be defined here. The self' and inputs'
+      # module parameters provide easy access to attributes of the same
+      # system.
+      _module.args.pkgs = import inputs.nixpkgs {
+        inherit inputs system;
+        overlays = import ./overlays {inherit inputs system;};
+        config.allowUnfree = true;
+        # hostPlatform = system;
       };
 
-      perSystem = {
-        config,
-        self',
-        inputs',
-        pkgs,
-        system,
-        ...
-      }: {
-        # Per-system attributes can be defined here. The self' and inputs'
-        # module parameters provide easy access to attributes of the same
-        # system.
-        _module.args.pkgs = import inputs.nixpkgs {
-          inherit inputs system;
-          overlays = import ./overlays {inherit inputs system;};
-        };
+      # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
+      packages.default = pkgs.hello;
 
-        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-        packages.default = pkgs.hello;
+      formatter = pkgs.alejandra;
 
-        formatter = pkgs.alejandra;
+      devenv.shells.default = {
+        devenv.root = let
+          devenvRootFileContent = builtins.readFile inputs.devenv-root.outPath;
+        in
+          pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
+        # devenv.root = ./.;
 
-        devenv.shells.default = {
-          devenv.root = let
-            devenvRootFileContent = builtins.readFile inputs.devenv-root.outPath;
-          in
-            pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
-          # devenv.root = ./.;
+        name = "my nix dev shell";
 
-          name = "my nix dev shell";
+        imports = [
+          # This is just like the imports in devenv.nix.
+          # See https://devenv.sh/guides/using-with-flake-parts/#import-a-devenv-module
+          # ./devenv-foo.nix
+        ];
 
-          imports = [
-            # This is just like the imports in devenv.nix.
-            # See https://devenv.sh/guides/using-with-flake-parts/#import-a-devenv-module
-            # ./devenv-foo.nix
-          ];
+        # https://devenv.sh/reference/options/
+        packages = [config.packages.default];
 
-          # https://devenv.sh/reference/options/
-          packages = [config.packages.default];
+        enterShell = ''
+          hello
+        '';
 
-          enterShell = ''
-            hello
-          '';
-
-          processes.hello.exec = "hello";
-        };
-      };
-
-      flake = {
-        # The usual flake attributes can be defined here, including system-
-        # agnostic ones like nixosModule and system-enumerating ones, although
-        # those are more easily expressed in perSystem.
-        schemas = inputs.flake-schemas.schemas;
+        processes.hello.exec = "hello";
       };
     };
+
+    flake = {
+      # The usual flake attributes can be defined here, including system-
+      # agnostic ones like nixosModule and system-enumerating ones, although
+      # those are more easily expressed in perSystem.
+      schemas = inputs.flake-schemas.schemas;
+
+
+      # nix-homebrew = {
+      #   # Install Homebrew under the default prefix
+      #   enable = true;
+      #   # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
+      #   enableRosetta = true;
+      #   # User owning the Homebrew prefix
+      #   user = "jrizzo";
+      #   # Automatically migrate existing Homebrew installations
+      #   autoMigrate = true;
+      #   # Optional: Enable fully-declarative tap management
+      #   #
+      #   # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
+      #   mutableTaps = false;
+      # };
+    };
+  };
 }

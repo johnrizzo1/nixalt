@@ -55,7 +55,6 @@ in {
     }
     ++ [
       pkgs.nodePackages.pnpm
-      # (pkgs.ghc.withPackages haskellPkgs)
       (pkgs.python3.withPackages pythonPkgs)
     ]
     ++ optionals isLinux [
@@ -104,7 +103,7 @@ in {
       };
       signing = {
         key = null;
-        signByDefault = true;
+        signByDefault = false;
       };
     };
 
@@ -138,27 +137,27 @@ in {
     };
   };
 
-  xdg.configFile = {
-    "mypy/config".text = ''
-      [mypy]
-      python_version = 3.10
-      strict = True
-      no_implicit_optional = False
-    '';
-    "lazygit/config.yml".text = ''
-      git:
-        autoFetch: false
-    '';
-    "cabal/config".text = ''
-      repository hackage.haskell.org
-        url: http://hackage.haskell.org/
+  # xdg.configFile = {
+  #   "mypy/config".text = ''
+  #     [mypy]
+  #     python_version = 3.10
+  #     strict = True
+  #     no_implicit_optional = False
+  #   '';
+  #   "lazygit/config.yml".text = ''
+  #     git:
+  #       autoFetch: false
+  #   '';
+  #   "cabal/config".text = ''
+  #     repository hackage.haskell.org
+  #       url: http://hackage.haskell.org/
 
-      remote-repo-cache: ${config.xdg.cacheHome}/cabal/packages
-      extra-prog-path: ${config.xdg.dataHome}/cabal/bin
-      build-summary: ${config.xdg.dataHome}/cabal/logs/build.log
-      remote-build-reporting: none
-      jobs: $ncpus
-      installdir: ${config.xdg.dataHome}/cabal/bin
-    '';
-  };
+  #     remote-repo-cache: ${config.xdg.cacheHome}/cabal/packages
+  #     extra-prog-path: ${config.xdg.dataHome}/cabal/bin
+  #     build-summary: ${config.xdg.dataHome}/cabal/logs/build.log
+  #     remote-build-reporting: none
+  #     jobs: $ncpus
+  #     installdir: ${config.xdg.dataHome}/cabal/bin
+  #   '';
+  # };
 }

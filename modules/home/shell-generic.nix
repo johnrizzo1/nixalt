@@ -38,8 +38,8 @@ in {
       );
 
     sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
+      EDITOR = "vi";
+      VISUAL = "vi";
     };
   };
 

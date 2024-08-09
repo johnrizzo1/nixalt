@@ -29,20 +29,20 @@
       config.allowUnfree = true;
     };
   };
+
+  darwin-packages = final: _prev: {
+    darwin = import inputs.nixpkgs-darwin {
+      system = final.system;
+      config.allowUnfree = true;
+    };
+  };
 in [
   additions
   modifications
   unstable-packages
   stable-packages
+  darwin-packages
   # substitute-all-rec
   inputs.nix.overlays.default
 ]
-# {
-# nixpkgs.overlays = [
-#   additions
-#   modifications
-#   unstable-packages
-#   stable-packages
-# ];
-# }
 

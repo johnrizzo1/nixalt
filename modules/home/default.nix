@@ -11,7 +11,6 @@
       
       catppuccin
       neovim
-      
       # nushell
       
       shell-generic
@@ -24,8 +23,7 @@
       ;
   };
 
-  xdg.configFile."nixpkgs/config.nix".source =
-    ../nixpkgs-config.nix;
+  # xdg.configFile."nixpkgs/config.nix".source = ../../nixpkgs-config.nix;
   programs.home-manager.enable = true;
   systemd.user.startServices = "sd-switch";
 }
