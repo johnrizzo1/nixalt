@@ -4,10 +4,10 @@
   ezModules,
   ...
 }: {
-  imports = lib.attrValues {
-    inherit (ezModules)
-      darwin;
-  };
+  # imports = lib.attrValues {
+  #   inherit (ezModules)
+  #     darwin;
+  # };
 
   users.users.jrizzo.home = 
     if pkgs.stdenv.isDarwin

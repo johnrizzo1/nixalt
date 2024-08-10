@@ -1,6 +1,7 @@
 {
   description = "My multi-os/user, flake-parts, home-manager, darwin, linux";
   # sudo nixos-rebuild switch --flake .#hostname
+  # darwin-rebuild switch --flake .#hostname
   # home-manager switch --flake .#username@hostname
 
   # The settings here only affect the flake itself
@@ -81,11 +82,11 @@
     ezConfigs = {
       root = ./.;
       darwin.configurationsDirectory = ./hosts/darwin;
-      darwin.modulesDirectory = ./modules;
+      darwin.modulesDirectory = ./modules/darwin;
       home.configurationsDirectory = ./homes;
       home.modulesDirectory = ./modules/home;
       nixos.configurationsDirectory = ./hosts/nixos;
-      nixos.modulesDirectory = ./modules;
+      nixos.modulesDirectory = ./modules/nixos;
 
       globalArgs = {inherit inputs;}; # user_config host_config;};
       home.users.jrizzo.importDefault = true;
@@ -117,6 +118,9 @@
 
       formatter = pkgs.alejandra;
 
+      # Set Git commit hash for darwin-version.
+      # system.configurationRevision = self'.rev or self'.dirtyRev or null;
+
       devenv.shells.default = {
         devenv.root = let
           devenvRootFileContent = builtins.readFile inputs.devenv-root.outPath;
@@ -147,8 +151,7 @@
       # The usual flake attributes can be defined here, including system-
       # agnostic ones like nixosModule and system-enumerating ones, although
       # those are more easily expressed in perSystem.
-      schemas = inputs.flake-schemas.schemas;
-
+      schemas = inputs.flake-schemas.schemas;      
 
       # nix-homebrew = {
       #   # Install Homebrew under the default prefix
