@@ -2,7 +2,7 @@
   imports = lib.attrValues {
     inherit (ezModules)
       nixpkgs
-      # nix
+      nix
       # fonts
       packages;
   };
@@ -13,6 +13,7 @@
       zsh
       coreutils
       vim
+      wget
       git
       home-manager
       direnv

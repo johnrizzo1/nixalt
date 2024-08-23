@@ -40,11 +40,11 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim
-    git
-    wget
-  ];
+  # environment.systemPackages = with pkgs; [
+  #   vim
+  #   git
+  #   wget
+  # ];
 
   # Host specific hardware items
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];

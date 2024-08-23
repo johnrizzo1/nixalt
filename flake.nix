@@ -160,22 +160,7 @@
       # The usual flake attributes can be defined here, including system-
       # agnostic ones like nixosModule and system-enumerating ones, although
       # those are more easily expressed in perSystem.
-      schemas = inputs.flake-schemas.schemas;      
-
-      # nix-homebrew = {
-      #   # Install Homebrew under the default prefix
-      #   enable = true;
-      #   # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-      #   enableRosetta = true;
-      #   # User owning the Homebrew prefix
-      #   user = "jrizzo";
-      #   # Automatically migrate existing Homebrew installations
-      #   autoMigrate = true;
-      #   # Optional: Enable fully-declarative tap management
-      #   #
-      #   # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
-      #   mutableTaps = false;
-      # };
+      schemas = inputs.flake-schemas.schemas;
     };
   };
 }
