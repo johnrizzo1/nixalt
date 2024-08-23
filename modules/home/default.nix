@@ -1,29 +1,22 @@
 {
   ezModules,
+  inputs,
   lib,
   ...
 }: {
   imports = lib.attrValues {
     inherit
       (ezModules)
+      # _1password
+      home-manager
+      packages
       alacritty
       # builder-ssh
-      
       catppuccin
-      neovim
-      # nushell
-      
-      shell-generic
-      shell-utils
-      tmux
+      shell
       xdg
-      # yazi
-      
-      zsh
       ;
-  };
+  }; 
 
   # xdg.configFile."nixpkgs/config.nix".source = ../../nixpkgs-config.nix;
-  programs.home-manager.enable = true;
-  systemd.user.startServices = "sd-switch";
 }

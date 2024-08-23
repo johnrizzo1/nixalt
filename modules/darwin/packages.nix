@@ -1,18 +1,14 @@
 { pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     # chromium
+    direnv
+    devenv
+    home-manager
   ];
 
   homebrew = {
     enable = true;
-    
-    taps = [
-      "homebrew/homebrew-core"
-      "homebrew/homebrew-cask"
-    ];
-
     brews = [];
-
     masApps = {
       "1Password for Safari" = 1569813296;
       "Save to Reader" = 1640236961;
@@ -29,31 +25,21 @@
       Kindle = 302584613;
       Xcode = 497799835;
     };
-
     casks = [
       "1password"
       "balenaetcher"
       "bambu-studio"
       "calibre"
-      "google-chrome"
       "discord"
-      "docker"
+      "google-chrome"
       "iterm2"
-      "microsoft-office"
-      "microsoft-teams"
       "nvidia-geforce-now"
-      "obs-advanced-scene-switcher"
-      "obs-ndi"
-      "obs-virtualcam"
       "obs"
-      "obsidian"
-      # "onedrive"
-      "orcaslicer"
+      "obsidian" # Took a long time
+      "orcaslicer" # Took a long time
       "parallels"
-      "quicken"
       "raspberry-pi-imager"
       "raycast"
-      "reader"
       "rectangle"
       "royal-tsx"
       "rustdesk"
@@ -64,20 +50,26 @@
       "synology-drive"
       "tailscale"
       "transmission"
-      # "whatsapp"
       "yubico-yubikey-manager"
       "zoom"
+      # "aircrack-ng" # failed
       # "aldente"
       # "anydesk"
       # "arc"
       # "chatterino"
+      # "docker" # Failed to install
       # "keycastr"
       # "linearmouse"
       # "logitech-g-hub"
       # "maccy"
+      "microsoft-office"
+      # "microsoft-teams"
+      # "onedrive"
       # "prismlauncher"
       # "protonmail-bridge"
       # "protonvpn"
+      # "quicken" # Failed to install
+      # "reader" #failed
       # "rwts-pdfwriter"
       # "soundsource"
       # "spotify"
@@ -85,6 +77,7 @@
       # "teamviewer"
       # "via"
       # "vlc"
+      # "whatsapp"
       # "xiv-on-mac"
       # "yacreader"
       # creality scan
@@ -101,7 +94,6 @@
       # Visual Studio
       # Visual Studio Code
     ];
-
     onActivation.cleanup = "zap";
   };
 }

@@ -4,11 +4,6 @@
   ezModules,
   ...
 }: {
-  # imports = lib.attrValues {
-  #   inherit (ezModules)
-  #     darwin;
-  # };
-
   users.users.jrizzo.home = 
     if pkgs.stdenv.isDarwin
     then "/Users/jrizzo"
@@ -19,6 +14,5 @@
     then "/var/root"
     else "/root";
   
-  # nixpkgs.config.allowUnfree = true;
   nixpkgs.hostPlatform = "aarch64-darwin";
 }

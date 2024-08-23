@@ -12,6 +12,7 @@ in {
     mouse = true;
     newSession = true;
     terminal = "tmux-256color";
+    prefix = "C-a";
 
     extraConfig = ''
       set-option -g status-position top

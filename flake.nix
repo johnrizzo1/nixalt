@@ -2,6 +2,7 @@
   description = "My multi-os/user, flake-parts, home-manager, darwin, linux";
   # sudo nixos-rebuild switch --flake .#hostname
   # darwin-rebuild switch --flake .#hostname
+  # nix run nix-darwin -- switch --flake ~/.config/nix-darwin
   # home-manager switch --flake .#username@hostname
 
   # The settings here only affect the flake itself
@@ -38,6 +39,16 @@
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    # Optional: Declarative tap management
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
     };
 
     flake-parts = {
@@ -110,12 +121,10 @@
         inherit inputs system;
         overlays = import ./overlays {inherit inputs system;};
         config.allowUnfree = true;
-        # hostPlatform = system;
       };
 
-      # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-      packages.default = pkgs.hello;
-
+      # packages = import ./pkgs inputs.nixpkgs.legacyPackages.system;
+      # packages.default = pkgs.hello;
       formatter = pkgs.alejandra;
 
       # Set Git commit hash for darwin-version.
@@ -133,7 +142,7 @@
         imports = [
           # This is just like the imports in devenv.nix.
           # See https://devenv.sh/guides/using-with-flake-parts/#import-a-devenv-module
-          # ./devenv-foo.nix
+          ./devenv.nix
         ];
 
         # https://devenv.sh/reference/options/

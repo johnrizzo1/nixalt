@@ -6,16 +6,13 @@
   ezModules,
   config,
   pkgs,
-  user_config,
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin;
 in {
   imports = lib.attrValues {
-    inherit
-      (ezModules)
-      darwin
-      ;
+    inherit (ezModules)
+      darwin;
   };
 
   home = rec {
@@ -33,9 +30,5 @@ in {
   programs.git = {
     userName = "John Rizzo";
     userEmail = "johnrizzo1@gmail.com";
-  };
-
-  programs.ssh = {
-    enable = true;
   };
 }

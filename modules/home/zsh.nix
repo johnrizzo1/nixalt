@@ -11,13 +11,17 @@
 in {
   programs.zsh = {
     enable = true;
-    defaultKeymap = "viins";
+    defaultKeymap = "viins"; # or viins, emacs, vicmd
     dotDir = ".config/zsh";
     enableCompletion = true;
+    enableVteIntegration = true;
+    autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+    # enableLsColors = true;
 
     history = {
       ignoreSpace = true;
+      ignoreAllDups = true;
       path = "${config.xdg.cacheHome}/zsh/history";
     };
 
@@ -39,9 +43,9 @@ in {
       source ${zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
       source ${zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
-      if [ "$TMUX" = "" ]; then
-        exec tmux a
-      fi
+      # if [ "$TMUX" = "" ]; then
+      #   exec tmux a
+      # fi
     '';
   };
 }

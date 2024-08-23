@@ -35,36 +35,36 @@ in {
       # $HOME/.ghcup
       GHCUP_USE_XDG_DIRS = 1;
 
-      # $HOME/.stack
-      STACK_ROOT = "${dataHome}/stack";
+      # # $HOME/.stack
+      # STACK_ROOT = "${dataHome}/stack";
 
-      # $HOME/.cabal
-      CABAL_CONFIG = "${configHome}/cabal/config";
-      CABAL_DIR = "${dataHome}/cabal";
+      # # $HOME/.cabal
+      # CABAL_CONFIG = "${configHome}/cabal/config";
+      # CABAL_DIR = "${dataHome}/cabal";
 
-      # $HOME/.rustup
-      RUSTUP_HOME = "${dataHome}/rustup";
+      # # $HOME/.rustup
+      # RUSTUP_HOME = "${dataHome}/rustup";
 
-      # $HOME/.cargo
-      CARGO_HOME = "${dataHome}/cargo";
+      # # $HOME/.cargo
+      # CARGO_HOME = "${dataHome}/cargo";
 
       # $HOME/.python_history
       PYTHONSTARTUP = "${configHome}/python/pythonrc.py";
 
-      # $HOME/.npmrc
-      NPM_CONFIG_USERCONFIG = "${configHome}/npm/npmrc";
+      # # $HOME/.npmrc
+      # NPM_CONFIG_USERCONFIG = "${configHome}/npm/npmrc";
 
-      # $HOME/.pnpmrc
-      PNPM_HOME = "${dataHome}/pnpm";
+      # # $HOME/.pnpmrc
+      # PNPM_HOME = "${dataHome}/pnpm";
 
       # $HOME/.lesshst
       LESSHISTFILE = "${cacheHome}/less/history";
 
       # $HOME/.kde4
-      KDEHOME = "${configHome}/kde";
+      # KDEHOME = "${configHome}/kde";
 
       # $HOME/.gtkrc-2.0
-      GTK2_RC_FILES = "${configHome}/gtk-2.0/gtkrc";
+      # GTK2_RC_FILES = "${configHome}/gtk-2.0/gtkrc";
 
       # $HOME/.gnupg
       GNUPGHOME = "${dataHome}/gnupg";
@@ -76,20 +76,44 @@ in {
       INPUTRC = "${configHome}/readline/inputrc";
 
       # $HOME/.azure
-      AZURE_CONFIG_DIR = "${dataHome}/azure";
+      # AZURE_CONFIG_DIR = "${dataHome}/azure";
 
       # $HOME/.aws
-      AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
-      AWS_CONFIG_FILE = "${configHome}/aws/config";
+      # AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
+      # AWS_CONFIG_FILE = "${configHome}/aws/config";
 
       # $HOME/.docker
       DOCKER_CONFIG = "${configHome}/docker";
     };
     shellAliases = {
       # $HOME/.yarnrc
-      yarn = "yarn --use-yarnrc ${configHome}/yarn/config";
+      # yarn = "yarn --use-yarnrc ${configHome}/yarn/config";
       # $HOME/wget-hsts
       wget = "wget - -hsts-file=${dataHome}/wget-hsts";
     };
   };
 }
+
+  # xdg.configFile = {
+  #   "mypy/config".text = ''
+  #     [mypy]
+  #     python_version = 3.10
+  #     strict = True
+  #     no_implicit_optional = False
+  #   '';
+  #   "lazygit/config.yml".text = ''
+  #     git:
+  #       autoFetch: false
+  #   '';
+  #   "cabal/config".text = ''
+  #     repository hackage.haskell.org
+  #       url: http://hackage.haskell.org/
+
+  #     remote-repo-cache: ${config.xdg.cacheHome}/cabal/packages
+  #     extra-prog-path: ${config.xdg.dataHome}/cabal/bin
+  #     build-summary: ${config.xdg.dataHome}/cabal/logs/build.log
+  #     remote-build-reporting: none
+  #     jobs: $ncpus
+  #     installdir: ${config.xdg.dataHome}/cabal/bin
+  #   '';
+  # };

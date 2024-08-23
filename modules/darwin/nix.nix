@@ -27,4 +27,6 @@
       "nixpkgs=${inputs.nixpkgs-darwin}"
     ];
   };
+
+  services.nix-daemon.enable = true;
 }
