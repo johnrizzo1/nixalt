@@ -11,6 +11,7 @@
       ;
   };
 
+  # default host level packages and shell setup
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
   environment = {

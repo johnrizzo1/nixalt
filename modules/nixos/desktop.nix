@@ -1,15 +1,25 @@
 { pkgs, ... }: {
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  # services.xserver.displayManager.gdm.enable = true;
+  # services.xserver.desktopManager.gnome.enable = true;
+  # services.gnome.gnome-remote-desktop.enable = true;
 
-  services.gnome.gnome-remote-desktop.enable = true;
+  # Enable the KDE Desktop Environment
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
-  # Configure keymap in X11
+  # Make QT apps look like dark themed Gnome apps
+  # qt = {
+  #   enable = true;
+  #   platformTheme = "gnome";
+  #   style = "adwaita-dark";
+  # };
+
   services.xserver = {
+    # Enable the X11 windowing system.
+    enable = true; 
+
+    # Configure keymap in X11
     xkb.layout = "us";
     xkb.variant = "";
   };
@@ -39,5 +49,4 @@
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
-
 }
