@@ -8,27 +8,41 @@
 in {
   xdg = {
     enable = true;
-    configFile."python/pythonrc.py".text = ''
-      import atexit
-      import os
-      import readline
+    configFile = {
+      # "nixpkgs/config.nix".source = config;
+      "python/pythonrc.py".text = ''
+        import atexit
+        import os
+        import readline
 
-      history = os.path.join(os.environ["XDG_CACHE_HOME"], "python_history")
-      try:
-          readline.read_history_file(history)
-      except OSError:
-          pass
-
-
-      def write_history():
-          try:
-              readline.write_history_file(history)
-          except OSError:
-              pass
+        history = os.path.join(os.environ["XDG_CACHE_HOME"], "python_history")
+        try:
+            readline.read_history_file(history)
+        except OSError:
+            pass
 
 
-      atexit.register(write_history)
-    '';
+        def write_history():
+            try:
+                readline.write_history_file(history)
+            except OSError:
+                pass
+
+
+        atexit.register(write_history)
+      '';
+      "mypy/config".text = ''
+        [mypy]
+        python_version = 3.10
+        strict = True
+        no_implicit_optional = False
+      '';
+      "lazygit/config.yml".text = ''
+        git:
+          autoFetch: false
+      '';
+  };
+
   };
   home = {
     sessionVariables = {
@@ -61,7 +75,7 @@ in {
       LESSHISTFILE = "${cacheHome}/less/history";
 
       # $HOME/.kde4
-      # KDEHOME = "${configHome}/kde";
+      KDEHOME = "${configHome}/kde";
 
       # $HOME/.gtkrc-2.0
       # GTK2_RC_FILES = "${configHome}/gtk-2.0/gtkrc";
@@ -94,26 +108,4 @@ in {
   };
 }
 
-  # xdg.configFile = {
-  #   "mypy/config".text = ''
-  #     [mypy]
-  #     python_version = 3.10
-  #     strict = True
-  #     no_implicit_optional = False
-  #   '';
-  #   "lazygit/config.yml".text = ''
-  #     git:
-  #       autoFetch: false
-  #   '';
-  #   "cabal/config".text = ''
-  #     repository hackage.haskell.org
-  #       url: http://hackage.haskell.org/
-
-  #     remote-repo-cache: ${config.xdg.cacheHome}/cabal/packages
-  #     extra-prog-path: ${config.xdg.dataHome}/cabal/bin
-  #     build-summary: ${config.xdg.dataHome}/cabal/logs/build.log
-  #     remote-build-reporting: none
-  #     jobs: $ncpus
-  #     installdir: ${config.xdg.dataHome}/cabal/bin
-  #   '';
-  # };
+  

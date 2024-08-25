@@ -4,13 +4,10 @@
 
     settings = {
       allowed-users = ["*"];
-      # auto-optimize-store = false;
       cores = 0;
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;
-      # sanbox-fallback = false;
-      # substitutors = "https://cache.nixos.org";
       system-features = ["nixos-test" "benchmark" "big-parallel" "kvm"];
       trusted-users = ["root" "@wheel"];
       trusted-substituters = ["https://nix-community.cachix.org"];
@@ -22,11 +19,6 @@
     gc = {
       automatic = true;
       options = "--delete-older-than 7d";
-      # interval = {
-      #   Hour = 3;
-      #   Minute = 15;
-      #   Weekday = 6;
-      # };
     };
 
     registry = {
@@ -37,6 +29,4 @@
       "nixpkgs=${inputs.nixpkgs}"
     ];
   };
-
-  # services.nix-daemon.enable = true;
 }

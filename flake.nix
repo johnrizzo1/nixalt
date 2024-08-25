@@ -51,6 +51,11 @@
       flake = false;
     };
 
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -124,7 +129,7 @@
       };
 
       # packages = import ./pkgs inputs.nixpkgs.legacyPackages.system;
-      # packages.default = pkgs.hello;
+      packages.default = pkgs.hello;
       formatter = pkgs.alejandra;
 
       # Set Git commit hash for darwin-version.
@@ -135,24 +140,8 @@
           devenvRootFileContent = builtins.readFile inputs.devenv-root.outPath;
         in
           pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
-        # devenv.root = ./.;
-
         name = "my nix dev shell";
-
-        imports = [
-          # This is just like the imports in devenv.nix.
-          # See https://devenv.sh/guides/using-with-flake-parts/#import-a-devenv-module
-          ./devenv.nix
-        ];
-
-        # https://devenv.sh/reference/options/
         packages = [config.packages.default];
-
-        enterShell = ''
-          hello
-        '';
-
-        processes.hello.exec = "hello";
       };
     };
 

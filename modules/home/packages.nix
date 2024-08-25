@@ -30,6 +30,7 @@ in {
         bottom
         cachix
         # docker
+        direnv
         erdtree
         eza
         gh

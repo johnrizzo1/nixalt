@@ -10,10 +10,10 @@
 }: let
   inherit (pkgs.stdenv) isDarwin;
 in {
-  imports = lib.attrValues {
-    inherit (ezModules)
-      darwin;
-  };
+  # imports = if isDarwin then lib.attrValues {
+  #     inherit (ezModules)
+  #       darwin;
+  #   } else [];
 
   home = rec {
     username = "jrizzo";

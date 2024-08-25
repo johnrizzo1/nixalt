@@ -14,9 +14,9 @@ in {
     inherit (ezModules)
     carapace
     direnv
+    editor
     git
     gpg
-    # neovim
     ssh
     starship
     tmux
@@ -27,7 +27,6 @@ in {
   home = {
     shellAliases =
       {
-        # vim = "nvim";
         # direnv-init = ''echo "use flake" >> .envrc'';
         ".." = "cd ..";
         "..." = "cd ../..";
@@ -39,15 +38,14 @@ in {
         homeSwitch = "home-manager switch --impure --flake '.#${username}@${hostName}'";
       } // (
         if isDarwin
-        then { darwinSwitch = "darwin-rebuild switch --impure --flake '.#${hostName}'"; }
+        then { 
+          darwinSwitch = "darwin-rebuild switch --impure --flake '.#${hostName}'"; }
         else if isLinux
-        then { nixosSwitch = "nixos-rebuild switch --impure --flake '.#${hostName}'"; }
+        then { 
+          nixosSwitch = "nixos-rebuild switch --impure --flake '.#${hostName}'"; }
         else {}
       );
 
-    sessionVariables = {
-      EDITOR = "vi";
-      VISUAL = "vi";
-    };
+    # sessionVariables = { };
   };
 }

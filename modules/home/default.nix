@@ -8,15 +8,14 @@
     inherit
       (ezModules)
       # _1password
-      home-manager
-      packages
       alacritty
       # builder-ssh
       catppuccin
+      editor
+      home-manager
+      packages
       shell
       xdg
       ;
   }; 
-
-  # xdg.configFile."nixpkgs/config.nix".source = ../../nixpkgs-config.nix;
 }
