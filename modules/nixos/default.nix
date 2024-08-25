@@ -5,7 +5,7 @@
       nix
       # fonts
       packages
-      # secureboot
+      secureboot
       ;
   };
 
