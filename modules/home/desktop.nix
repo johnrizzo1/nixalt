@@ -8,6 +8,7 @@
   imports = lib.attrValues {
     inherit (ezModules)
       obs
-      kde;
+      kde; 
+      # Todo move gnome options here and create option to select
   };
 }

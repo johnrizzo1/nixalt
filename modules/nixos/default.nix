@@ -8,6 +8,7 @@
       nixpkgs
       packages
       secureboot
+      ssh
       ;
   };
 
@@ -49,13 +50,6 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-
-
-  #############################################################################
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
 
   system.stateVersion = "24.05";
 }

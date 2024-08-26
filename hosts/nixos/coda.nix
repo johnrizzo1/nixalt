@@ -12,6 +12,7 @@
   networking.hostName = "coda"; # Define your hostname.
 
   hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
   services.printing.enable = true;
   services.colord.enable = true;
   services.hardware.bolt.enable = true;
@@ -42,7 +43,6 @@
       firefox
     ];
   };
-
 
   # This and the import should be in a separate file as it is generated
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
