@@ -4,10 +4,10 @@
 
 { config, lib, pkgs, ezModules, modulesPath, ... }:
 {
-  # imports = lib.attrValues {
-    # inherit (ezModules) virtualization; 
-  # } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports = lib.attrValues {
+    inherit (ezModules) virt;
+  } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  # imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   networking.hostName = "coda"; # Define your hostname.
 
@@ -33,16 +33,6 @@
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "jrizzo";
   services.tailscale.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.jrizzo = {
-    isNormalUser = true;
-    description = "John Rizzo";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      firefox
-    ];
-  };
 
   # This and the import should be in a separate file as it is generated
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];

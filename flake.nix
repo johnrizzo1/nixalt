@@ -102,7 +102,7 @@
       # nixos.hosts.coda.userHomeModules = ["root" "jrizzo"];
       darwin.hosts.tymnet.userHomeModules = ["jrizzo"];
     };
-
+    
     perSystem = {
       config,
       self',
@@ -119,6 +119,14 @@
         overlays = import ./overlays {inherit inputs system;};
         config.allowUnfree = true;
       };
+
+      # options = {
+      # config.variables = pkgs.lib.mkOption {
+      #     type = pkgs.lib.types.attrs;
+      #     default = { 
+      #       tmux = true;
+      #     };
+      #   };
 
       # packages = import ./pkgs inputs.nixpkgs.legacyPackages.system;
       packages.default = pkgs.hello;

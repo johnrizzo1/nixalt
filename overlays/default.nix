@@ -44,6 +44,5 @@ in [
   darwin-packages
   # substitute-all-rec
   inputs.nix.overlays.default
-  inputs.proxmox-nixos.overlays.default
 ]
 

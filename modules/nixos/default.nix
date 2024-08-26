@@ -1,4 +1,4 @@
-{ ezModules, pkgs, inputs, lib, ... }: {
+{ ezModules, pkgs, inputs, lib, config, ... }: {
   imports = lib.attrValues {
     inherit (ezModules)
       desktop
@@ -9,6 +9,7 @@
       packages
       secureboot
       ssh
+      users
       ;
   };
 
