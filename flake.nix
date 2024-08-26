@@ -25,10 +25,8 @@
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-24.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
-
     catppuccin.url = github:catppuccin/nix;
     nix-colors.url = github:misterio77/nix-colors;
-
     # Home manager
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
@@ -49,19 +47,15 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
-
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-
     flake-schemas.url = github:DeterminateSystems/flake-schemas/v0.1.5;
-
     ez-configs = {
       url = "github:ehllie/ez-configs";
       inputs = {
@@ -69,16 +63,15 @@
         flake-parts.follows = "flake-parts";
       };
     };
-
     devenv.url = "github:cachix/devenv";
     devenv-root = {
       url = "file+file:///dev/null";
       flake = false;
     };
-
     nix2container.url = "github:nlewo/nix2container";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
+    proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} {

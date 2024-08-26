@@ -2,12 +2,19 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, ezModules, modulesPath, ... }:
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix") ];
-  
+  # imports = lib.attrValues {
+    # inherit (ezModules) virtualization; 
+  # } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+
   networking.hostName = "coda"; # Define your hostname.
+
+  hardware.bluetooth.enable = true;
+  services.printing.enable = true;
+  services.colord.enable = true;
+  services.hardware.bolt.enable = true;
 
   # gate with test for desktop
   hardware.opengl.enable = true;
@@ -24,6 +31,7 @@
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "jrizzo";
+  services.tailscale.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jrizzo = {
@@ -31,12 +39,10 @@
     description = "John Rizzo";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-    #  thunderbird
       firefox
     ];
   };
 
-  system.stateVersion = "24.05";
 
   # This and the import should be in a separate file as it is generated
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
@@ -50,7 +56,6 @@
     };
 
   boot.initrd.luks.devices."luks-92495b6b-c802-4e9b-a664-7ff01a612079".device = "/dev/disk/by-uuid/92495b6b-c802-4e9b-a664-7ff01a612079";
-
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/E78E-9520";
       fsType = "vfat";
@@ -61,14 +66,5 @@
     [ { device = "/dev/disk/by-uuid/e8421a9d-d432-4a67-b6a9-b872e6644240"; }
     ];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp3s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
-
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
