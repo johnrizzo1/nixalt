@@ -19,6 +19,7 @@
     virt-viewer
     #virtio-win
     #win-spice
+    gnome.gnome-boxes
   ];
   programs.virt-manager.enable = true;
 }
