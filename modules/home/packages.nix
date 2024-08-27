@@ -36,6 +36,7 @@ in {
         gh
         glow
         jq
+        google-chrome
         killall
         pandoc
         unzip

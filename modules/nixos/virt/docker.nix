@@ -1,0 +1,11 @@
+{ pkgs, ... }: {
+  environment.systemPackages = with pkgs; [
+    docker-compose
+  ];
+
+  virtualisation.docker = {
+    enable = true;
+    # enableNvidia = true;
+    enableOnBoot = true;
+  };
+}

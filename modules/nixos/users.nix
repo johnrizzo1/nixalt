@@ -5,14 +5,14 @@ in {
   users.users.jrizzo = {
     isNormalUser = true;
     description = "John Rizzo";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd"];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "lxd"];
     packages = with pkgs; [ ];
-    dconf.settings = {
-      "org/virt-manager/virt-manager/connections" = {
-        autoconnect = [ "qemu:///system" ];
-        uris = [ "qemu:///system" ];
-      };
-    };
+    # dconf.settings = {
+    #   "org/virt-manager/virt-manager/connections" = {
+    #     autoconnect = [ "qemu:///system" ];
+    #     uris = [ "qemu:///system" ];
+    #   };
+    # };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.

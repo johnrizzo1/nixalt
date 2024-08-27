@@ -15,6 +15,8 @@ in {
     #   ;
   # ]; 
 
+  home.packages = with pkgs; [ spacevim ];
+
   programs.vscode = {
     enable = true;
     # package = pkgs.vscodium.fhsWithPackages (ps: with ps; [ rustup zlib ]);
