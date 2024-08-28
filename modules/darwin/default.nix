@@ -1,6 +1,5 @@
 { 
-  ezModules, 
-  pkgs,
+  ezModules,
   lib,
   ...
 } : {
@@ -8,8 +7,8 @@
     inherit (ezModules)
       nix
       nixpkgs
-      fonts
-      packages
+      # fonts
+      # packages
       ;
   };
 }

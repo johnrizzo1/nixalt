@@ -5,19 +5,6 @@
 
   networking.hostName = "irl";
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.root.home =
-    if pkgs.stdenv.isDarwin
-    then "/var/root"
-    else "/root";
-
-  users.users.jrizzo = {
-    isNormalUser = true;
-    description = "John Rizzo";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
-  };
-
   #############################################################################
   # List services that you want to enable:
 

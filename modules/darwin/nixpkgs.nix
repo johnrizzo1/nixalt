@@ -1,7 +1,7 @@
 # { inputs, lib, ... }: {
 { ... }: {
   nixpkgs.config = {
-    allowUnfree = true;
+    allowUnfree = true;    
     # allowUnfreePredicate = 
     #   pkg: builtins.elem (lib.getName pkg) [
     #     "1password-gui"

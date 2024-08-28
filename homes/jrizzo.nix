@@ -17,13 +17,11 @@ in {
 
   home = rec {
     username = "jrizzo";
-    homeDirectory =
-      (
+    homeDirectory = (
         if isDarwin
         then "/Users/"
         else "/home/"
-      )
-      + username;
+      ) + username;
     stateVersion = "24.05";
   };
 
