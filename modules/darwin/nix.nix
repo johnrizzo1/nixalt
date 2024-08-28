@@ -10,7 +10,7 @@
     };
 
     gc = {
-      automatic = true;
+      automatic = false;
       options = "--delete-older-than 7d";
       # interval = {
       #   Hour = 3;
@@ -28,5 +28,5 @@
     ];
   };
 
-  services.nix-daemon.enable = true;
+  # services.nix-daemon.enable = true;
 }
