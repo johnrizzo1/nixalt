@@ -22,13 +22,11 @@ in {
         then "/Users/"
         else "/home/"
       ) + username;
-    # stateVersion = "24.05";
+    stateVersion = "24.05";
   };
 
   programs.git = {
     userName = "John Rizzo";
     userEmail = "johnrizzo1@gmail.com";
   };
-
-  stateVersion = "24.05";
 }
