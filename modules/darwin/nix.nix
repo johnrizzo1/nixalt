@@ -12,11 +12,11 @@
     gc = {
       automatic = true;
       options = "--delete-older-than 7d";
-      interval = {
-        Hour = 3;
-        Minute = 15;
-        Weekday = 6;
-      };
+      # interval = {
+      #   Hour = 3;
+      #   Minute = 15;
+      #   Weekday = 6;
+      # };
     };
 
     registry = {
