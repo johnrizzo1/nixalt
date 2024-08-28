@@ -14,5 +14,26 @@
   services.xserver.displayManager.autoLogin.user = "jrizzo";
   services.tailscale.enable = true;
 
-  nixpkgs.hostPlatform = "aarch64-linux";
+  boot.initrd.availableKernelModules = [ "xhci_pci" "usbhid" "sr_mod" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
+
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/704e04f3-c2b5-414a-af99-b7610cd65f09";
+      fsType = "ext4";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/FF03-7730";
+      fsType = "vfat";
+    };
+
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/13a4f4ba-faa4-4ffe-8453-feaba7900547"; }
+    ];
+
+  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+  hardware.parallels.enable = true;
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "prl-tools" ];
 }
