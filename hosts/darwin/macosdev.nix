@@ -16,5 +16,5 @@
     then "/var/root"
     else "/root";
   
-  nixpkgs.hostPlatform = "aarch64-darwin";
+  nixpkgs.hostPlatform = lib.mkForce "aarch64-darwin";
 }

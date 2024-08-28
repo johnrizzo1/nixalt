@@ -22,7 +22,7 @@ in {
         then "/Users/"
         else "/home/"
       ) + username;
-    stateVersion = "24.05";
+    # stateVersion = "24.05";
   };
 
   programs.git = {
