@@ -4,7 +4,7 @@
   networking.hostName = "nixalot"; # Define your hostname.
   
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "jrizzo";
   services.tailscale.enable = true;
 

@@ -4,7 +4,7 @@
   ezModules,
   ...
 }: {
-  networking.hostName = "tymnet";
+  networking.hostName = "macosdev";
 
   users.users.jrizzo.home = 
     if pkgs.stdenv.isDarwin
