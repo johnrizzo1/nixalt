@@ -29,4 +29,6 @@ in {
     userName = "John Rizzo";
     userEmail = "johnrizzo1@gmail.com";
   };
+
+  stateVersion = "24.05";
 }
