@@ -13,4 +13,6 @@
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "jrizzo";
   services.tailscale.enable = true;
+
+  nixpkgs.hostPlatform = "aarch64-linux";
 }
