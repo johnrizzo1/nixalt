@@ -27,7 +27,7 @@
     [ { device = "/dev/disk/by-uuid/13a4f4ba-faa4-4ffe-8453-feaba7900547"; }
     ];
 
-  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+  nixpkgs.hostPlatform = lib.mkForce "aarch64-linux";
   hardware.parallels.enable = true;
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "prl-tools" ];
 }
