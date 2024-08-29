@@ -96,7 +96,7 @@
       nixos.configurationsDirectory = ./hosts/nixos;
       nixos.modulesDirectory = ./modules/nixos;
 
-      globalArgs = {inherit inputs;}; # user_config host_config;};
+      globalArgs = {inherit inputs;};
       home.users.jrizzo.importDefault = true;
       home.users.root.importDefault = false;
       # nixos.hosts.coda.userHomeModules = ["root" "jrizzo"];
@@ -119,14 +119,6 @@
         overlays = import ./overlays {inherit inputs system;};
         config.allowUnfree = true;
       };
-
-      # options = {
-      # config.variables = pkgs.lib.mkOption {
-      #     type = pkgs.lib.types.attrs;
-      #     default = { 
-      #       tmux = true;
-      #     };
-      #   };
 
       # packages = import ./pkgs inputs.nixpkgs.legacyPackages.system;
       packages.default = pkgs.hello;

@@ -4,12 +4,12 @@
 
 { config, lib, pkgs, ezModules, modulesPath, ... }:
 {
-  # imports = lib.attrValues {
-  #   inherit (ezModules)
-  #     # secureboot
-  #     virt;
-  # } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports = lib.attrValues {
+    inherit (ezModules)
+      secureboot
+      virt;
+  } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  # imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   networking.hostName = "coda"; # Define your hostname.
 
@@ -19,7 +19,7 @@
   services.colord.enable = true;
   services.hardware.bolt.enable = true;
   
-  # services.secureboot.enable = true;
+  services.secureboot.enable = true;
 
   # gate with test for desktop
   hardware.opengl.enable = true;
