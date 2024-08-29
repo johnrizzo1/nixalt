@@ -100,7 +100,7 @@
       home.users.jrizzo.importDefault = true;
       home.users.root.importDefault = false;
       # nixos.hosts.coda.userHomeModules = ["root" "jrizzo"];
-      darwin.hosts.tymnet.userHomeModules = ["jrizzo"];
+      # darwin.hosts.tymnet.userHomeModules = ["jrizzo"];
     };
     
     perSystem = {
@@ -135,14 +135,14 @@
       # Set Git commit hash for darwin-version.
       # system.configurationRevision = self'.rev or self'.dirtyRev or null;
 
-      devenv.shells.default = {
-        devenv.root = let
-          devenvRootFileContent = builtins.readFile inputs.devenv-root.outPath;
-        in
-          pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
-        name = "my nix dev shell";
-        packages = [config.packages.default];
-      };
+      # devenv.shells.default = {
+      #   devenv.root = let
+      #     devenvRootFileContent = builtins.readFile inputs.devenv-root.outPath;
+      #   in
+      #     pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
+      #   name = "my nix dev shell";
+      #   packages = [config.packages.default];
+      # };
     };
 
     flake = {

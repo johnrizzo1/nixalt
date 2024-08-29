@@ -7,10 +7,8 @@
     inherit (ezModules)
       nix
       nixpkgs
-      # fonts
-      # packages
+      fonts
+      packages
       ;
   };
-
-  # home.stateVersion = "24.05";
 }

@@ -7,7 +7,6 @@
       nix
       nixpkgs
       packages
-      secureboot
       ssh
       users
       ;

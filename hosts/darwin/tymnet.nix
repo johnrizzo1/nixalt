@@ -1,7 +1,5 @@
 {
   pkgs,
-  lib,
-  ezModules,
   ...
 }: {
   networking.hostName = "tymnet";

@@ -3,26 +3,16 @@
 {
   inputs,
   lib,
-  ezModules,
   config,
   pkgs,
   ...
-}: let
-  inherit (pkgs.stdenv) isDarwin;
-in {
-  # imports = if isDarwin then lib.attrValues {
-  #     inherit (ezModules)
-  #       darwin;
-  #   } else [];
-
+}: {
   home = rec {
     username = "jrizzo";
-    homeDirectory = (
-        if isDarwin
-        then "/Users/"
-        else "/home/"
-      ) + username;
-    stateVersion = "24.05";
+    homeDirectory =
+      if pkgs.stdenv.isDarwin
+      then "/Users/jrizzo"
+      else "/home/jrizzo";
   };
 
   programs.git = {
