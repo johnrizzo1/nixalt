@@ -12,9 +12,8 @@
 in {
   imports = lib.attrValues {
     inherit (ezModules)
-    carapace
+    # carapace
     direnv
-    editor
     git
     gpg
     ssh

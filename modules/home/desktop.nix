@@ -5,29 +5,32 @@
   pkgs,
   ...
 }: {
-  imports = lib.attrValues {
-    inherit (ezModules)
-      obs
-      kde; 
-      # Todo move gnome options here and create option to select
-  };
-  # ++ lib.optional pkgs.stdenv.isDarwin (lib.attrValues {
-  #  inherit (pkgs)
-  #    orc
-  #    ;
-  #});
+  ###
+  ### TODO
+  ### Convert this to optional modules. so that it is only applied when linux
+  # imports =  [] ++ lib.optional pkgs.stdenv.isLinux
+    # lib.attrValues { # linux
+      # inherit (ezModules)
+        # obs
+  #       kde 
+  #       # Todo move gnome options here and create option to select
+        # ;
+    # };
+  #   } else lib.attrValues { }; # darwin
 
-  home.packages = lib.attrValues {
-    inherit (pkgs)
-      orca-slicer
-      hugo
-      zoom
-      firefox
-      ;
-  };
+  # home.packages = 
+  #   if pkgs.stdenv.isLinux 
+  #   then lib.attrValues {
+  #     inherit (pkgs)
+  #       orca-slicer
+  #       hugo
+  #       zoom
+  #       firefox
+  #       ;
+  #   } else lib.attrValues { };
   
-  # environment.systemPackages = with pkgs; 
-  #   if pkgs.stdenv.isLinux then [
-  #     orca-slicer
-  #   ] else [];
+  # environment.systemPackages =
+  #   if pkgs.stdenv.isLinux
+  #   then [ pkgs.orca-slicer ]
+  #   else [];
 }

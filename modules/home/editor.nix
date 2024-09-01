@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: let
+{ pkgs, lib, inputs, ... }: let
   _extensions = with pkgs.vscode-extensions; [
       arrterian.nix-env-selector
       bbenoist.nix
@@ -15,17 +15,23 @@ in {
     #   ;
   # ]; 
 
+  imports = [ inputs.vscode-server.nixosModules.default ];
+  services.vscode-server.enable = true;
+  
   home.packages = with pkgs; [ spacevim ];
 
   programs.vscode = {
     enable = true;
-    # package = pkgs.vscodium.fhsWithPackages (ps: with ps; [ rustup zlib ]);
-    package = pkgs.vscode.fhsWithPackages (ps: with ps; [ rustup zlib openssl.dev pkg-config ]);
+    # package = pkgs.vscodium.fhsWithPackages (
+    # package = pkgs.vscode.fhsWithPackages (
+      # ps: with ps; [ rustup zlib openssl.dev pkg-config ]
+    # );
+    package = pkgs.vscode;
     extensions = _extensions;
   };
 
   home.shellAliases = {
-    vi = "spacevim";
+    vi = "vim";
     # vim = "nvim";
   };
 

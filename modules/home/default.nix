@@ -8,9 +8,10 @@
     inherit
       (ezModules)
       # _1password
-      alacritty
+      # alacritty
       # builder-ssh
-      catppuccin
+
+      # catppuccin
       editor
       home-manager
       packages
