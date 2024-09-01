@@ -6,6 +6,7 @@
 {
   imports = lib.attrValues {
     inherit (ezModules)
+      hackrf
       secureboot
       virt;
   } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
@@ -20,6 +21,7 @@
   services.hardware.bolt.enable = true;
   
   services.secureboot.enable = true;
+  services.hackrf.enable = true;
 
   # gate with test for desktop
   hardware.opengl.enable = true;

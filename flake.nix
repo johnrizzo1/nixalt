@@ -80,6 +80,7 @@
       inputs.devenv.flakeModule
     ];
 
+    # systems = nixpkgs.lib.systems.flakeExpose;
     systems = [
       "aarch64-linux"
       "x86_64-linux"
@@ -126,15 +127,6 @@
 
       # Set Git commit hash for darwin-version.
       # system.configurationRevision = self'.rev or self'.dirtyRev or null;
-
-      # devenv.shells.default = {
-      #   devenv.root = let
-      #     devenvRootFileContent = builtins.readFile inputs.devenv-root.outPath;
-      #   in
-      #     pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
-      #   name = "my nix dev shell";
-      #   packages = [config.packages.default];
-      # };
     };
 
     flake = {
@@ -142,6 +134,7 @@
       # agnostic ones like nixosModule and system-enumerating ones, although
       # those are more easily expressed in perSystem.
       schemas = inputs.flake-schemas.schemas;
+      devenv.shells.default = import ./devenv.nix;
     };
   };
 }

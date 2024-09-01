@@ -22,6 +22,7 @@
       orca-slicer
       hugo
       zoom
+      firefox
       ;
   };
   
