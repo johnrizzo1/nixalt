@@ -3,7 +3,7 @@
   lib,
   ...
 }: {
-  home.packages = with pkgs; [
+  environment.systemPackages = with pkgs; [
     kdePackages.konsole
     kdePackages.plasma-browser-integration
     # (lib.getBin qttools)

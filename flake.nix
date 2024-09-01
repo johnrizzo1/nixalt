@@ -81,7 +81,7 @@
       inputs.devenv.flakeModule
     ];
 
-    # systems = nixpkgs.lib.systems.flakeExpose;
+    # systems = pkgs.lib.systems.flakeExpose;
     systems = [
       "aarch64-linux"
       "x86_64-linux"

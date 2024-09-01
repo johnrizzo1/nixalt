@@ -17,7 +17,7 @@
       packages
       shell
       xdg
-      desktop
+      obs
       ;
   };
 

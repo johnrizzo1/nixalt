@@ -1,4 +1,11 @@
 { pkgs, ... }: {
+  imports = lib.attrValues {
+    inherit (ezModules)
+      kde
+      # move gnome here
+      ;
+  };
+
   # Enable the GNOME Desktop Environment.
   # services.xserver.displayManager.gdm.enable = true;
   # services.xserver.desktopManager.gnome.enable = true;
