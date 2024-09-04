@@ -35,9 +35,10 @@
       "iterm2"
       "nvidia-geforce-now"
       "obs"
-      "obsidian" # Took a long time
-      "orcaslicer" # Took a long time
+      "obsidian"
+      "orcaslicer"
       "parallels"
+      "pycharm-ce"
       "raspberry-pi-imager"
       "raycast"
       "rectangle"

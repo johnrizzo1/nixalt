@@ -15,4 +15,16 @@
     else "/root";
   
   nixpkgs.hostPlatform = "aarch64-darwin";
+
+  environment.systemPackages = with pkgs; [ hugo git-lfs ];
+
+  homebrew = {
+    casks = [
+      "sketch"
+      "gimp"
+      "krita"
+      "figma"
+      "blender"
+    ];
+  };
 }
