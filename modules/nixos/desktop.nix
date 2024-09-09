@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ezModules, ... }: {
   imports = lib.attrValues {
     inherit (ezModules)
       kde

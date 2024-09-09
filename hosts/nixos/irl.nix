@@ -1,5 +1,9 @@
-{ config, pkgs, lib, ezModules, ... }: {  
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+{ config, pkgs, lib, ezModules, modulesPath, ... }: {  
+  imports = lib.attrValues {
+    inherit (ezModules)
+      secureboot
+      virt;
+  } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
     # Include the results of the hardware scan.
     #   ./virtualization.nix
 
@@ -10,6 +14,30 @@
 
   # Enable the OpenSSH daemon.
   services.tailscale.enable = true;
+
+  services.gitlab = {
+    enable = true;
+    databasePasswordFile = pkgs.writeText "dbPassword" "zgvcyfwsxzcwr85l";
+    initialRootPasswordFile = pkgs.writeText "rootPassword" "dakqdvp4ovhksxer";
+    secrets = {
+      secretFile = pkgs.writeText "secret" "Aig5zaic";
+      otpFile = pkgs.writeText "otpsecret" "Riew9mue";
+      dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
+      jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
+    };
+  };
+
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    virtualHosts = {
+      localhost = {
+        locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+      };
+    };
+  };
+
+  systemd.services.gitlab-backup.environment.BACKUP = "dump";
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
@@ -35,7 +63,7 @@
     ];
 
   networking.interfaces.enp36s0f0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp36s0f1.useDHCP = lib.mkDefault true;
+  networking.interfaces.enp36s0f1.useDHCP = lib.mkDefault true;
   networking.interfaces.wlp38s0.useDHCP = lib.mkDefault true;
 
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
