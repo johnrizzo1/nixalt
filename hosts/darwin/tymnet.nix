@@ -25,6 +25,8 @@
       "krita"
       "figma"
       "blender"
+      "inkscape"
+      "gns3"
     ];
   };
 }
