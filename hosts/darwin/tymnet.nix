@@ -19,10 +19,6 @@
   environment.systemPackages = with pkgs; [ hugo git-lfs ];
 
   homebrew = {
-    brews = [
-      "virt-manager"
-    ];
-
     casks = [
       "sketch"
       "gimp"
