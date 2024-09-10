@@ -2,6 +2,7 @@
   imports = lib.attrValues {
     inherit (ezModules)
       secureboot
+      nix-ld
       virt;
   } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
     # Include the results of the hardware scan.
@@ -12,9 +13,10 @@
   #############################################################################
   # List services that you want to enable:
 
-  # Enable the OpenSSH daemon.
+  # TailScale
   services.tailscale.enable = true;
 
+  # Gitlab
   services.gitlab = {
     enable = true;
     databasePasswordFile = pkgs.writeText "dbPassword" "zgvcyfwsxzcwr85l";
@@ -39,6 +41,7 @@
 
   systemd.services.gitlab-backup.environment.BACKUP = "dump";
 
+  # Enable Secure Boot on this host
   services.secureboot.enable = true;
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];

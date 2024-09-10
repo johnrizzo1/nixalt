@@ -39,6 +39,9 @@ in {
         '';
       }
       {
+        plugin = tmuxPlugins.sensible;
+      }
+      {
         plugin = tmuxPlugins.catppuccin.overrideAttrs (_: {
           version = "unstable-2023-11-01";
           src = pkgs.fetchFromGitHub {
