@@ -17,11 +17,15 @@
         hostname = "coda";
         forwardAgent = true;
       };
+      "irl" = lib.hm.dag.entryBefore ["coda"] {
+        hostname = "irl";
+        forwardAgent = true;
+      };
     };
 
     # startAgent = true;
     controlMaster = "auto";
-    forwardAgent = false;    
+    forwardAgent = false;
     compression = true;
     # extraConfig = "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
     
