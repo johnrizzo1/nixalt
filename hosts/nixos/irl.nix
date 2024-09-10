@@ -3,6 +3,7 @@
     inherit (ezModules)
       secureboot
       nix-ld
+      vscode-server
       virt;
   } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
     # Include the results of the hardware scan.
