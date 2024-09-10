@@ -72,6 +72,7 @@
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
     proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
+
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
