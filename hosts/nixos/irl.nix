@@ -37,7 +37,17 @@
       localhost = {
         locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
       };
+      "irl.technobable.com" = {
+        addSSL = true;
+        enableACME = true;
+        locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+      };
     };
+  };
+
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "johnrizzo1@gmail.com";
   };
 
   systemd.services.gitlab-backup.environment.BACKUP = "dump";
