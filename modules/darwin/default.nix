@@ -9,6 +9,7 @@
       nixpkgs
       fonts
       packages
+      _1password
       ;
   };
 }

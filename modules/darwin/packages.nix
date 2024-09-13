@@ -10,10 +10,8 @@
     enable = true;
     brews = [];
     masApps = {
-      "1Password for Safari" = 1569813296;
       "Save to Reader" = 1640236961;
       "Remote Desktop" = 409907375;
-      Telegram = 747648890;
       OmniGraffle = 1142578753;
       GarageBand = 682658836;
       "DS Manager" = 1435876433;
@@ -26,13 +24,13 @@
       Xcode = 497799835;
     };
     casks = [
-      "1password"
       "balenaetcher"
       "bambu-studio"
       "calibre"
       "discord"
       "google-chrome"
       "iterm2"
+      "jan" # Offline AI Tool like LMStudio
       "nvidia-geforce-now"
       "obs"
       "obsidian"
@@ -42,7 +40,7 @@
       "raspberry-pi-imager"
       "raycast"
       "rectangle"
-      "royal-tsx"
+      # "royal-tsx"
       "rustdesk"
       "signal"
       "slack"

@@ -2,12 +2,12 @@
   ezModules,
   inputs,
   lib,
+  pkgs,
   ...
 }: {
   imports = lib.attrValues {
     inherit
       (ezModules)
-      # _1password
       # alacritty
       # builder-ssh
 
