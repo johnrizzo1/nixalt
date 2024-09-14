@@ -14,7 +14,6 @@ in {
     inherit (ezModules)
     # carapace
     direnv
-    git
     gpg
     ssh
     starship

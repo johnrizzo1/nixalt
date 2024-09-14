@@ -18,6 +18,7 @@
       shell
       xdg
       obs
+      git
       ;
   };
 

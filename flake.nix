@@ -76,6 +76,7 @@
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
+    nix-alien.url = "github:thiagokokada/nix-alien";
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} {

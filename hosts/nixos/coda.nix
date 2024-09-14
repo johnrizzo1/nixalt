@@ -8,11 +8,11 @@
     inherit (ezModules)
       hackrf
       secureboot
+      nix-ld
       virt;
   } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
-  # imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  networking.hostName = "coda"; # Define your hostname.
+  networking.hostName = "coda";
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
@@ -20,7 +20,7 @@
   services.colord.enable = true;
   services.hardware.bolt.enable = true;
   
-  services.secureboot.enable = true;
+  # services.secureboot.enable = true;
   services.hackrf.enable = true;
 
   # gate with test for desktop
@@ -47,20 +47,21 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/6714e7a5-59a5-47e3-a12a-9d1b221e4d32";
+    { device = "/dev/disk/by-uuid/acaad368-bbf3-49ad-bc47-052d84af9a37";
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."luks-92495b6b-c802-4e9b-a664-7ff01a612079".device = "/dev/disk/by-uuid/92495b6b-c802-4e9b-a664-7ff01a612079";
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/E78E-9520";
+    { device = "/dev/disk/by-uuid/5A3A-73B9";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/e8421a9d-d432-4a67-b6a9-b872e6644240"; }
-    ];
+  swapDevices = [ ];
 
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+    boot.loader.systemd-boot.enable = true;
+    boot.loader.efi.canTouchEfiVariables = true;
 }

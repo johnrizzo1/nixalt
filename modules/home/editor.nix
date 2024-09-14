@@ -15,8 +15,8 @@ in {
     #   ;
   # ]; 
 
-  imports = [ inputs.vscode-server.nixosModules.default ];
-  services.vscode-server.enable = true;
+  # imports = [ inputs.vscode-server.nixosModules.default ];
+  # services.vscode-server.enable = true;
   
   home.packages = with pkgs; [ spacevim ];
 

@@ -7,8 +7,15 @@
     (pkgs)
     zsh-nix-shell
     zsh-vi-mode
+    nix-index
     ;
 in {
+  # programs.command-not-found.enable = true;
+  programs.nix-index = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   programs.zsh = {
     enable = true;
     defaultKeymap = "viins"; # or viins, emacs, vicmd
@@ -42,7 +49,7 @@ in {
     initExtra = ''
       source ${zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
       source ${zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
+      # source ${nix-index}/etc/profile.d/command-not-found.sh
       # if [ "$TMUX" = "" ]; then
       #   exec tmux a
       # fi
