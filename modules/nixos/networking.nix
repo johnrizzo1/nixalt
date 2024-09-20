@@ -17,7 +17,7 @@
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 3389 ];
+  networking.firewall.allowedTCPPorts = [ 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall.enable = false;

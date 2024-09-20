@@ -5,11 +5,19 @@
       nix-ld
       vscode-server
       virt;
-  } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
-    # Include the results of the hardware scan.
-    #   ./virtualization.nix
+  } ++ [ 
+    (modulesPath + "/installer/scan/not-detected.nix") 
+  ];
 
   networking.hostName = "irl";
+  #
+  # 80/443 for web traffic
+  # 3080 for gns3
+  # 5432 for postgresql
+  networking.firewall.allowedTCPPorts = [ 80 443 5432 ];
+
+  # Host Specific Applications
+  # environment.systemPackages = with pkgs; [ ];
 
   #############################################################################
   # List services that you want to enable:
@@ -18,39 +26,39 @@
   services.tailscale.enable = true;
 
   # Gitlab
-  services.gitlab = {
-    enable = true;
-    databasePasswordFile = pkgs.writeText "dbPassword" "zgvcyfwsxzcwr85l";
-    initialRootPasswordFile = pkgs.writeText "rootPassword" "dakqdvp4ovhksxer";
-    secrets = {
-      secretFile = pkgs.writeText "secret" "Aig5zaic";
-      otpFile = pkgs.writeText "otpsecret" "Riew9mue";
-      dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
-      jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
-    };
-  };
+  # services.gitlab = {
+  #   enable = true;
+  #   databasePasswordFile = pkgs.writeText "dbPassword" "zgvcyfwsxzcwr85l";
+  #   initialRootPasswordFile = pkgs.writeText "rootPassword" "dakqdvp4ovhksxer";
+  #   secrets = {
+  #     secretFile = pkgs.writeText "secret" "Aig5zaic";
+  #     otpFile = pkgs.writeText "otpsecret" "Riew9mue";
+  #     dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
+  #     jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
+  #   };
+  # };
 
-  services.nginx = {
-    enable = true;
-    recommendedProxySettings = true;
-    virtualHosts = {
-      localhost = {
-        locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
-      };
-      "irl.technobable.com" = {
-        addSSL = true;
-        enableACME = true;
-        locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
-      };
-    };
-  };
+  # services.nginx = {
+  #   enable = true;
+  #   recommendedProxySettings = true;
+  #   virtualHosts = {
+  #     localhost = {
+  #       locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+  #     };
+  #     "irl.technobable.com" = {
+  #       addSSL = true;
+  #       enableACME = true;
+  #       locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+  #     };
+  #   };
+  # };
 
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "johnrizzo1@gmail.com";
-  };
+  # security.acme = {
+  #   acceptTerms = true;
+  #   defaults.email = "johnrizzo1@gmail.com";
+  # };
 
-  systemd.services.gitlab-backup.environment.BACKUP = "dump";
+  # systemd.services.gitlab-backup.environment.BACKUP = "dump";
 
   # Enable Secure Boot on this host
   services.secureboot.enable = true;

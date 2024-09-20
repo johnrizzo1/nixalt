@@ -7,16 +7,10 @@
       jnoortheen.nix-ide
       vscodevim.vim
       yzhang.markdown-all-in-one
-  ]; # ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [ ];
+  ];
 in {
-  # imports = lib.attrValues [
-    # inherit (ezModules)
-    #   neovim
-    #   ;
-  # ]; 
-
-  # imports = [ inputs.vscode-server.nixosModules.default ];
-  # services.vscode-server.enable = true;
+  imports = [ inputs.vscode-server.nixosModules.default ];
+  services.vscode-server.enable = true;
   
   home.packages = with pkgs; [ spacevim ];
 
