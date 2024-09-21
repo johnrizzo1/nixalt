@@ -17,9 +17,10 @@
     spice-gtk
     spice-protocol
     virt-viewer
+    virt-manager
     #virtio-win
     #win-spice
-    gnome.gnome-boxes
+    gnome-boxes
   ];
   programs.virt-manager.enable = true;
 }
