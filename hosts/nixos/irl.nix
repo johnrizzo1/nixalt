@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ezModules, modulesPath, ... }: {  
+{ config, pkgs, lib, ezModules, modulesPath, inputs, ... }: {  
   imports = lib.attrValues {
     inherit (ezModules)
       secureboot
@@ -7,6 +7,7 @@
       virt;
   } ++ [ 
     (modulesPath + "/installer/scan/not-detected.nix") 
+    inputs.nix-bitcoin.nixosModules.default
   ];
 
   networking.hostName = "irl";
@@ -14,10 +15,12 @@
   # 80/443 for web traffic
   # 3080 for gns3
   # 5432 for postgresql
-  networking.firewall.allowedTCPPorts = [ 80 443 5432 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 5432 8335 8334 8332 9735 4224 ];
 
   # Host Specific Applications
-  # environment.systemPackages = with pkgs; [ ];
+  environment.systemPackages = with pkgs; [ 
+    nixos-generators # various image generators
+  ];
 
   #############################################################################
   # List services that you want to enable:
@@ -59,6 +62,45 @@
   # };
 
   # systemd.services.gitlab-backup.environment.BACKUP = "dump";
+
+  # Bitcoin
+  # Automatically generate all secrets required by services.
+  # The secrets are stored in /etc/nix-bitcoin-secrets
+  nix-bitcoin.generateSecrets = true;
+
+  # Enable some services.
+  # See ../configuration.nix for all available features.
+  services.bitcoind.enable = true;
+  services.clightning.enable = true;
+  services.mempool.enable = true;
+
+  # When using nix-bitcoin as part of a larger NixOS configuration, set the following to enable
+  # interactive access to nix-bitcoin features (like bitcoin-cli) for your system's main user
+  nix-bitcoin.operator = {
+    enable = true;
+    name = "jrizzo";
+  };
+
+  nix-bitcoin.nodeinfo.enable = true;
+
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    virtualHosts = {
+      localhost = {
+        locations."/".proxyPass = "http://127.0.0.1:60845";
+      };
+    };
+  };
+
+  # If you use a custom nixpkgs version for evaluating your system
+  # (instead of `nix-bitcoin.inputs.nixpkgs` like in this example),
+  # consider setting `useVersionLockedPkgs = true` to use the exact pkgs
+  # versions for nix-bitcoin services that are tested by nix-bitcoin.
+  # The downsides are increased evaluation times and increased system
+  # closure size.
+  #
+  # nix-bitcoin.useVersionLockedPkgs = true;
 
   # Enable Secure Boot on this host
   services.secureboot.enable = true;

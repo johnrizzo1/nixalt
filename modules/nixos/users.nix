@@ -5,7 +5,7 @@ in {
   users.users.jrizzo = {
     isNormalUser = true;
     description = "John Rizzo";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "lxd"];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "lxd" "incus-admin"];
     packages = with pkgs; [ ];
     # dconf.settings = {
     #   "org/virt-manager/virt-manager/connections" = {

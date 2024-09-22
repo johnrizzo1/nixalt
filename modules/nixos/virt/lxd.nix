@@ -1,6 +1,9 @@
 { ... }: {
+  virtualisation.incus.enable = true;
+
   virtualisation.lxd = {
     enable = true;
+    agent.enable = true;
     ui.enable = true;
     recommendedSysctlSettings = true;
   };
