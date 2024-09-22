@@ -10,7 +10,10 @@
       secureboot
       nix-ld
       virt;
-  } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  } ++ [ 
+    /etc/nixos/hardware-configuration.nix
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   networking.hostName = "coda";
 
@@ -40,6 +43,14 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
+  # Enable the XFCE Desktop Environment.
+  # services.xserver.displayManager.lightdm.enable = true;
+  # services.xserver.desktopManager.xfce.enable = true;
+
+  # Enable the KDE Desktop Environment.
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
+
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "jrizzo";
@@ -51,18 +62,18 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/acaad368-bbf3-49ad-bc47-052d84af9a37";
-      fsType = "ext4";
-    };
+  # fileSystems."/" =
+  #   { device = "/dev/disk/by-uuid/acaad368-bbf3-49ad-bc47-052d84af9a37";
+  #     fsType = "ext4";
+  #   };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/5A3A-73B9";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  # fileSystems."/boot" =
+  #   { device = "/dev/disk/by-uuid/5A3A-73B9";
+  #     fsType = "vfat";
+  #     options = [ "fmask=0022" "dmask=0022" ];
+  #   };
 
-  swapDevices = [ ];
+  # swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

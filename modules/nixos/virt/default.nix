@@ -1,13 +1,13 @@
 { pkgs, ... }: {
-  # imports = [
+  imports = [
     # ./libvirt.nix
     # ./lxd.nix
     #./podman.nix
-    # ./docker.nix
+    ./docker.nix
     # ./incus.nix
-    # ./gns3.nix
+    ./gns3.nix
     # ./proxmox.nix
-  # ];
+  ];
 
   environment.systemPackages = with pkgs; [
     bridge-utils
@@ -22,16 +22,16 @@
   ];
 
   virtualisation = {
-    # libvirtd = {
-    #   enable = true;
-    #   qemu = {
-    #     package = pkgs.qemu_kvm;
-    #     swtpm.enable = true;
-    #     ovmf.enable = true;
-    #     ovmf.packages = [ pkgs.OVMFFull.fd ];
-    #   };
-    # };
-    # spiceUSBRedirection.enable = true;
+    libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        swtpm.enable = true;
+        ovmf.enable = true;
+        ovmf.packages = [ pkgs.OVMFFull.fd ];
+      };
+    };
+    spiceUSBRedirection.enable = true;
     # lxd = {
     #   enable = true;
     #   ui.enable = true;
