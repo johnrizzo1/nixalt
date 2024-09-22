@@ -20,16 +20,16 @@
     # Nix
     nix.url = "github:NixOS/nix/2.24.1";
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-24.05-darwin";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
     catppuccin.url = github:catppuccin/nix;
     nix-colors.url = github:misterio77/nix-colors;
     # Home manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
       # inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
@@ -38,7 +38,6 @@
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
-    # Optional: Declarative tap management
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;
@@ -77,9 +76,12 @@
     nix-ld.url = "github:Mic92/nix-ld";
     nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
-
     # bitcoin
     nix-bitcoin.url = "github:fort-nix/nix-bitcoin/release";
+    nixvirt = {
+      url = "https://flakehub.com/f/AshleyYakeley/NixVirt/*.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} {
@@ -129,7 +131,6 @@
         config.allowUnfree = true;
       };
 
-      # packages = import ./pkgs inputs.nixpkgs.legacyPackages.system;
       packages.default = pkgs.hello;
       formatter = pkgs.alejandra;
 
