@@ -2,13 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, ezModules, modulesPath, ... }:
+{ config, lib, pkgs, ezModules, modulesPath, inputs, ... }:
 {
   imports = lib.attrValues {
     inherit (ezModules)
       hackrf
       secureboot
       nix-ld
+      # crypto
+      desktop
       virt;
   } ++ [ 
     /etc/nixos/hardware-configuration.nix
@@ -42,14 +44,6 @@
     nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-
-  # Enable the XFCE Desktop Environment.
-  # services.xserver.displayManager.lightdm.enable = true;
-  # services.xserver.desktopManager.xfce.enable = true;
-
-  # Enable the KDE Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;

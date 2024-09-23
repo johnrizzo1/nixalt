@@ -1,8 +1,8 @@
 { pkgs, lib, ezModules, ... }: {
   imports = lib.attrValues {
     inherit (ezModules)
+      fonts
       kde
-      # move gnome here
       ;
   };
 
@@ -11,18 +11,16 @@
   # services.xserver.desktopManager.gnome.enable = true;
   # services.gnome.gnome-remote-desktop.enable = true;
 
-  # Enable the KDE Desktop Environment
-  # services.displayManager.sddm.enable = true;
-  # services.displayManager.sddm.wayland.enable = true;
-  # services.desktopManager.plasma6.enable = true;
-  # services.desktopManager.plasma6.enableQt5Integration = true;
-  
   # Make QT apps look like dark themed Gnome apps
   # qt = {
   #   enable = true;
   #   platformTheme = "gnome";
   #   style = "adwaita-dark";
   # };
+
+  # Enable the XFCE Desktop Environment.
+  # services.xserver.displayManager.lightdm.enable = true;
+  # services.xserver.desktopManager.xfce.enable = true;
 
   services.xserver = {
     # Enable the X11 windowing system.

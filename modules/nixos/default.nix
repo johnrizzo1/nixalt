@@ -1,8 +1,6 @@
 { ezModules, pkgs, inputs, lib, config, ... }: {
   imports = lib.attrValues {
     inherit (ezModules)
-      desktop
-      # fonts
       networking
       nix
       nixpkgs
