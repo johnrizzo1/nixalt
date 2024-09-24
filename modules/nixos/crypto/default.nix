@@ -1,7 +1,7 @@
 { config, lib, ... }: {
   imports = [
     inputs.nix-bitcoin.nixosModules.default
-  ]
+  ];
   # Bitcoin
   # Automatically generate all secrets required by services.
   # The secrets are stored in /etc/nix-bitcoin-secrets
