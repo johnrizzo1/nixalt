@@ -23,4 +23,11 @@
     # kdePackages.kwallet-pam
     merkuro
   ];
+
+
+  # Enable the KDE Desktop Environment
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6.enableQt5Integration = true;
 }

@@ -29,7 +29,7 @@ in {
         bat
         bottom
         cachix
-        # docker
+        comma
         direnv
         erdtree
         eza

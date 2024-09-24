@@ -2,15 +2,20 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, ezModules, modulesPath, ... }:
+{ config, lib, pkgs, ezModules, modulesPath, inputs, ... }:
 {
   imports = lib.attrValues {
     inherit (ezModules)
       hackrf
       secureboot
       nix-ld
+      # crypto
+      desktop
       virt;
-  } ++ [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  } ++ [ 
+    /etc/nixos/hardware-configuration.nix
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   networking.hostName = "coda";
 
@@ -51,18 +56,18 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/acaad368-bbf3-49ad-bc47-052d84af9a37";
-      fsType = "ext4";
-    };
+  # fileSystems."/" =
+  #   { device = "/dev/disk/by-uuid/acaad368-bbf3-49ad-bc47-052d84af9a37";
+  #     fsType = "ext4";
+  #   };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/5A3A-73B9";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  # fileSystems."/boot" =
+  #   { device = "/dev/disk/by-uuid/5A3A-73B9";
+  #     fsType = "vfat";
+  #     options = [ "fmask=0022" "dmask=0022" ];
+  #   };
 
-  swapDevices = [ ];
+  # swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
