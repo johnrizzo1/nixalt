@@ -1,8 +1,13 @@
 { pkgs, ... }: {
-  fonts.packages = with pkgs; [
-    noto-fonts
-    fira-code
-    fira-code-symbols
-    nerdfonts
-  ];
+  fonts = {
+    fontDir.enable = true;
+
+    packages = with pkgs; [
+      fira-code
+      fira-code-symbols
+      jetbrains-mono
+      nerdfonts
+      noto-fonts
+    ];
+  };
 }

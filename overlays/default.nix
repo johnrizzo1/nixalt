@@ -2,8 +2,6 @@
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs final.pkgs;
 
-  # substitute-all-rec = import ./substitute-all-rec;
-
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
   # https://nixos.wiki/wiki/Overlays
@@ -29,19 +27,20 @@
     };
   };
 
-  darwin-packages = final: _prev: {
-    darwin = import inputs.nixpkgs-darwin {
-      system = final.system;
-      config.allowUnfree = true;
-    };
-  };
+  # darwin-packages = final: _prev: {
+  #   darwin = import inputs.nixpkgs-darwin {
+  #     system = final.system;
+  #     config.allowUnfree = true;
+  #   };
+  # };
 in [
   additions
   modifications
   unstable-packages
   stable-packages
-  darwin-packages
-  # substitute-all-rec
+  # darwin-packages
   inputs.nix.overlays.default
+  inputs.proxmox-nixos.overlays.x86_64-linux
+  inputs.jujutsu.overlays.default
+  inputs.zig.overlays.default
 ]
-

@@ -1,10 +1,8 @@
-{ pkgs, lib, ezModules, ... }: {
-  imports = lib.attrValues {
-    inherit (ezModules)
-      fonts
-      kde
-      ;
-  };
+{ pkgs, lib, ... }: {
+  imports = [
+    ./fonts.nix
+    ./kde.nix
+  ];
 
   # Enable the GNOME Desktop Environment.
   # services.xserver.displayManager.gdm.enable = true;
