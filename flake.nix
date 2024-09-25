@@ -57,6 +57,12 @@
     # Other packages
     jujutsu.url = "github:martinvonz/jj";
     zig.url = "github:mitchellh/zig-overlay";
+    
+    # SecureBoot
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Virtualisation
     proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
@@ -96,9 +102,15 @@
       inherit overlays nixpkgs inputs;
     };
   in {
-    nixosConfigurations.coda = mkSystem "coda" rec {
-      system = "x86_64-linux";
-      user   = "jrizzo";
+    nixosConfigurations = {
+      coda = mkSystem "coda" rec {
+        system = "x86_64-linux";
+        user   = "jrizzo";
+      };
+      irl = mkSystem "irl" rec {
+        system = "x86_64-linux";
+        user   = "jrizzo";
+      };
     };
   };
 }
