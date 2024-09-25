@@ -18,7 +18,7 @@
   # https://nixos.org/manual/nix/unstable/command-ref/new-cli/nix3-flake.html#flake-inputs
   inputs = {
     # Nix
-    nix.url = "github:NixOS/nix/2.24.1";
+    nix.url = "github:nixos/nix/2.24.1";
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
