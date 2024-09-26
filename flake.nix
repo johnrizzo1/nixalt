@@ -124,5 +124,12 @@
         isHypervisor = true;
       };
     };
+
+    darwinConfigurations = {
+      tymnet = mkSystem "tymnet" {
+        system = "aarch64-darwin";
+        user = "jrizzo";
+      };
+    };
   };
 }
