@@ -60,12 +60,23 @@
     
     # SecureBoot
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.1";
+      # url = "github:nix-community/lanzaboote/v0.4.1";
+      url = "github:nix-community/lanzaboote/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Virtualisation
     proxmox-nixos.url = "github:SaumonNet/proxmox-nixos";
+    nixvirt = {
+      url = "https://flakehub.com/f/AshleyYakeley/NixVirt/*.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
+    # VSCodium
+    vscode-server.url = "github:nix-community/nixos-vscode-server";
+    nix-ld.url = "github:Mic92/nix-ld";
+    nix-ld.inputs.nixpkgs.follows = "nixpkgs";
+    nix-alien.url = "github:thiagokokada/nix-alien";
 
     # Non-flakes
     nvim-conform.url = "github:stevearc/conform.nvim/v7.1.0";
@@ -110,6 +121,7 @@
       irl = mkSystem "irl" rec {
         system = "x86_64-linux";
         user   = "jrizzo";
+        isHypervisor = true;
       };
     };
   };

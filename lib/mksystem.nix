@@ -7,13 +7,11 @@ name:
   system,
   user,
   darwin ? false,
-  wsl ? false
+  isWSL ? false,
+  isHypervisor ? false
 }:
 
 let
-  # True if this is a WSL system.
-  isWSL = wsl;
-
   # The config files for this system.
   machineConfig = ../machines/${name}.nix;
   userOSConfig = ../users/${user}/${if darwin then "darwin" else "nixos" }.nix;
@@ -26,7 +24,7 @@ in systemFunc rec {
   inherit system;
 
   modules = [
-    inputs.proxmox-nixos.nixosModules.proxmox-ve
+    (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
     
     # Apply our overlays. Overlays are keyed by system type so we have
     # to go through and apply our system type. We do this first so
@@ -46,6 +44,7 @@ in systemFunc rec {
       home-manager.useUserPackages = true;
       home-manager.users.${user} = import userHMConfig {
         isWSL = isWSL;
+        isHypervisor = isHypervisor;
         inputs = inputs;
       };
     }
@@ -58,6 +57,7 @@ in systemFunc rec {
         currentSystemName = name;
         currentSystemUser = user;
         isWSL = isWSL;
+        isHypervisor = isHypervisor;
         inputs = inputs;
       };
     }

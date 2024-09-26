@@ -1,8 +1,5 @@
-{ config, pkgs, lib, modulesPath, inputs, ... }: {  
-  imports = [ 
-    (modulesPath + "/installer/scan/not-detected.nix") 
-    ../../modules/nixos/secureboot.nix 
-  ];
+{ config, pkgs, lib, modulesPath, ... }: {  
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
@@ -27,5 +24,6 @@
     [ { device = "/dev/disk/by-uuid/e7e3118f-c6d4-4b6a-aeca-1ba9d14e2128"; }
     ];
 
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

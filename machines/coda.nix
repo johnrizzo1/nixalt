@@ -1,4 +1,6 @@
-{ inputs, config, pkgs, lib, currentSystem, currentSystemName,... }:
+{ inputs, config, pkgs, lib, 
+  currentSystem, currentSystemUser, currentSystemName, 
+  ... }:
 
 let
   # Turn this to true to use gnome instead of i3. This is a bit
@@ -8,10 +10,13 @@ let
 in {
   imports = [ 
     ./hardware/coda.nix
+    # ../modules/nixos/secureboot.nix
     ../modules/nixos/desktop.nix
     ../modules/nixos/networking.nix
     ../modules/nixos/virt
   ];
+
+  # services.secureboot.enable = true;
 
   # Be careful updating this.
   # boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -23,73 +28,9 @@ in {
       keep-outputs = true
       keep-derivations = true
     '';
-
-    # public binary cache that I use for all my derivations. You can keep
-    # this, use your own, or toss it. Its typically safe to use a binary cache
-    # since the data inside is checksummed.
-    # settings = {
-    #   substituters = ["https://mitchellh-nixos-config.cachix.org"];
-    #   trusted-public-keys = ["mitchellh-nixos-config.cachix.org-1:bjEbXJyLrL1HZZHBbO4QALnI5faYZppzkU4D2s0G8RQ="];
-    # };
   };
 
-  # users.users.root = {
-  #   isSystemUser = true;
-  #   initialHashedPassword = "$y$j9T$/rtWlSDTxh6freq48xNP51$HcBAQ5J.VluIdc5vmzmrActXmRy3K4pKj.WbTBoQDt1";
-  # };
-
-  # services.proxmox-ve = { 
-  #   enable = true;
-  #   vms = {
-  #     myvm1 = {
-  #       vmid = 100;
-  #       memory = 4096;
-  #       cores = 4;
-  #       sockets = 2;
-  #       kvm = false;
-  #       net = [
-  #         {
-  #           model = "virtio";
-  #           bridge = "vmbr0";
-  #         }
-  #       ];
-  #       scsi = [ { file = "local:16"; } ];
-  #     };
-  #     # myvm2 = {
-  #     #   vmid = 101;
-  #     #   memory = 8192;
-  #     #   cores = 2;
-  #     #   sockets = 2;
-  #     #   scsi = [ { file = "local:32"; } ];
-  #     # };
-  #   };
-  # };
-  # networking.bridges.vmbr0.interfaces = [ "enp3s0" ];
-  # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
-  # systemd.network.networks."10-lan" = {
-  #   matchConfig.Name = [ "enp3s0" ];
-  #   networkConfig = {
-  #     Bridge = "vmbr0";
-  #   };
-  # };
-
-  # systemd.network.netdevs."vmbr0" = {
-  #   netdevConfig = {
-  #     Name = "vmbr0";
-  #     Kind = "bridge";
-  #   };
-  # };
-
-  # systemd.network.networks."10-lan-bridge" = {
-  #   matchConfig.Name = "vmbr0";
-  #   networkConfig = {
-  #     IPv6AcceptRA = true;
-  #     DHCP = "ipv4";
-  #   };
-  #   linkConfig.RequiredForOnline = "routable";
-  # };
-
-  # nixpkgs.config.permittedInsecurePackages = [ ];
+  networking.hostName = currentSystemName;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -99,9 +40,6 @@ in {
   # "error switching console mode" on boot.
   boot.loader.systemd-boot.consoleMode = "0";
 
-  # Define your hostname.
-  networking.hostName = currentSystemName;
-
   # Set your time zone.
   time.timeZone = "America/New_York";
 
@@ -110,8 +48,6 @@ in {
   services.printing.enable = true;
   services.colord.enable = true;
   services.hardware.bolt.enable = true;
-
-  # services.secureboot.enable = true;
   # services.hackrf.enable = true;
 
   # gate with test for desktop
@@ -128,18 +64,10 @@ in {
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "jrizzo";
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-#   networking.useDHCP = false;
+  services.displayManager.autoLogin.user = currentSystemUser;
 
   # Don't require password for sudo
-  security.sudo.wheelNeedsPassword = false;
-
-  # Virtualization settings
-#   virtualisation.docker.enable = true;
+  # security.sudo.wheelNeedsPassword = false;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -162,6 +90,8 @@ in {
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
+
+  # nixpkgs.config.permittedInsecurePackages = [ ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
