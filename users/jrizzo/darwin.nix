@@ -1,7 +1,7 @@
 { inputs, pkgs, ... }:
 
 {
-  nixpkgs.overlays = import ../../lib/overlays.nix;
+  # nixpkgs.overlays = import ../../lib/overlays.nix;
   #nixpkgs.overlays = import ../../lib/overlays.nix ++ [
   #  (import ./vim.nix { inherit inputs; })
   #];
@@ -28,7 +28,8 @@
   users.users.jrizzo = {
     home = "/Users/jrizzo";
     shell = pkgs.fish;
-    group = "jrizzo";
-    isNormalUser = true;
   };
+  
+  services.nix-daemon.enable = true;
+  # nix.useDaemon = true;
 }
