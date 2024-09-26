@@ -9,25 +9,29 @@
     then "/Users/jrizzo"
     else "/home/jrizzo";
 
-  users.users.root.home =
-    if pkgs.stdenv.isDarwin
-    then "/var/root"
-    else "/root";
+  # users.users.root.home =
+  #   if pkgs.stdenv.isDarwin
+  #   then "/var/root"
+  #   else "/root";
   
-  nixpkgs.hostPlatform = "aarch64-darwin";
+  nix.settings.experimental-features = "nix-command flakes";
 
   environment.systemPackages = with pkgs; [ hugo git-lfs ];
 
-  homebrew = {
-    casks = [
-      "sketch"
-      "gimp"
-      "krita"
-      "figma"
-      "blender"
-      "inkscape"
-      "gns3"
-    ];
-  };
+  # homebrew = {
+  #   casks = [
+  #     "sketch"
+  #     "gimp"
+  #     "krita"
+  #     "figma"
+  #     "blender"
+  #     "inkscape"
+  #     "gns3"
+  #   ];
+  # };
 
+  # Set Git commit hash for darwin-version.
+  # system.configurationRevision = self.rev or self.dirtyRev or null;
+  nixpkgs.hostPlatform = "aarch64-darwin";
+  system.stateVersion = 5;
 }

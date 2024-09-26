@@ -38,7 +38,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    darwin = {
+    nix-darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -103,33 +103,59 @@
     vim-copilot.flake = false;
     vim-misc.url = "github:mitchellh/vim-misc";
     vim-misc.flake = false;
+
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, home-manager, darwin, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, flake-utils, ... }@inputs:
+  let
     # Overlays is the list of overlays we want to apply from flake inputs.
     overlays = import ./overlays { inherit inputs; };
 
     mkSystem = import ./lib/mksystem.nix {
       inherit overlays nixpkgs inputs;
     };
+
+    supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+    forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
+      pkgs = import nixpkgs { inherit system; };
+    });
   in {
-    nixosConfigurations = {
-      coda = mkSystem "coda" rec {
+    nixosConfigurations.coda = mkSystem "coda" {
         system = "x86_64-linux";
         user   = "jrizzo";
       };
-      irl = mkSystem "irl" rec {
-        system = "x86_64-linux";
-        user   = "jrizzo";
-        isHypervisor = true;
-      };
+
+    nixosConfigurations.irl = mkSystem "irl" {
+      system = "x86_64-linux";
+      user   = "jrizzo";
+      isHypervisor = true;
     };
 
     darwinConfigurations = {
       tymnet = mkSystem "tymnet" {
         system = "aarch64-darwin";
         user = "jrizzo";
+        darwin = true;
       };
     };
+    # darwinPackages = self.darwinConfigurations."tymnet".pkgs;
+
+    devShells = forEachSupportedSystem ({ pkgs }: {
+      default = pkgs.mkShell {
+        venvDir = ".venv";
+        packages = 
+          with pkgs; [
+            python311
+            jq
+            wget
+            curl
+          ] 
+          ++ (with pkgs.python311Packages; [
+            pip
+            venvShellHook
+          ]);
+      };
+    });
   };
 }
