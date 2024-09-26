@@ -17,7 +17,7 @@
     git-lfs
   ];
   homebrew = {
-    masApps = [
+    masApps = {
       "Save to Reader" = 1640236961;
       "Remote Desktop" = 409907375;
       OmniGraffle = 1142578753;
@@ -28,7 +28,7 @@
       TestFlight = 899247664;
       Kindle = 302584613;
       Xcode = 497799835;
-    ];
+    };
 
     casks = [
       "sketch"
