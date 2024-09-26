@@ -121,6 +121,8 @@
       pkgs = import nixpkgs { inherit system; };
     });
   in {
+    #
+    # Linux
     nixosConfigurations.coda = mkSystem "coda" {
         system = "x86_64-linux";
         user   = "jrizzo";
@@ -132,6 +134,8 @@
       isHypervisor = true;
     };
 
+    #
+    # MacOS
     darwinConfigurations = {
       tymnet = mkSystem "tymnet" {
         system = "aarch64-darwin";
@@ -141,6 +145,16 @@
     };
     # darwinPackages = self.darwinConfigurations."tymnet".pkgs;
 
+    #
+    # Virtual Machines & Containers
+    # nixos-rebuild --flake .#vm-intel build-vm
+    nixosConfigurations.vm-intel = mkSystem "vm-intel" {
+      system = "x86_64-linux";
+      user = "jrizzo";
+    };
+
+    #
+    # Setting up my dev shells
     devShells = forEachSupportedSystem ({ pkgs }: {
       default = pkgs.mkShell {
         venvDir = ".venv";

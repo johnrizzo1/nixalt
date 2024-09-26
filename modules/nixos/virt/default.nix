@@ -19,6 +19,8 @@
     #virtio-win
     #win-spice
     gnome-boxes
+    swtpm
+    swtpm-tpm2
   ];
 
   virtualisation = {

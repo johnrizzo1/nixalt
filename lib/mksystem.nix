@@ -14,12 +14,16 @@ name:
 let
   # The config files for this system.
   machineConfig = ../machines/${name}.nix;
-  userOSConfig = ../users/${user}/${if darwin then "darwin" else "nixos" }.nix;
+  userOSConfig = ../users/${user}/${if darwin then "darwin" else "nixos"}.nix;
   userHMConfig = ../users/${user}/home-manager.nix;
 
   # NixOS vs nix-darwin functionst
-  systemFunc = if darwin then inputs.nix-darwin.lib.darwinSystem else nixpkgs.lib.nixosSystem;
-  home-manager = if darwin then inputs.home-manager.darwinModules else inputs.home-manager.nixosModules;
+  systemFunc = if darwin 
+               then inputs.nix-darwin.lib.darwinSystem 
+               else nixpkgs.lib.nixosSystem;
+  home-manager = if darwin
+                 then inputs.home-manager.darwinModules
+                 else inputs.home-manager.nixosModules;
 in systemFunc rec {
   inherit system;
 
