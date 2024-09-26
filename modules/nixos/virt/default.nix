@@ -19,8 +19,10 @@
     #virtio-win
     #win-spice
     gnome-boxes
+    qemu_full
     swtpm
     swtpm-tpm2
+    OVMFFull
   ];
 
   virtualisation = {
@@ -47,6 +49,7 @@
       enable = true;
       ui.enable = true;
     };
+    docker.enable = true;
   };
 
   networking.nftables.enable = true;

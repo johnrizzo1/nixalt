@@ -123,11 +123,13 @@
   in {
     #
     # Linux
+    # sudo nixos-rebuild --flake .#coda switch
     nixosConfigurations.coda = mkSystem "coda" {
-        system = "x86_64-linux";
-        user   = "jrizzo";
-      };
+      system = "x86_64-linux";
+      user   = "jrizzo";
+    };
 
+    # sudo nixos-rebuild --flake .#irl switch
     nixosConfigurations.irl = mkSystem "irl" {
       system = "x86_64-linux";
       user   = "jrizzo";
@@ -136,6 +138,8 @@
 
     #
     # MacOS
+    # nix run nix-darwin -- switch --flake .#tymnet
+    # darwin-rebuild --flake .#tymnet
     darwinConfigurations = {
       tymnet = mkSystem "tymnet" {
         system = "aarch64-darwin";
@@ -143,7 +147,6 @@
         darwin = true;
       };
     };
-    # darwinPackages = self.darwinConfigurations."tymnet".pkgs;
 
     #
     # Virtual Machines & Containers
@@ -155,6 +158,7 @@
 
     #
     # Setting up my dev shells
+    # nix develop
     devShells = forEachSupportedSystem ({ pkgs }: {
       default = pkgs.mkShell {
         venvDir = ".venv";
