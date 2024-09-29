@@ -34,6 +34,7 @@ in systemFunc rec {
     # to go through and apply our system type. We do this first so
     # the overlays are available globally.
     { nixpkgs.overlays = overlays; }
+    { nixpkgs.config.android_sdk.accept_license = true; }
 
     # Allow unfree packages.
     { nixpkgs.config.allowUnfree = true; }

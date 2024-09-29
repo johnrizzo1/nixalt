@@ -3,9 +3,10 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (pkgs) tmuxPlugins;
+  inherit (config.xdg) cacheHome configHome dataHome;
   # sources = import ../../nix/sources.nix;
-  isDarwin = pkgs.stdenv.isDarwin;
-  isLinux = pkgs.stdenv.isLinux;
+  inherit (pkgs.stdenv) isDarwin isLinux;
 
   # For our MANPAGER env var
   # https://github.com/sharkdp/bat/issues/1145
@@ -15,98 +16,116 @@ let
   #   cat "$1" | col -bx | bat --language man --style plain
   # ''));
 in {
-  # Home-manager 22.11 requires this be set. We never set it so we have
-  # to use the old state version.
-  home.stateVersion = "24.05";
+  imports = [
+  #   # catppuccin
+  #   ./editor.nix
+  #   ./home-manager.nix
+  #   ./packages.nix
+  #   ./shell.nix
+  #   ./xdg.nix
+    ./obs.nix
+  #   ./git.nix
+  ];
 
-  xdg.enable = true;
+  home = {
+    # Home-manager 22.11 requires this be set. We never set it so we have
+    # to use the old state version.
+    stateVersion = "24.05";
 
-  #---------------------------------------------------------------------
-  # Packages
-  #---------------------------------------------------------------------
+    #---------------------------------------------------------------------
+    # Packages
+    #---------------------------------------------------------------------
 
-  # Packages I always want installed. Most packages I install using
-  # per-project flakes sourced with direnv and nix-shell, so this is
-  # not a huge list.
-  home.packages = [
-    pkgs._1password
-    pkgs.asciinema
-    pkgs.bat
-    pkgs.fd
-    pkgs.fzf
-    pkgs.gh
-    pkgs.htop
-    pkgs.jq
-    # pkgs.ripgrep
-    # pkgs.sentry-cli
-    pkgs.tree
-    pkgs.watch
+    # Packages I always want installed. Most packages I install using
+    # per-project flakes sourced with direnv and nix-shell, so this is
+    # not a huge list.
+    packages = with pkgs; [
+      # ripgrep
+      # sentry-cli
+      asciinema
+      bat
+      bottom
+      devenv
+      direnv
+      eza
+      fd
+      fzf
+      gh
+      git-lfs
+      gopls
+      home-manager
+      htop
+      jq
+      nodejs # Node is required for Copilot.vim
+      tailscale
+      tree
+      watch
+      xsel
+      zigpkgs."0.13.0"
+    ] ++ (lib.optionals isDarwin [
+      # This is automatically setup on Linux
+      pkgs.cachix
+      mas
+      iterm2
+      # pkgs.tailscale
+    ]) ++ (lib.optionals (isLinux && !isWSL) [
+      pkgs.chromium
+      pkgs.firefox
+      pkgs.rofi
+      # pkgs.valgrind
+      pkgs.zathura
+      pkgs.xfce.xfce4-terminal
+    ]);
 
-    pkgs.gopls
-    pkgs.zigpkgs."0.13.0"
+    #---------------------------------------------------------------------
+    # Env vars and dotfiles
+    #---------------------------------------------------------------------
 
-    # Node is required for Copilot.vim
-    pkgs.nodejs
-
-    pkgs.tailscale
-  ] ++ (lib.optionals isDarwin [
-    # This is automatically setup on Linux
-    pkgs.cachix
-    # pkgs.tailscale
-  ]) ++ (lib.optionals (isLinux && !isWSL) [
-    pkgs.chromium
-    pkgs.firefox
-    pkgs.rofi
-    # pkgs.valgrind
-    pkgs.zathura
-    pkgs.xfce.xfce4-terminal
-  ]);
-
-  #---------------------------------------------------------------------
-  # Env vars and dotfiles
-  #---------------------------------------------------------------------
-
-  home.sessionVariables = {
-    LANG = "en_US.UTF-8";
-    LC_CTYPE = "en_US.UTF-8";
-    LC_ALL = "en_US.UTF-8";
-    EDITOR = "nvim";
-    PAGER = "less -FirSwX";
-    # MANPAGER = "${manpager}/bin/manpager";
+    sessionVariables = {
+      LANG = "en_US.UTF-8";
+      LC_CTYPE = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
+      EDITOR = "nvim";
+      PAGER = "less -FirSwX";
+      # MANPAGER = "${manpager}/bin/manpager";
+      
+      # XDG Config Dirs
+      GHCUP_USE_XDG_DIRS = 1; # $HOME/.ghcup
+      PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
+      LESSHISTFILE = "${cacheHome}/less/history"; # $HOME/.lesshst
+      KDEHOME = "${configHome}/kde"; # $HOME/.kde4
+      # GTK2_RC_FILES = "${configHome}/gtk-2.0/gtkrc"; # $HOME/.gtkrc-2.0
+      GNUPGHOME = "${dataHome}/gnupg"; # $HOME/.gnupg
+      CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
+      INPUTRC = "${configHome}/readline/inputrc"; # $HOME/.inputrc
+      # AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
+      # AWS_CONFIG_FILE = "${configHome}/aws/config";
+      DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
+    };
+    
+    shellAliases = {
+      ".." = "cd ..";
+      "..." = "cd ../..";
+      top = "btm";
+      btop = "btm";
+      ls = "eza";
+      cat = "bat -pp";
+      tree = "erd --layout inverted --icons --human";
+      
+      # XDG Config Dirs
+      # yarn = "yarn --use-yarnrc ${configHome}/yarn/config"; # $HOME/.yarnrc
+      wget = "wget - -hsts-file=${dataHome}/wget-hsts"; # $HOME/wget-hsts
+    };
   };
 
-  # home.file = {
-  #   ".gdbinit".source = ./gdbinit;
-  #   ".inputrc".source = ./inputrc;
-  # } // (if isDarwin then {
-  #   "Library/Application Support/jj/config.toml".source = ./jujutsu.toml;
-  # } else {});
-
-  # xdg.configFile = {
-  #   "i3/config".text = builtins.readFile ./i3;
-  #   "rofi/config.rasi".text = builtins.readFile ./rofi;
-
-  #   # tree-sitter parsers
-  #   "nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
-  #   "nvim/queries/proto/folds.scm".source =
-  #     "${sources.tree-sitter-proto}/queries/folds.scm";
-  #   "nvim/queries/proto/highlights.scm".source =
-  #     "${sources.tree-sitter-proto}/queries/highlights.scm";
-  #   "nvim/queries/proto/textobjects.scm".source =
-  #     ./textobjects.scm;
-  # } // (if isDarwin then {
-  #   # Rectangle.app. This has to be imported manually using the app.
-  #   "rectangle/RectangleConfig.json".text = builtins.readFile ./RectangleConfig.json;
-  # } else {}) // (if isLinux then {
-  #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
-  #   "jj/config.toml".source = ./jujutsu.toml;
-  # } else {});
+  #---------------------------------------------------------------------
+  # Setting up config files
+  #---------------------------------------------------------------------
+  xdg.enable = true;
 
   #---------------------------------------------------------------------
   # Programs
   #---------------------------------------------------------------------
-
-  programs.gpg.enable = !isDarwin;
 
   programs.bash = {
     enable = true;
@@ -129,7 +148,8 @@ in {
 
   programs.direnv= {
     enable = true;
-
+    enableZshIntegration = true;
+    # enableFishIntegration = true;
     config = {
       whitelist = {
         # prefix= [
@@ -195,9 +215,12 @@ in {
       color.ui = true;
       core.askPass = ""; # needs to be empty to use terminal for ask pass
       credential.helper = "store"; # want to make this more secure
+      delta.enable = true;
       github.user = "johnrizzo1";
-      push.default = "tracking";
       init.defaultBranch = "main";
+      lfs.enable = true;
+      merge.conflictStyle = "diff3";
+      push.default = "tracking";
     };
   };
 
@@ -213,22 +236,122 @@ in {
     # I don't use "settings" because the path is wrong on macOS at
     # the time of writing this.
   };
+  
+  programs.ssh = {
+    enable = true;
+
+    matchBlocks = {
+      "coda" = lib.hm.dag.entryBefore ["*"] {
+        hostname = "coda";
+        forwardAgent = true;
+      };
+      "irl" = lib.hm.dag.entryBefore ["coda"] {
+        hostname = "irl";
+        forwardAgent = true;
+      };
+    };
+
+    # startAgent = true;
+    controlMaster = "auto";
+    forwardAgent = false;
+    compression = true;
+
+    extraConfig = 
+      if pkgs.stdenv.isDarwin
+      then "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
+      else "";
+  };
 
   programs.tmux = {
     enable = true;
-    terminal = "xterm-256color";
-    shortcut = "l";
-    secureSocket = false;
+    baseIndex = 1;
+    clock24 = true;
+    mouse = true;
+    newSession = true;
+    terminal = "screen-256color";
+    prefix = "C-a";
+    keyMode = "vi";
+    # shortcut = "l";
+    # secureSocket = false;
 
     extraConfig = ''
-      set -ga terminal-overrides ",*256col*:Tc"
+      set-option -g status-position top
 
-      set -g @dracula-show-battery false
-      set -g @dracula-show-network false
-      set -g @dracula-show-weather false
+      # Opens new windows in the current directory
+      bind '"' split-window -c "#{pane_current_path}"
+      bind % split-window -h -c "#{pane_current_path}"
+      bind c new-window -c "#{pane_current_path}"
 
-      bind -n C-k send-keys "clear"\; send-keys "Enter"
+      set -s set-clipboard external
+      set -s copy-command 'xsel -i'
+      
+      # Vim style pane selection
+      set -g status-keys vi
+      setw -g mode-keys vi
+      bind h select-pane -L
+      bind j select-pane -D 
+      bind k select-pane -U
+      bind l select-pane -R
+      
+      # Fix my clear screen obsession
+      bind-key -n C-l send-keys -R ^M \; clear-history
     '';
+    
+    plugins = [
+      {
+        plugin = tmuxPlugins.resurrect;
+        extraConfig = ''
+          set -g @resurrect-dir ${config.xdg.stateHome}/tmux-ressurect
+          set -g @resurrect-strategy-nvim 'session'
+        '';
+      }
+      {
+        plugin = tmuxPlugins.yank;
+        extraConfig = ''
+          set -g @yank_action 'copy-pipe'
+        '';
+      }
+      {
+        plugin = tmuxPlugins.catppuccin.overrideAttrs (_: {
+          version = "unstable-2023-11-01";
+          src = pkgs.fetchFromGitHub {
+            owner = "catppuccin";
+            repo = "tmux";
+            rev = "47e33044b4b47b1c1faca1e42508fc92be12131a";
+            hash = "sha256-kn3kf7eiiwXj57tgA7fs5N2+B2r441OtBlM8IBBLl4I=";
+          };
+        });
+        extraConfig = ''
+          set -g @catppuccin_flavour 'frappe'
+
+          set -g @catppuccin_window_left_separator ""
+          set -g @catppuccin_window_right_separator " "
+          set -g @catppuccin_window_middle_separator " █"
+          set -g @catppuccin_window_number_position "right"
+
+          set -g @catppuccin_window_default_fill "number"
+          set -g @catppuccin_window_default_text "#W"
+
+          set -g @catppuccin_window_current_fill "number"
+          set -g @catppuccin_window_current_text "#W"
+
+          set -g @catppuccin_status_modules_right "session date_time"
+          set -g @catppuccin_status_left_separator  " "
+          set -g @catppuccin_status_right_separator ""
+          set -g @catppuccin_status_right_separator_inverse "no"
+          set -g @catppuccin_status_fill "icon"
+          set -g @catppuccin_status_connect_separator "no"
+
+          set -g @catppuccin_date_time_text "%a %-d %b %H:%M"
+        '';
+      }
+      tmuxPlugins.sensible
+      tmuxPlugins.vim-tmux-navigator
+      tmuxPlugins.resurrect
+      tmuxPlugins.open        
+      tmuxPlugins.continuum
+      tmuxPlugins.tmux-fzf
+    ];
   };
 
   programs.alacritty = {
@@ -237,15 +360,50 @@ in {
     settings = {
       env.TERM = "xterm-256color";
 
-      key_bindings = [
+      window.dimensions = {
+        columns = 130;
+        lines = 36;
+      };
+
+      font = {
+        italic.style = "Italic";
+        bold.style = "Bold";
+        bold_italic.style = "Bold Italic";
+        size =
+          if isLinux
+          then 13
+          else 15;
+
+        normal = {
+          family = "CaskaydiaCove Nerd Font";
+          style = "Regular";
+        };
+      };
+
+      keyboard.bindings = [
         { key = "K"; mods = "Command"; chars = "ClearHistory"; }
         { key = "V"; mods = "Command"; action = "Paste"; }
         { key = "C"; mods = "Command"; action = "Copy"; }
         { key = "Key0"; mods = "Command"; action = "ResetFontSize"; }
         { key = "Equals"; mods = "Command"; action = "IncreaseFontSize"; }
-        { key = "Subtract"; mods = "Command"; action = "DecreaseFontSize"; }
+        # { key = "Subtract"; mods = "Command"; action = "DecreaseFontSize"; }
       ];
+
     };
+  };
+
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    enableFishIntegration = true;
+    enableNushellIntegration = true;
+  };
+
+  # programs.command-not-found.enable = true;
+  programs.nix-index = {
+    enable = true;
+    enableZshIntegration = true;
+    enableFishIntegration = true;
   };
 
   # programs.kitty = {
@@ -316,23 +474,4 @@ in {
 
     # extraConfig = (import ./vim-config.nix) { inherit sources; };
   };
-
-  # services.gpg-agent = {
-  #   enable = isLinux;
-  #   pinentryPackage = pkgs.pinentry-tty;
-
-  #   # cache the keys forever so we don't get asked for a password
-  #   defaultCacheTtl = 31536000;
-  #   maxCacheTtl = 31536000;
-  # };
-
-  # xresources.extraConfig = builtins.readFile ./Xresources;
-
-  # Make cursor not tiny on HiDPI screens
-  # home.pointerCursor = lib.mkIf (isLinux && !isWSL) {
-  #   name = "Vanilla-DMZ";
-  #   package = pkgs.vanilla-dmz;
-  #   size = 128;
-  #   x11.enable = true;
-  # };
 }

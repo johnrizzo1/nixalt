@@ -2,20 +2,44 @@
   pkgs,
   ...
 }: {
+  imports = [ ../modules/darwin ];
+
   networking.hostName = "tymnet";
 
-  users.users.jrizzo.home = 
-    if pkgs.stdenv.isDarwin
-    then "/Users/jrizzo"
-    else "/home/jrizzo";
+  # users.users.jrizzo.home = 
+  #   if pkgs.stdenv.isDarwin
+  #   then "/Users/jrizzo"
+  #   else "/home/jrizzo";
+
+  # zsh is the default shell on Mac and we want to make sure that we're
+  # configuring the rc correctly with nix-darwin paths.
+  programs.zsh.enable = true;
+  programs.zsh.shellInit = ''
+    # Nix
+    if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+      . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+    fi
+    # End Nix
+    '';
+
+  programs.fish.enable = true;
+  programs.fish.shellInit = ''
+    # Nix
+    if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+      source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+    end
+    # End Nix
+    '';
+
+  environment.shells = with pkgs; [ bashInteractive zsh fish ];
 
 
   #
   # Packages
-  environment.systemPackages = with pkgs; [
-    hugo
-    git-lfs
-  ];
+  # environment.systemPackages = with pkgs; [];
+
+  # nixpkgs.config.android_sdk.accept_license = true;
+
   homebrew = {
     masApps = {
       "Save to Reader" = 1640236961;
@@ -31,18 +55,20 @@
     };
 
     casks = [
-      "sketch"
-      "gimp"
-      "krita"
-      "figma"
-      "blender"
-      "inkscape"
-      "gns3"
+      "android-studio"
       "balenaetcher"
       "bambu-studio"
+      "blender"
       "calibre"
+      "dbeaver-community"
       "discord"
+      "figma"
+      "gimp"
+      "gns3"
+      "inkscape"
       "jan" # Offline AI Tool like LMStudio
+      "krita"
+      "microsoft-office"
       "nvidia-geforce-now"
       "obs"
       "obsidian"
@@ -51,9 +77,9 @@
       "raspberry-pi-imager"
       "raycast"
       "rectangle"
-      # "royal-tsx"
       "rustdesk"
       "signal"
+      "sketch"
       "slack"
       "sonos"
       "sourcetree"
@@ -71,14 +97,13 @@
       # "linearmouse"
       # "logitech-g-hub"
       # "maccy"
-      "microsoft-office"
-      # "microsoft-teams"
-      # "onedrive"
+      # "microsoft-teams"`
       # "prismlauncher"
       # "protonmail-bridge"
       # "protonvpn"
       # "quicken" # Failed to install
       # "reader" #failed
+      # "royal-tsx"
       # "rwts-pdfwriter"
       # "soundsource"
       # "spotify"

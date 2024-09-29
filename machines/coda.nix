@@ -96,6 +96,7 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    android-studio-full
     cachix
     devenv
     direnv
@@ -108,10 +109,10 @@ in {
     signal-desktop
     tmux
     vim
+    vscodium
     weechat
     wget
     xclip
-    vscodium
     # For hypervisors that support auto-resizing, this script forces it.
     # I've noticed not everyone listens to the udev events so this is a hack.
     (writeShellScriptBin "xrandr-auto" ''

@@ -155,6 +155,11 @@
       system = "x86_64-linux";
       user = "jrizzo";
     };
+    # nixos-rebuild --flake .#vm-intel-prl build-vm
+    nixosConfigurations.vm-intel-prl = mkSystem "vm-intel-prl" {
+      system = "aarch64-linux";
+      user = "jrizzo";
+    };
 
     #
     # Setting up my dev shells

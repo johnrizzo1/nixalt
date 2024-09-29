@@ -3,8 +3,8 @@
   ...
 } : {
   imports = [
-    ./nix.nix 
-    ./nixpkgs.nix
+    # ./nix.nix 
+    # ./nixpkgs.nix
     ./fonts.nix
     ./packages.nix
     ./_1password.nix
