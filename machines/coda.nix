@@ -107,6 +107,7 @@ in {
     niv
     rxvt_unicode
     signal-desktop
+    synology-drive-client
     tmux
     vim
     vscodium
