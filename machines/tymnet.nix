@@ -1,10 +1,11 @@
-{
-  pkgs,
-  ...
-}: {
+{ inputs, config, pkgs, lib, 
+  currentSystem, currentSystemUser, currentSystemName, 
+  ... }: {
   imports = [ ../modules/darwin ];
 
-  networking.hostName = "tymnet";
+  networking.hostName = currentSystemName;
+  networking.computerName = currentSystemName;
+  networking.localHostName = currentSystemName;
 
   # users.users.jrizzo.home = 
   #   if pkgs.stdenv.isDarwin
@@ -30,9 +31,8 @@
     end
     # End Nix
     '';
-
+    
   environment.shells = with pkgs; [ bashInteractive zsh fish ];
-
 
   #
   # Packages
@@ -70,7 +70,7 @@
       "krita"
       "microsoft-office"
       "nvidia-geforce-now"
-      "obs"
+      # "obs"
       "obsidian"
       "orcaslicer"
       "pycharm-ce"
@@ -130,11 +130,20 @@
     ];
   };
 
+  services.tailscale.enable = true;
+  services.synergy.client = {
+    enable = true;
+    autoStart = true;
+    serverAddress = coda.technobable.com;
+    tls.enable = true;
+  };
+  
   #
   # Other Options
   nix.settings.experimental-features = "nix-command flakes";
+  nix.package = pkgs.nix;
   # Set Git commit hash for darwin-version.
   # system.configurationRevision = self.rev or self.dirtyRev or null;
-  nixpkgs.hostPlatform = "aarch64-darwin";
+  nixpkgs.hostPlatform = currentSystem;
   system.stateVersion = 5;
 }

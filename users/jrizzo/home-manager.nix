@@ -23,7 +23,7 @@ in {
   #   ./packages.nix
   #   ./shell.nix
   #   ./xdg.nix
-    ./obs.nix
+    # ./obs.nix
   #   ./git.nix
   ];
 
@@ -127,351 +127,362 @@ in {
   # Programs
   #---------------------------------------------------------------------
 
-  programs.bash = {
-    enable = true;
-    shellOptions = [];
-    historyControl = [ "ignoredups" "ignorespace" ];
-    initExtra = builtins.readFile ./files/bashrc;
+  programs = {
+    bash = {
+      enable = true;
+      shellOptions = [];
+      enableCompletion = true;
+      historyControl = [ "ignoredups" "ignorespace" ];
+      initExtra = builtins.readFile ./files/bashrc;
 
-    shellAliases = {
-      ga = "git add";
-      gc = "git commit";
-      gco = "git checkout";
-      gcp = "git cherry-pick";
-      gdiff = "git diff";
-      gl = "git prettylog";
-      gp = "git push";
-      gs = "git status";
-      gt = "git tag";
-    };
-  };
-
-  programs.direnv= {
-    enable = true;
-    enableZshIntegration = true;
-    # enableFishIntegration = true;
-    config = {
-      whitelist = {
-        # prefix= [
-        #   "$HOME/code/go/src/github.com/hashicorp"
-        #   "$HOME/code/go/src/github.com/mitchellh"
-        # ];
-
-        exact = ["$HOME/.envrc"];
-      };
-    };
-  };
-
-  programs.fish = {
-    enable = true;
-    interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
-      (builtins.readFile ./files/config.fish)
-      "set -g SHELL ${pkgs.fish}/bin/fish"
-    ]));
-
-    shellAliases = {
-      ga = "git add";
-      gc = "git commit";
-      gco = "git checkout";
-      gcp = "git cherry-pick";
-      gdiff = "git diff";
-      gl = "git prettylog";
-      gp = "git push";
-      gs = "git status";
-      gt = "git tag";
-
-      jf = "jj git fetch";
-      jn = "jj new";
-      js = "jj st";
-    } // (if isLinux then {
-      # Two decades of using a Mac has made this such a strong memory
-      # that I'm just going to keep it consistent.
-      pbcopy = "xclip";
-      pbpaste = "xclip -o";
-    } else {});
-
-    # plugins = [
-    #   "fish-fzf"
-    #   "fish-foreign-env"
-    #   "theme-bobthefish"
-    # ];
-  };
-
-  programs.git = {
-    enable = true;
-    userName = "John Rizzo";
-    userEmail = "johnrizzo1@gmail.com";
-    # signing = {
-    #   key = "523D5DC389D273BC";
-    #   signByDefault = true;
-    # };
-    aliases = {
-      # cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 -r git branch -d";
-      prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-      root = "rev-parse --show-toplevel";
-    };
-    extraConfig = {
-      branch.autosetuprebase = "always";
-      color.ui = true;
-      core.askPass = ""; # needs to be empty to use terminal for ask pass
-      credential.helper = "store"; # want to make this more secure
-      delta.enable = true;
-      github.user = "johnrizzo1";
-      init.defaultBranch = "main";
-      lfs.enable = true;
-      merge.conflictStyle = "diff3";
-      push.default = "tracking";
-    };
-  };
-
-  programs.go = {
-    enable = true;
-    goPath = "Projects/go";
-    goPrivate = [ "github.com/johnrizzo1" "rfc822.mx" ];
-  };
-
-  programs.jujutsu = {
-    enable = true;
-
-    # I don't use "settings" because the path is wrong on macOS at
-    # the time of writing this.
-  };
-  
-  programs.ssh = {
-    enable = true;
-
-    matchBlocks = {
-      "coda" = lib.hm.dag.entryBefore ["*"] {
-        hostname = "coda";
-        forwardAgent = true;
-      };
-      "irl" = lib.hm.dag.entryBefore ["coda"] {
-        hostname = "irl";
-        forwardAgent = true;
+      shellAliases = {
+        ga = "git add";
+        gc = "git commit";
+        gco = "git checkout";
+        gcp = "git cherry-pick";
+        gdiff = "git diff";
+        gl = "git prettylog";
+        gp = "git push";
+        gs = "git status";
+        gt = "git tag";
       };
     };
 
-    # startAgent = true;
-    controlMaster = "auto";
-    forwardAgent = false;
-    compression = true;
+    direnv= {
+      enable = true;
+      enableZshIntegration = true;
+      # enableFishIntegration = true;
+      config = {
+        whitelist = {
+          # prefix= [
+          #   "$HOME/code/go/src/github.com/hashicorp"
+          #   "$HOME/code/go/src/github.com/mitchellh"
+          # ];
 
-    extraConfig = 
-      if pkgs.stdenv.isDarwin
-      then "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
-      else "";
-  };
+          exact = ["$HOME/.envrc"];
+        };
+      };
+    };
 
-  programs.tmux = {
-    enable = true;
-    baseIndex = 1;
-    clock24 = true;
-    mouse = true;
-    newSession = true;
-    terminal = "screen-256color";
-    prefix = "C-a";
-    keyMode = "vi";
-    # shortcut = "l";
-    # secureSocket = false;
+    fish = {
+      enable = true;
+      interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
+        (builtins.readFile ./files/config.fish)
+        "set -g SHELL ${pkgs.fish}/bin/fish"
+      ]));
 
-    extraConfig = ''
-      set-option -g status-position top
+      shellAliases = {
+        ga = "git add";
+        gc = "git commit";
+        gco = "git checkout";
+        gcp = "git cherry-pick";
+        gdiff = "git diff";
+        gl = "git prettylog";
+        gp = "git push";
+        gs = "git status";
+        gt = "git tag";
 
-      # Opens new windows in the current directory
-      bind '"' split-window -c "#{pane_current_path}"
-      bind % split-window -h -c "#{pane_current_path}"
-      bind c new-window -c "#{pane_current_path}"
+        jf = "jj git fetch";
+        jn = "jj new";
+        js = "jj st";
+      } // (if isLinux then {
+        # Two decades of using a Mac has made this such a strong memory
+        # that I'm just going to keep it consistent.
+        pbcopy = "xclip";
+        pbpaste = "xclip -o";
+      } else {});
 
-      set -s set-clipboard external
-      set -s copy-command 'xsel -i'
+      # plugins = [
+      #   "fish-fzf"
+      #   "fish-foreign-env"
+      #   "theme-bobthefish"
+      # ];
+    };
+
+    tmux = {
+      enable = true;
+      baseIndex = 1;
+      clock24 = true;
+      mouse = true;
+      newSession = true;
+      terminal = "screen-256color";
+      prefix = "C-a";
+      keyMode = "vi";
+      # shortcut = "l";
+      # secureSocket = false;
+
+      extraConfig = ''
+        set-option -g status-position top
+
+        # Opens new windows in the current directory
+        bind '"' split-window -c "#{pane_current_path}"
+        bind % split-window -h -c "#{pane_current_path}"
+        bind c new-window -c "#{pane_current_path}"
+
+        set -s set-clipboard external
+        set -s copy-command 'xsel -i'
+        
+        # Vim style pane selection
+        set -g status-keys vi
+        setw -g mode-keys vi
+        bind h select-pane -L
+        bind j select-pane -D 
+        bind k select-pane -U
+        bind l select-pane -R
+        
+        # Fix my clear screen obsession
+        bind-key -n C-l send-keys -R ^M \; clear-history
+      '';
       
-      # Vim style pane selection
-      set -g status-keys vi
-      setw -g mode-keys vi
-      bind h select-pane -L
-      bind j select-pane -D 
-      bind k select-pane -U
-      bind l select-pane -R
-      
-      # Fix my clear screen obsession
-      bind-key -n C-l send-keys -R ^M \; clear-history
-    '';
+      plugins = [
+        {
+          plugin = tmuxPlugins.resurrect;
+          extraConfig = ''
+            set -g @resurrect-dir ${config.xdg.stateHome}/tmux-ressurect
+            set -g @resurrect-strategy-nvim 'session'
+          '';
+        }
+        {
+          plugin = tmuxPlugins.yank;
+          extraConfig = ''
+            set -g @yank_action 'copy-pipe'
+          '';
+        }
+        {
+          plugin = tmuxPlugins.catppuccin.overrideAttrs (_: {
+            version = "unstable-2023-11-01";
+            src = pkgs.fetchFromGitHub {
+              owner = "catppuccin";
+              repo = "tmux";
+              rev = "47e33044b4b47b1c1faca1e42508fc92be12131a";
+              hash = "sha256-kn3kf7eiiwXj57tgA7fs5N2+B2r441OtBlM8IBBLl4I=";
+            };
+          });
+          extraConfig = ''
+            set -g @catppuccin_flavour 'frappe'
+
+            set -g @catppuccin_window_left_separator ""
+            set -g @catppuccin_window_right_separator " "
+            set -g @catppuccin_window_middle_separator " █"
+            set -g @catppuccin_window_number_position "right"
+
+            set -g @catppuccin_window_default_fill "number"
+            set -g @catppuccin_window_default_text "#W"
+
+            set -g @catppuccin_window_current_fill "number"
+            set -g @catppuccin_window_current_text "#W"
+
+            set -g @catppuccin_status_modules_right "session date_time"
+            set -g @catppuccin_status_left_separator  " "
+            set -g @catppuccin_status_right_separator ""
+            set -g @catppuccin_status_right_separator_inverse "no"
+            set -g @catppuccin_status_fill "icon"
+            set -g @catppuccin_status_connect_separator "no"
+
+            set -g @catppuccin_date_time_text "%a %-d %b %H:%M"
+          '';
+        }
+        tmuxPlugins.sensible
+        tmuxPlugins.vim-tmux-navigator
+        tmuxPlugins.resurrect
+        tmuxPlugins.open        
+        tmuxPlugins.continuum
+        tmuxPlugins.tmux-fzf
+      ];
+    };
     
-    plugins = [
-      {
-        plugin = tmuxPlugins.resurrect;
-        extraConfig = ''
-          set -g @resurrect-dir ${config.xdg.stateHome}/tmux-ressurect
-          set -g @resurrect-strategy-nvim 'session'
-        '';
-      }
-      {
-        plugin = tmuxPlugins.yank;
-        extraConfig = ''
-          set -g @yank_action 'copy-pipe'
-        '';
-      }
-      {
-        plugin = tmuxPlugins.catppuccin.overrideAttrs (_: {
-          version = "unstable-2023-11-01";
-          src = pkgs.fetchFromGitHub {
-            owner = "catppuccin";
-            repo = "tmux";
-            rev = "47e33044b4b47b1c1faca1e42508fc92be12131a";
-            hash = "sha256-kn3kf7eiiwXj57tgA7fs5N2+B2r441OtBlM8IBBLl4I=";
-          };
-        });
-        extraConfig = ''
-          set -g @catppuccin_flavour 'frappe'
+    zsh = {
+      enable = true;
+      # enableBashCompletion = true;
+      enableCompletion = true;
+      # enableFzfCompletion = true;
+      syntaxHighlighting.enable = true;
+    };
 
-          set -g @catppuccin_window_left_separator ""
-          set -g @catppuccin_window_right_separator " "
-          set -g @catppuccin_window_middle_separator " █"
-          set -g @catppuccin_window_number_position "right"
-
-          set -g @catppuccin_window_default_fill "number"
-          set -g @catppuccin_window_default_text "#W"
-
-          set -g @catppuccin_window_current_fill "number"
-          set -g @catppuccin_window_current_text "#W"
-
-          set -g @catppuccin_status_modules_right "session date_time"
-          set -g @catppuccin_status_left_separator  " "
-          set -g @catppuccin_status_right_separator ""
-          set -g @catppuccin_status_right_separator_inverse "no"
-          set -g @catppuccin_status_fill "icon"
-          set -g @catppuccin_status_connect_separator "no"
-
-          set -g @catppuccin_date_time_text "%a %-d %b %H:%M"
-        '';
-      }
-      tmuxPlugins.sensible
-      tmuxPlugins.vim-tmux-navigator
-      tmuxPlugins.resurrect
-      tmuxPlugins.open        
-      tmuxPlugins.continuum
-      tmuxPlugins.tmux-fzf
-    ];
-  };
-
-  programs.alacritty = {
-    enable = !isWSL;
-
-    settings = {
-      env.TERM = "xterm-256color";
-
-      window.dimensions = {
-        columns = 130;
-        lines = 36;
+    git = {
+      enable = true;
+      userName = "John Rizzo";
+      userEmail = "johnrizzo1@gmail.com";
+      # signing = {
+      #   key = "523D5DC389D273BC";
+      #   signByDefault = true;
+      # };
+      aliases = {
+        # cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 -r git branch -d";
+        prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+        root = "rev-parse --show-toplevel";
       };
+      extraConfig = {
+        branch.autosetuprebase = "always";
+        color.ui = true;
+        core.askPass = ""; # needs to be empty to use terminal for ask pass
+        credential.helper = "store"; # want to make this more secure
+        delta.enable = true;
+        github.user = "johnrizzo1";
+        init.defaultBranch = "main";
+        lfs.enable = true;
+        merge.conflictStyle = "diff3";
+        push.default = "tracking";
+      };
+    };
 
-      font = {
-        italic.style = "Italic";
-        bold.style = "Bold";
-        bold_italic.style = "Bold Italic";
-        size =
-          if isLinux
-          then 13
-          else 15;
+    go = {
+      enable = true;
+      goPath = "Projects/go";
+      goPrivate = [ "github.com/johnrizzo1" "rfc822.mx" ];
+    };
 
-        normal = {
-          family = "CaskaydiaCove Nerd Font";
-          style = "Regular";
+    jujutsu = {
+      enable = true;
+
+      # I don't use "settings" because the path is wrong on macOS at
+      # the time of writing this.
+    };
+    
+    ssh = {
+      enable = true;
+
+      matchBlocks = {
+        "coda" = lib.hm.dag.entryBefore ["*"] {
+          hostname = "coda";
+          forwardAgent = true;
+        };
+        "irl" = lib.hm.dag.entryBefore ["coda"] {
+          hostname = "irl";
+          forwardAgent = true;
         };
       };
 
-      keyboard.bindings = [
-        { key = "K"; mods = "Command"; chars = "ClearHistory"; }
-        { key = "V"; mods = "Command"; action = "Paste"; }
-        { key = "C"; mods = "Command"; action = "Copy"; }
-        { key = "Key0"; mods = "Command"; action = "ResetFontSize"; }
-        { key = "Equals"; mods = "Command"; action = "IncreaseFontSize"; }
-        # { key = "Subtract"; mods = "Command"; action = "DecreaseFontSize"; }
-      ];
+      # startAgent = true;
+      controlMaster = "auto";
+      forwardAgent = false;
+      compression = true;
 
-    };
-  };
-
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
-    enableFishIntegration = true;
-    enableNushellIntegration = true;
-  };
-
-  # programs.command-not-found.enable = true;
-  programs.nix-index = {
-    enable = true;
-    enableZshIntegration = true;
-    enableFishIntegration = true;
-  };
-
-  # programs.kitty = {
-  #   enable = !isWSL;
-  #   extraConfig = builtins.readFile ./kitty;
-  # };
-
-  programs.i3status = {
-    enable = isLinux && !isWSL;
-
-    general = {
-      colors = true;
-      color_good = "#8C9440";
-      color_bad = "#A54242";
-      color_degraded = "#DE935F";
+      extraConfig = 
+        if pkgs.stdenv.isDarwin
+        then "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
+        else "";
     };
 
-    modules = {
-      ipv6.enable = false;
-      "wireless _first_".enable = false;
-      "battery all".enable = false;
+    alacritty = {
+      enable = !isWSL;
+
+      settings = {
+        env.TERM = "xterm-256color";
+
+        window.dimensions = {
+          columns = 130;
+          lines = 36;
+        };
+
+        font = {
+          italic.style = "Italic";
+          bold.style = "Bold";
+          bold_italic.style = "Bold Italic";
+          size =
+            if isLinux
+            then 13
+            else 15;
+
+          normal = {
+            family = "CaskaydiaCove Nerd Font";
+            style = "Regular";
+          };
+        };
+
+        keyboard.bindings = [
+          { key = "K"; mods = "Command"; chars = "ClearHistory"; }
+          { key = "V"; mods = "Command"; action = "Paste"; }
+          { key = "C"; mods = "Command"; action = "Copy"; }
+          { key = "Key0"; mods = "Command"; action = "ResetFontSize"; }
+          { key = "Equals"; mods = "Command"; action = "IncreaseFontSize"; }
+          # { key = "Subtract"; mods = "Command"; action = "DecreaseFontSize"; }
+        ];
+
+      };
     };
-  };
 
-  programs.neovim = {
-    enable = true;
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+    starship = {
+      enable = true;
+      enableZshIntegration = true;
+      enableFishIntegration = true;
+      enableNushellIntegration = true;
+    };
 
-    withPython3 = true;
+    # command-not-found.enable = true;
+    nix-index = {
+      enable = true;
+      enableZshIntegration = true;
+      enableFishIntegration = true;
+    };
 
-    # plugins = with pkgs; [
-    #   customVim.vim-copilot
-    #   customVim.vim-cue
-    #   customVim.vim-fish
-    #   customVim.vim-glsl
-    #   customVim.vim-misc
-    #   customVim.vim-pgsql
-    #   customVim.vim-tla
-    #   customVim.vim-zig
-    #   customVim.pigeon
-    #   customVim.AfterColors
+    # kitty = {
+    #   enable = !isWSL;
+    #   extraConfig = builtins.readFile ./kitty;
+    # };
 
-    #   customVim.vim-nord
-    #   customVim.nvim-comment
-    #   customVim.nvim-conform
-    #   customVim.nvim-dressing
-    #   customVim.nvim-gitsigns
-    #   customVim.nvim-lualine
-    #   customVim.nvim-lspconfig
-    #   customVim.nvim-nui
-    #   customVim.nvim-plenary # required for telescope
-    #   customVim.nvim-telescope
-    #   customVim.nvim-treesitter
-    #   customVim.nvim-treesitter-playground
-    #   customVim.nvim-treesitter-textobjects
+    i3status = {
+      enable = isLinux && !isWSL;
 
-    #   vimPlugins.vim-eunuch
-    #   vimPlugins.vim-markdown
-    #   vimPlugins.vim-nix
-    #   vimPlugins.typescript-vim
-    #   vimPlugins.nvim-treesitter-parsers.elixir
-    # ] ++ (lib.optionals (!isWSL) [
-    #   # This is causing a segfaulting while building our installer
-    #   # for WSL so just disable it for now. This is a pretty
-    #   # unimportant plugin anyway.
-    #   customVim.nvim-web-devicons
-    # ]);
+      general = {
+        colors = true;
+        color_good = "#8C9440";
+        color_bad = "#A54242";
+        color_degraded = "#DE935F";
+      };
 
-    # extraConfig = (import ./vim-config.nix) { inherit sources; };
+      modules = {
+        ipv6.enable = false;
+        "wireless _first_".enable = false;
+        "battery all".enable = false;
+      };
+    };
+
+    neovim = {
+      enable = true;
+      package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+
+      withPython3 = true;
+
+      # plugins = with pkgs; [
+      #   customVim.vim-copilot
+      #   customVim.vim-cue
+      #   customVim.vim-fish
+      #   customVim.vim-glsl
+      #   customVim.vim-misc
+      #   customVim.vim-pgsql
+      #   customVim.vim-tla
+      #   customVim.vim-zig
+      #   customVim.pigeon
+      #   customVim.AfterColors
+
+      #   customVim.vim-nord
+      #   customVim.nvim-comment
+      #   customVim.nvim-conform
+      #   customVim.nvim-dressing
+      #   customVim.nvim-gitsigns
+      #   customVim.nvim-lualine
+      #   customVim.nvim-lspconfig
+      #   customVim.nvim-nui
+      #   customVim.nvim-plenary # required for telescope
+      #   customVim.nvim-telescope
+      #   customVim.nvim-treesitter
+      #   customVim.nvim-treesitter-playground
+      #   customVim.nvim-treesitter-textobjects
+
+      #   vimPlugins.vim-eunuch
+      #   vimPlugins.vim-markdown
+      #   vimPlugins.vim-nix
+      #   vimPlugins.typescript-vim
+      #   vimPlugins.nvim-treesitter-parsers.elixir
+      # ] ++ (lib.optionals (!isWSL) [
+      #   # This is causing a segfaulting while building our installer
+      #   # for WSL so just disable it for now. This is a pretty
+      #   # unimportant plugin anyway.
+      #   customVim.nvim-web-devicons
+      # ]);
+
+      # extraConfig = (import ./vim-config.nix) { inherit sources; };
+    };
   };
 }

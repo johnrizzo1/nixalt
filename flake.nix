@@ -24,8 +24,6 @@
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
-    # nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-24.05-darwin";
-    # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Build a custom WSL installer
@@ -38,10 +36,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # I think technically you're not supposed to override the nixpkgs
     # used by neovim but recently I had failures if I didn't pin to my
@@ -155,8 +151,8 @@
       system = "x86_64-linux";
       user = "jrizzo";
     };
-    # nixos-rebuild --flake .#vm-intel-prl build-vm
-    nixosConfigurations.vm-intel-prl = mkSystem "vm-intel-prl" {
+    # nixos-rebuild --flake .#vm-aarch64-prl build-vm
+    nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
       system = "aarch64-linux";
       user = "jrizzo";
     };

@@ -132,6 +132,13 @@ in {
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;
   services.openssh.settings.PermitRootLogin = "no";
+  
+  services.synergy.server = {
+    enable = true;
+    address = "0.0.0.0";
+    autoStart = true;
+    tls.enable = true;
+  };
 
   # Disable the firewall since we're in a VM and we want to make it
   # easy to visit stuff in here. We only use NAT networking anyways.
