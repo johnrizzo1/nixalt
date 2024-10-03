@@ -58,8 +58,8 @@
       ApplePressAndHoldEnabled = false;
       AppleShowAllExtensions = true;
       AppleShowAllFiles = true;
-      InitialKeyRepeat = 3;
-      KeyRepeat = 1;
+      InitialKeyRepeat = 0;
+      KeyRepeat = 10;
       NSAutomaticCapitalizationEnabled = false;
       NSAutomaticDashSubstitutionEnabled = false;
       NSAutomaticInlinePredictionEnabled = false;
