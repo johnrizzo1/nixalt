@@ -36,7 +36,9 @@
 
   #
   # Packages
-  # environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [
+    synergy
+  ];
 
   # nixpkgs.config.android_sdk.accept_license = true;
 
@@ -65,6 +67,7 @@
       "figma"
       "gimp"
       "gns3"
+      "google-drive" 
       "inkscape"
       "jan" # Offline AI Tool like LMStudio
       "krita"
@@ -131,12 +134,12 @@
   };
 
   services.tailscale.enable = true;
-  services.synergy.client = {
-    enable = true;
-    autoStart = true;
-    serverAddress = coda.technobable.com;
-    tls.enable = true;
-  };
+  # services.synergy.client = {
+  #   enable = true;
+  #   autoStart = true;
+  #   serverAddress = "coda.technobable.com:24800";
+  #   # tls.enable = true;
+  # };
   
   #
   # Other Options
