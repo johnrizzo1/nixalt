@@ -67,6 +67,7 @@
       "figma"
       "gimp"
       "gns3"
+      "google-drive" 
       "inkscape"
       "jan" # Offline AI Tool like LMStudio
       "krita"
