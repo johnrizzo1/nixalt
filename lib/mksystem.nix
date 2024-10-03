@@ -28,8 +28,6 @@ in systemFunc rec {
   inherit system;
 
   modules = [
-    (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
-    
     # Apply our overlays. Overlays are keyed by system type so we have
     # to go through and apply our system type. We do this first so
     # the overlays are available globally.
@@ -38,6 +36,8 @@ in systemFunc rec {
 
     # Allow unfree packages.
     { nixpkgs.config.allowUnfree = true; }
+
+    (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
 
     # Bring in WSL if this is a WSL build
     (if isWSL then inputs.nixos-wsl.nixosModules.wsl else {})

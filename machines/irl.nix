@@ -21,6 +21,11 @@
     '';
   };
 
+  users.users.root = {
+    isSystemUser = true;
+    initialHashedPassword = "$y$j9T$nF3bvV8Ta/mmPCELOr5hB/$jRPG1EZ0rPuCuzKdPgn0VsAsfTyZMiEkrVneqOr7ci0";
+  };
+
   networking.hostName = currentSystemName;
 
   # 80/443 for web traffic
