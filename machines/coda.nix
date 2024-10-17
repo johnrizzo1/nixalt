@@ -18,8 +18,6 @@ in {
 
   # services.secureboot.enable = true;
 
-  # Be careful updating this.
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   nix = {
     package = pkgs.nixVersions.latest;
@@ -30,126 +28,139 @@ in {
     '';
   };
 
-  networking.hostName = currentSystemName;
+  networking = {
+    hostName = currentSystemName;
+    # Disable the firewall since we're in a VM and we want to make it
+    # easy to visit stuff in here. We only use NAT networking anyways.
+    # firewall.enable = false;
+  };
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    # Be careful updating this.
+    # boot.kernelPackages = pkgs.linuxPackages_latest;
+    # Use the systemd-boot EFI boot loader.
 
-  # VMware, Parallels both only support this being 0 otherwise you see
-  # "error switching console mode" on boot.
-  boot.loader.systemd-boot.consoleMode = "0";
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      # VMware, Parallels both only support this being 0 otherwise you see
+      # "error switching console mode" on boot.
+      systemd-boot.consoleMode = "0";
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "America/New_York";
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  services.printing.enable = true;
-  services.colord.enable = true;
-  services.hardware.bolt.enable = true;
-  # services.hackrf.enable = true;
+  services = {
+    printing.enable = true;
+    colord.enable = true;
+    hardware.bolt.enable = true;
+    xserver.videoDrivers = ["nvidia"];
+    ollama = {
+      enable = false;
+      acceleration = "cuda";
+    };
+    #? tabby.acceleration = "cpu|rocm|cuda|metal";
+    #- yubikey-agent.enable = true;
+    # Enable automatic login for the user.
+    displayManager.autoLogin.enable = true;
+    displayManager.autoLogin.user = currentSystemUser;
 
-  # gate with test for desktop
-  # hardware.graphics.enable = true;
-  services.xserver.videoDrivers = ["nvidia"];
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = true;
-    powerManagement.finegrained = false;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # Enable tailscale. We manually authenticate when we want with
+    # "sudo tailscale up". If you don't use tailscale, you should comment
+    # out or delete all of this.
+    tailscale.enable = true;
+    # Enable the OpenSSH daemon.
+    openssh.enable = true;
+    openssh.settings.PasswordAuthentication = true;
+    openssh.settings.PermitRootLogin = "no";
+  
+    synergy.server = {
+      enable = true;
+      address = "0.0.0.0";
+      autoStart = true;
+      tls.enable = true;
+    };
+
+    virt.enable = true;
   };
 
-  # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = currentSystemUser;
-
+  hardware = {
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = true;
+      powerManagement.finegrained = false;
+      open = false;
+      nvidiaSettings = true;
+      # nvidiaPersistenced = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
+    graphics.enable = true;
+    logitech.wireless = {
+      enable = true;
+      enableGraphical = true;
+    };
+    hackrf.enable = true;
+    flipperzero.enable = true;
+  };
+  
   # Don't require password for sudo
   # security.sudo.wheelNeedsPassword = false;
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      LC_ADDRESS = "en_US.UTF-8";
+      LC_IDENTIFICATION = "en_US.UTF-8";
+      LC_MEASUREMENT = "en_US.UTF-8";
+      LC_MONETARY = "en_US.UTF-8";
+      LC_NAME = "en_US.UTF-8";
+      LC_NUMERIC = "en_US.UTF-8";
+      LC_PAPER = "en_US.UTF-8";
+      LC_TELEPHONE = "en_US.UTF-8";
+      LC_TIME = "en_US.UTF-8";
+    };
   };
-
-  # Enable tailscale. We manually authenticate when we want with
-  # "sudo tailscale up". If you don't use tailscale, you should comment
-  # out or delete all of this.
-  services.tailscale.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
-
+  users.users.root = {
+    hashedPassword = "$y$j9T$huQi//1srOgV4dSHFgVrh/$mZbJwRhMuqOTAPWssVxlL1d9YCjDxugoQejlN8I4K70";
+  };
   # nixpkgs.config.permittedInsecurePackages = [ ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    android-studio-full
-    cachix
-    devenv
-    direnv
-    git
-    gnumake
-    home-manager
-    killall
-    niv
-    rxvt_unicode
-    signal-desktop
-    synology-drive-client
-    tmux
-    vim
-    vscodium
-    weechat
-    wget
-    xclip
-    # For hypervisors that support auto-resizing, this script forces it.
-    # I've noticed not everyone listens to the udev events so this is a hack.
-    (writeShellScriptBin "xrandr-auto" ''
-      xrandr --output Virtual-1 --auto
-    '')
-  ];
+  environment = {
+    systemPackages = with pkgs; [
+      cachix
+      devenv
+      direnv
+      git
+      home-manager
+      niv
+      tmux
+      wget
+      ollama
+      ollama-cuda
+      # For hypervisors that support auto-resizing, this script forces it.
+      # I've noticed not everyone listens to the udev events so this is a hack.
+      (writeShellScriptBin "xrandr-auto" ''
+        xrandr --output Virtual-1 --auto
+      '')
+    ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true;
-  services.openssh.settings.PermitRootLogin = "no";
-  
-  services.synergy.server = {
-    enable = true;
-    address = "0.0.0.0";
-    autoStart = true;
-    tls.enable = true;
+    sessionVariables.NIXOS_OZONE_WL = "1";
   };
 
-  # Disable the firewall since we're in a VM and we want to make it
-  # easy to visit stuff in here. We only use NAT networking anyways.
-#   networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  # system.autoUpgrade.enable = true;
+  # system.autoUpgrade.allowReboot = false;
+  # system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.05";
   system.stateVersion = "24.05"; # Did you read the comment?
 }

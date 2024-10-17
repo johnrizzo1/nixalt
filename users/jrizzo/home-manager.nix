@@ -42,24 +42,37 @@ in {
     packages = with pkgs; [
       # ripgrep
       # sentry-cli
+      android-studio-full
       asciinema
       bat
       bottom
-      devenv
-      direnv
+      comma
       eza
       fd
       fzf
       gh
+      git
       git-lfs
+      gnumake
       gopls
-      home-manager
       htop
       jq
+      killall
+      niv
       nodejs # Node is required for Copilot.vim
+      alpaca # ollama GUI
+      rxvt_unicode
+      signal-desktop
+      synology-drive-client
       tailscale
+      tmux
       tree
+      vim
+      vscodium
       watch
+      weechat
+      wget
+      xclip
       xsel
       zigpkgs."0.13.0"
     ] ++ (lib.optionals isDarwin [

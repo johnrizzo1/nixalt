@@ -1,9 +1,9 @@
 { inputs, pkgs, ... }: {
   environment.systemPackages = [
-    pkgs.proxmove
-    pkgs.terraform
-    pkgs.terraform-providers.proxmox
+    # pkgs.proxmove
+    # pkgs.terraform
+    # pkgs.terraform-providers.proxmox
   ];
 
-  services.proxmox-ve.enable = true;
+  # services.proxmox-ve.enable = true;
 }

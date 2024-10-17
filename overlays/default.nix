@@ -40,7 +40,7 @@ in [
   stable-packages
   # darwin-packages
   inputs.nix.overlays.default
-  inputs.proxmox-nixos.overlays.x86_64-linux
+  # inputs.proxmox-nixos.overlays.x86_64-linux
   inputs.jujutsu.overlays.default
   inputs.zig.overlays.default
 ]
