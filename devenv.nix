@@ -14,6 +14,7 @@
     git --version | grep "2.42.0"
   '';
   languages.nix.enable = true;
+  difftastic.enable = true;
   pre-commit.hooks.shellcheck.enable = true;
   # See full reference at https://devenv.sh/reference/options/
 }

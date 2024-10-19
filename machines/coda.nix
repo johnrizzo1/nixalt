@@ -18,14 +18,20 @@ in {
 
   # services.secureboot.enable = true;
 
-
   nix = {
     package = pkgs.nixVersions.latest;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-    '';
+    # extraOptions = ''
+      # keep-outputs = true
+      # keep-derivations = true
+      # experimental-features = nix-command flakes
+    # '';
+
+    settings = {
+      experimental-features = "nix-command flakes";
+      keep-outputs = true;
+      keep-derivations = true;
+      trusted-users = [ "root" "jrizzo" ];
+    };
   };
 
   networking = {
@@ -39,7 +45,7 @@ in {
     # Be careful updating this.
     # boot.kernelPackages = pkgs.linuxPackages_latest;
     # Use the systemd-boot EFI boot loader.
-
+    supportedFilesystems = [ "ntfs" ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -149,6 +155,8 @@ in {
       wget
       ollama
       ollama-cuda
+      obsidian
+      cudatoolkit
       # For hypervisors that support auto-resizing, this script forces it.
       # I've noticed not everyone listens to the udev events so this is a hack.
       (writeShellScriptBin "xrandr-auto" ''
