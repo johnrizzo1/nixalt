@@ -42,6 +42,8 @@ in systemFunc rec {
     # Allow unfree packages.
     { nixpkgs.config.allowUnfree = true; }
 
+    # inputs.vscode-server.nixosModules.default
+
     # (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
     # inputs.proxmox-nixos.nixosModules.proxmox-ve
     # Bring in WSL if this is a WSL build

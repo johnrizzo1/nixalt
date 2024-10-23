@@ -40,10 +40,10 @@ in {
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
     packages = with pkgs; [
+      # alpaca # ollama GUI
       # android-studio-full
       # ripgrep
       # sentry-cli
-      # alpaca # ollama GUI
       asciinema
       bat
       bottom
@@ -60,7 +60,7 @@ in {
       jq
       killall
       niv
-      nodejs # Node is required for Copilot.vim
+      nodejs # Node is required for Copilot.vim      
       rxvt_unicode
       signal-desktop
       synology-drive-client
@@ -75,20 +75,13 @@ in {
       xclip
       xsel
       # zigpkgs."0.13.0"
-    ] ++ (lib.optionals isDarwin [
-      # This is automatically setup on Linux
-      pkgs.cachix
-      mas
-      iterm2
-      # pkgs.tailscale
-    ]) ++ (lib.optionals (isLinux && !isWSL) [
-      pkgs.chromium
-      pkgs.firefox
-      pkgs.element-desktop-wayland
-      # pkgs.rofi
-      # pkgs.valgrind
-      pkgs.zathura
-      pkgs.xfce.xfce4-terminal
+      _1password
+    ] ++ (lib.optionals (isLinux && !isWSL) [
+      chromium
+      firefox
+      element-desktop-wayland
+      _1password-gui
+      discord
     ]);
 
     #---------------------------------------------------------------------
@@ -116,7 +109,7 @@ in {
       # AWS_CONFIG_FILE = "${configHome}/aws/config";
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
     };
-    
+
     shellAliases = {
       ".." = "cd ..";
       "..." = "cd ../..";
@@ -125,11 +118,29 @@ in {
       ls = "eza";
       cat = "bat -pp";
       tree = "erd --layout inverted --icons --human";
-      
+      ga = "git add";
+      gc = "git commit";
+      gco = "git checkout";
+      gcp = "git cherry-pick";
+      gdiff = "git diff";
+      gl = "git prettylog";
+      gp = "git push";
+      gs = "git status";
+      gt = "git tag";
+
+      jf = "jj git fetch";
+      jn = "jj new";
+      js = "jj st";
+
       # XDG Config Dirs
       # yarn = "yarn --use-yarnrc ${configHome}/yarn/config"; # $HOME/.yarnrc
       wget = "wget - -hsts-file=${dataHome}/wget-hsts"; # $HOME/wget-hsts
-    };
+    } // (if isLinux then {
+      # Two decades of using a Mac has made this such a strong memory
+      # that I'm just going to keep it consistent.
+      pbcopy = "xclip";
+      pbpaste = "xclip -o";
+    } else {});
   };
 
   #---------------------------------------------------------------------
@@ -185,26 +196,7 @@ in {
         "set -g SHELL ${pkgs.fish}/bin/fish"
       ]));
 
-      shellAliases = {
-        ga = "git add";
-        gc = "git commit";
-        gco = "git checkout";
-        gcp = "git cherry-pick";
-        gdiff = "git diff";
-        gl = "git prettylog";
-        gp = "git push";
-        gs = "git status";
-        gt = "git tag";
-
-        jf = "jj git fetch";
-        jn = "jj new";
-        js = "jj st";
-      } // (if isLinux then {
-        # Two decades of using a Mac has made this such a strong memory
-        # that I'm just going to keep it consistent.
-        pbcopy = "xclip";
-        pbpaste = "xclip -o";
-      } else {});
+      # shellAliases = {};
 
       # plugins = [
       #   "fish-fzf"

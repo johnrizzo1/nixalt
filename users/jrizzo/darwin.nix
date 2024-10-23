@@ -40,9 +40,14 @@
   #   pkgs.darwin-packages.darwin-zsh-completions
   # ];
 
+  home.packages = with pkgs; [
+    mas
+    iterm2
+  ];
+
   users.users.jrizzo = {
     home = "/Users/jrizzo";
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
   };
   
   services.nix-daemon.enable = true;

@@ -7,8 +7,12 @@
   # Add ~/.local/bin to PATH
   environment.localBinInPath = true;
 
+  # environment.systemPackages = with pkgs; [];
+  # home.packages = with pkgs; [];
+
   # Since we're using fish as our shell
   programs.fish.enable = true;
+  programs.zsh.enable = true;
 
   users.users.jrizzo = {
     isNormalUser = true;
@@ -22,7 +26,7 @@
       "incus-admin"
       "gns3"
     ];
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     hashedPassword = "$y$j9T$b5Q1pCL/pua.UUsOV3TKi/$8nkwFkKrHjUu5cr8b4TQnFgSpcYbVuFW63w88UppUF1";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRWDuga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"
