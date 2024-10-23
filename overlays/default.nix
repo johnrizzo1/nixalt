@@ -39,8 +39,8 @@ in [
   unstable-packages
   stable-packages
   # darwin-packages
-  inputs.nix.overlays.default
+  # inputs.nix.overlays.default
   # inputs.proxmox-nixos.overlays.x86_64-linux
-  inputs.jujutsu.overlays.default
-  inputs.zig.overlays.default
+  # inputs.jujutsu.overlays.default
+  # inputs.zig.overlays.default
 ]

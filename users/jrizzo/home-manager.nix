@@ -40,9 +40,10 @@ in {
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
     packages = with pkgs; [
+      # android-studio-full
       # ripgrep
       # sentry-cli
-      android-studio-full
+      # alpaca # ollama GUI
       asciinema
       bat
       bottom
@@ -60,7 +61,6 @@ in {
       killall
       niv
       nodejs # Node is required for Copilot.vim
-      alpaca # ollama GUI
       rxvt_unicode
       signal-desktop
       synology-drive-client
@@ -74,7 +74,7 @@ in {
       wget
       xclip
       xsel
-      zigpkgs."0.13.0"
+      # zigpkgs."0.13.0"
     ] ++ (lib.optionals isDarwin [
       # This is automatically setup on Linux
       pkgs.cachix
@@ -84,7 +84,8 @@ in {
     ]) ++ (lib.optionals (isLinux && !isWSL) [
       pkgs.chromium
       pkgs.firefox
-      pkgs.rofi
+      pkgs.element-desktop-wayland
+      # pkgs.rofi
       # pkgs.valgrind
       pkgs.zathura
       pkgs.xfce.xfce4-terminal
@@ -453,7 +454,7 @@ in {
 
     neovim = {
       enable = true;
-      package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+      # package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
 
       withPython3 = true;
 

@@ -16,13 +16,16 @@
 
   inputs = {
     # Nix
-    nix.url = "github:nixos/nix/2.24.7";
-
+    # nix.url = "github:nixos/nix/2.24.7";
+    flake-schemas.url = "https://flakehub.com/f/DeterminateSystems/flake-schemas/*.tar.gz";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2405.0";
+ 
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
@@ -31,8 +34,8 @@
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager = {
-      # url = "github:nix-community/home-manager/release-24.05";
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager/release-24.05";
+      # url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -42,17 +45,17 @@
     # I think technically you're not supposed to override the nixpkgs
     # used by neovim but recently I had failures if I didn't pin to my
     # own. We can always try to remove that anytime.
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
+    # neovim-nightly-overlay = {
+    #   url = "github:nix-community/neovim-nightly-overlay";
 
-      # Only need unstable until the lpeg fix hits mainline, probably
-      # not very long... can safely switch back for 23.11.
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
+    #   # Only need unstable until the lpeg fix hits mainline, probably
+    #   # not very long... can safely switch back for 23.11.
+    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
+    # };
 
     # Other packages
-    jujutsu.url = "github:martinvonz/jj";
-    zig.url = "github:mitchellh/zig-overlay";
+    # jujutsu.url = "github:martinvonz/jj";
+    # zig.url = "github:mitchellh/zig-overlay";
     
     # SecureBoot
     lanzaboote = {
@@ -105,6 +108,8 @@
 
   outputs = { self, nixpkgs, home-manager, flake-utils, ... }@inputs:
   let
+    inherit (inputs.flake-schemas) schemas;
+
     # Overlays is the list of overlays we want to apply from flake inputs.
     overlays = import ./overlays { inherit inputs; };
 
@@ -162,18 +167,12 @@
     # nix develop
     devShells = forEachSupportedSystem ({ pkgs }: {
       default = pkgs.mkShell {
-        venvDir = ".venv";
         packages = 
           with pkgs; [
-            python311
             jq
             wget
             curl
-          ] 
-          ++ (with pkgs.python311Packages; [
-            pip
-            venvShellHook
-          ]);
+          ];
       };
     });
   };

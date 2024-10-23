@@ -24,16 +24,21 @@ let
   home-manager = if darwin
                  then inputs.home-manager.darwinModules
                  else inputs.home-manager.nixosModules;
+  determinate = if darwin
+                then inputs.determinate.darwinModules.default
+                else inputs.determinate.nixosModules.default;
 in systemFunc rec {
   inherit system;
 
   modules = [
+    determinate
+
     # Apply our overlays. Overlays are keyed by system type so we have
     # to go through and apply our system type. We do this first so
     # the overlays are available globally.
     { nixpkgs.overlays = overlays; }
     { nixpkgs.config.android_sdk.accept_license = true; }
-
+    { nixpkgs.config.cudaSupport = true; }
     # Allow unfree packages.
     { nixpkgs.config.allowUnfree = true; }
 

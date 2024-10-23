@@ -29,7 +29,7 @@
       virt-manager
       #virtio-win
       #win-spice
-      gnome-boxes
+      # gnome-boxes
       qemu_full
       quickemu
       swtpm

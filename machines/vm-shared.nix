@@ -10,19 +10,23 @@ in {
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   nix = {
-    package = pkgs.nixVersions.latest;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-    '';
-
-    # public binary cache that I use for all my derivations. You can keep
-    # this, use your own, or toss it. Its typically safe to use a binary cache
-    # since the data inside is checksummed.
+    enable = true;
     settings = {
-      substituters = ["https://mitchellh-nixos-config.cachix.org"];
-      trusted-public-keys = ["mitchellh-nixos-config.cachix.org-1:bjEbXJyLrL1HZZHBbO4QALnI5faYZppzkU4D2s0G8RQ="];
+      # keep-derivations = true;
+      # keep-outputs = true;
+      allowed-users = ["*"];
+      auto-optimise-store = false;
+      cores = 0;
+      experimental-features = [ "nix-command" "flakes" ];
+      extra-sandbox-paths = [];
+      max-jobs = "auto";
+      require-sigs = true;
+      sandbox = true;
+      substituters = [ "https://cache.nixos.org/" ];
+      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+      trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+      trusted-substituters = [];
+      trusted-users = ["root" "jrizzo"];
     };
   };
 
