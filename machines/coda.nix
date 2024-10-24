@@ -93,7 +93,7 @@
     };
     tabby = {
       enable = false;
-      accelleration = "cuda";
+      acceleration = "cuda";
       usageCollection = false;
     };
 
