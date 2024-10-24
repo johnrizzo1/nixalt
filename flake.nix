@@ -42,6 +42,12 @@
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
     # SecureBoot
     lanzaboote = {
       # url = "github:nix-community/lanzaboote/v0.4.1";
@@ -146,6 +152,35 @@
       system = "aarch64-linux";
       user = "jrizzo";
     };
+
+
+    #
+    # Setting up the formatter
+    formatter = forEachSupportedSystem ({ pkgs }: {
+      default = pkgs.nixfmt-rfc-style.type;
+    });
+
+            # shfmt -d -s -i 2 -ci ${files}
+            # shellcheck -x ${files}
+            # mkdir "$out"
+    # checks = forEachSupportedSystem ({ pkgs }: {
+    #   default = pkgs.runCommandLocal "fmt-check" {
+    #     src = ./.;
+    #     nativeBuildInputs = with pkgs; [alejandra shellcheck shfmt];
+    #   } ''
+    #       alejandra -c .
+    #     '';
+    # });
+
+    checks = forEachSupportedSystem ({ pkgs }: {
+      pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
+        src = ./.;
+        hooks = {
+          alejandra.enable = true;
+          # statix.enable = false;
+        };
+      };
+    });
 
     #
     # Setting up my dev shells
