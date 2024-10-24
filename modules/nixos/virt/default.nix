@@ -98,7 +98,8 @@
     };
 
     # This is to support nvidia cards on docker
-    hardware.nvidia-container-toolkit.enable = true;
+    # enable this after you create an option for cuda/rocm
+    # hardware.nvidia-container-toolkit.enable = true;
 
     # Required for incus
     networking.nftables.enable = true;
@@ -106,7 +107,7 @@
     # networking.firewall.enable = true;
     networking.firewall.trustedInterfaces = ["incusbr0" "virbr0"];
 
-    programs.virt-manager.enable = true;
+    programs.virt-manager.enable = false;
 
     # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
     # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
