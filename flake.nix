@@ -18,7 +18,7 @@
     # Nix
     # nix.url = "github:nixos/nix/2.24.7";
     flake-schemas.url = "https://flakehub.com/f/DeterminateSystems/flake-schemas/*.tar.gz";
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
+    # determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2405.0";
  
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
@@ -42,21 +42,6 @@
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    # I think technically you're not supposed to override the nixpkgs
-    # used by neovim but recently I had failures if I didn't pin to my
-    # own. We can always try to remove that anytime.
-    # neovim-nightly-overlay = {
-    #   url = "github:nix-community/neovim-nightly-overlay";
-
-    #   # Only need unstable until the lpeg fix hits mainline, probably
-    #   # not very long... can safely switch back for 23.11.
-    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
-    # };
-
-    # Other packages
-    # jujutsu.url = "github:martinvonz/jj";
-    # zig.url = "github:mitchellh/zig-overlay";
-    
     # SecureBoot
     lanzaboote = {
       # url = "github:nix-community/lanzaboote/v0.4.1";

@@ -168,17 +168,16 @@ in {
   environment = {
     systemPackages = with pkgs; [
       cachix
+      cudatoolkit
       devenv
       direnv
       git
       home-manager
       niv
+      obsidian
+      ollama
       tmux
       wget
-      ollama
-      # ollama-cuda
-      obsidian
-      cudatoolkit
       # For hypervisors that support auto-resizing, this script forces it.
       # I've noticed not everyone listens to the udev events so this is a hack.
       (writeShellScriptBin "xrandr-auto" ''

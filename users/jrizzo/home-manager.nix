@@ -40,10 +40,12 @@ in {
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
     packages = with pkgs; [
+      _1password
       # alpaca # ollama GUI
       # android-studio-full
       # ripgrep
       # sentry-cli
+      # zigpkgs."0.13.0"
       asciinema
       bat
       bottom
@@ -61,27 +63,29 @@ in {
       killall
       niv
       nodejs # Node is required for Copilot.vim      
-      rxvt_unicode
-      signal-desktop
-      synology-drive-client
+      procs
       tailscale
       tmux
       tree
       vim
-      vscodium
       watch
       weechat
       wget
       xclip
       xsel
-      # zigpkgs."0.13.0"
-      _1password
+      zenith
     ] ++ (lib.optionals (isLinux && !isWSL) [
-      chromium
-      firefox
-      element-desktop-wayland
       _1password-gui
+      chromium
       discord
+      element-desktop-wayland
+      firefox
+      freetube
+      rxvt_unicode
+      signal-desktop
+      spotube
+      synology-drive-client
+      vscodium
     ]);
 
     #---------------------------------------------------------------------

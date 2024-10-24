@@ -31,7 +31,7 @@ in systemFunc rec {
   inherit system;
 
   modules = [
-    determinate
+    # determinate
 
     # Apply our overlays. Overlays are keyed by system type so we have
     # to go through and apply our system type. We do this first so

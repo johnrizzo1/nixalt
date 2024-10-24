@@ -35,7 +35,11 @@
       swtpm
       swtpm-tpm2
       OVMFFull
-      docker-compose
+      # docker-compose
+      # podman
+      # podman-compose
+      # podman-tui
+      # podman-desktop
       # proxmove
       # terraform
       # terraform-providers.proxmox
@@ -65,10 +69,17 @@
         enable = true;
         ui.enable = true;
       };
-      docker = {
-        enable = true;
-        enableOnBoot = true;
-      };
+      # docker = {
+      #   enable = true;
+      #   enableOnBoot = true;
+      # };
+      # podman = {
+        # enable = true;
+        # dockerSocket.enable = true;
+        # dockerCompat = true;
+        # defaultNetwork.settings.dns_enabled = true;
+      # };
+      # containers.cdi.dynamic.nvidia.enable = true;
     };
 
     # This is to support nvidia cards on docker
