@@ -7,18 +7,15 @@
   currentSystemUser,
   currentSystemName,
   ...
-}: let
-  # Turn this to true to use gnome instead of i3. This is a bit
-  # of a hack, I just flip it on as I need to develop gnome stuff
-  # for now.
-  linuxGnome = true;
-in {
+}: {
   imports = [
     ./hardware/coda.nix
-    # ../modules/nixos/secureboot.nix
     ../modules/nixos/desktop.nix
     ../modules/nixos/networking.nix
+    ../modules/nixos/nix-ld.nix
     ../modules/nixos/virt
+    # ../modules/nixos/secureboot.nix
+    # ../modules/nixos/vscode-server.nix
   ];
 
   # services.secureboot.enable = true;
@@ -108,12 +105,12 @@ in {
     openssh.settings.PasswordAuthentication = true;
     openssh.settings.PermitRootLogin = "no";
 
-    synergy.server = {
-      enable = true;
-      address = "0.0.0.0";
-      autoStart = true;
-      tls.enable = true;
-    };
+    # synergy.server = {
+    #   enable = true;
+    #   address = "0.0.0.0";
+    #   autoStart = true;
+    #   tls.enable = true;
+    # };
 
     virt.enable = true;
   };

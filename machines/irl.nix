@@ -17,6 +17,8 @@
     # ../modules/nixos/vscode-server.nix
   ];
 
+  # services.secureboot.enable = true;
+
   nix = {
     enable = true;
     settings = {
@@ -38,6 +40,8 @@
     };
   };
 
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.mutableUsers = false;
   users.users.root = {
     isSystemUser = true;
     initialHashedPassword = "$y$j9T$nF3bvV8Ta/mmPCELOr5hB/$jRPG1EZ0rPuCuzKdPgn0VsAsfTyZMiEkrVneqOr7ci0";
@@ -75,22 +79,19 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  users.mutableUsers = false;
-
   # Host Specific Applications
   environment.systemPackages = with pkgs; [
-    nixos-generators # various image generators
     cachix
     devenv
     direnv
     git
-    gnumake
     home-manager
     killall
     niv
+    nixos-generators # various image generators
+    ollama
     tmux
     vim
-    weechat
     wget
   ];
 
@@ -103,6 +104,12 @@
 
   # services.secureboot.enable = true;
 
+  # Enable Ollama
+  ollama = {
+    enable = true;
+    # acceleration = "rocm";
+  };
+
   # TailScale
   services.tailscale.enable = true;
 
@@ -114,6 +121,9 @@
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;
   services.openssh.settings.PermitRootLogin = "no";
+
+  # Enable my virt setup
+  services.virt.enable = true;
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
