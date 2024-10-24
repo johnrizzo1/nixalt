@@ -20,7 +20,7 @@
     flake-schemas.url = "https://flakehub.com/f/DeterminateSystems/flake-schemas/*.tar.gz";
     # determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2405.0";
- 
+
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
@@ -45,7 +45,7 @@
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      # inputs.flake-utils.follows = "flake-utils";
     };
 
     # SecureBoot
@@ -61,7 +61,7 @@
       url = "https://flakehub.com/f/AshleyYakeley/NixVirt/*.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     # VSCodium
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nix-ld.url = "github:Mic92/nix-ld";
@@ -77,7 +77,7 @@
     nvim-gitsigns.flake = false;
     nvim-lspconfig.url = "github:neovim/nvim-lspconfig";
     nvim-lspconfig.flake = false;
-    nvim-lualine.url ="github:nvim-lualine/lualine.nvim";
+    nvim-lualine.url = "github:nvim-lualine/lualine.nvim";
     nvim-lualine.flake = false;
     nvim-nui.url = "github:MunifTanjim/nui.nvim";
     nvim-nui.flake = false;
@@ -97,34 +97,41 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, home-manager, flake-utils, ... }@inputs:
-  let
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    flake-utils,
+    ...
+  } @ inputs: let
     inherit (inputs.flake-schemas) schemas;
 
     # Overlays is the list of overlays we want to apply from flake inputs.
-    overlays = import ./overlays { inherit inputs; };
+    overlays = import ./overlays {inherit inputs;};
 
     mkSystem = import ./lib/mksystem.nix {
       inherit overlays nixpkgs inputs;
     };
 
-    supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
-    forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
-      pkgs = import nixpkgs { inherit system; };
-    });
+    supportedSystems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+    forEachSupportedSystem = f:
+      nixpkgs.lib.genAttrs supportedSystems (system:
+        f {
+          pkgs = import nixpkgs {inherit system;};
+        });
   in {
     #
     # Linux
     # sudo nixos-rebuild --flake .#coda switch
     nixosConfigurations.coda = mkSystem "coda" {
       system = "x86_64-linux";
-      user   = "jrizzo";
+      user = "jrizzo";
     };
 
     # sudo nixos-rebuild --flake .#irl switch
     nixosConfigurations.irl = mkSystem "irl" {
       system = "x86_64-linux";
-      user   = "jrizzo";
+      user = "jrizzo";
       isHypervisor = true;
     };
 
@@ -148,21 +155,20 @@
       user = "jrizzo";
     };
     # nixos-rebuild --flake .#vm-aarch64-prl build-vm
-    nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
-      system = "aarch64-linux";
-      user = "jrizzo";
-    };
-
+    # nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
+    #   system = "aarch64-linux";
+    #   user = "jrizzo";
+    # };
 
     #
     # Setting up the formatter
-    formatter = forEachSupportedSystem ({ pkgs }: {
+    formatter = forEachSupportedSystem ({pkgs}: {
       default = pkgs.nixfmt-rfc-style.type;
     });
 
-            # shfmt -d -s -i 2 -ci ${files}
-            # shellcheck -x ${files}
-            # mkdir "$out"
+    # shfmt -d -s -i 2 -ci ${files}
+    # shellcheck -x ${files}
+    # mkdir "$out"
     # checks = forEachSupportedSystem ({ pkgs }: {
     #   default = pkgs.runCommandLocal "fmt-check" {
     #     src = ./.;
@@ -172,27 +178,40 @@
     #     '';
     # });
 
-checks = forEachSupportedSystem ({ pkgs }: {
-  pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
-    src = ./.;
-    hooks = {
-      alejandra.enable = true;
-      # statix.enable = false;
-    };
-  };
-});
+    checks = forEachSupportedSystem ({pkgs}: {
+      pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
+        src = ./.;
+        hooks = {
+          # nixpkgs-fmt.enable = true;
+          alejandra.enable = true;
+          statix.enable = false;
+        };
+      };
+    });
 
     #
     # Setting up my dev shells
     # nix develop
-    devShells = forEachSupportedSystem ({ pkgs }: {
+    # devShells = forEachSupportedSystem ({pkgs}: {
+    #   default = pkgs.mkShell {
+    #     packages = with pkgs; [
+    #       jq
+    #       wget
+    #       curl
+    #     ];
+    #   };
+    # });
+    # devShells = forAllSystems (system: {
+    #     default = nixpkgs.legacyPackages.${system}.mkShell {
+    #       inherit (self.checks.${system}.pre-commit-check) shellHook;
+    #       buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
+    #     };
+    #   });
+
+    devShells = forEachSupportedSystem ({pkgs}: {
       default = pkgs.mkShell {
-        packages = 
-          with pkgs; [
-            jq
-            wget
-            curl
-          ];
+        inherit (self.checks.${pkgs.system}.pre-commit-check) shellHook;
+        buildInputs = self.checks.${pkgs.system}.pre-commit-check.enabledPackages;
       };
     });
   };

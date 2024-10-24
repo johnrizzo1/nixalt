@@ -1,4 +1,4 @@
-{ ... }: {
+{...}: {
   virtualisation.incus.enable = true;
 
   virtualisation.lxd = {

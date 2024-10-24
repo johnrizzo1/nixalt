@@ -1,5 +1,10 @@
-{ inputs, lib, pkgs, ... }: {
-  nixpkgs.overlays = [ 
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}: {
+  nixpkgs.overlays = [
     inputs.nix-alien.overlays.default
   ];
 

@@ -1,13 +1,17 @@
-{ isWSL, inputs, ... }:
-
-{ config, lib, pkgs, ... }:
-
-let
+{
+  isWSL,
+  inputs,
+  ...
+}: {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (pkgs) tmuxPlugins;
   inherit (config.xdg) cacheHome configHome dataHome;
   # sources = import ../../nix/sources.nix;
   inherit (pkgs.stdenv) isDarwin isLinux;
-
   # For our MANPAGER env var
   # https://github.com/sharkdp/bat/issues/1145
   # manpager = (pkgs.writeShellScriptBin "manpager" (if isDarwin then ''
@@ -17,14 +21,14 @@ let
   # ''));
 in {
   imports = [
-  #   # catppuccin
-  #   ./editor.nix
-  #   ./home-manager.nix
-  #   ./packages.nix
-  #   ./shell.nix
-  #   ./xdg.nix
+    #   # catppuccin
+    #   ./editor.nix
+    #   ./home-manager.nix
+    #   ./packages.nix
+    #   ./shell.nix
+    #   ./xdg.nix
     # ./obs.nix
-  #   ./git.nix
+    #   ./git.nix
   ];
 
   home = {
@@ -39,54 +43,56 @@ in {
     # Packages I always want installed. Most packages I install using
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
-    packages = with pkgs; [
-      _1password
-      # alpaca # ollama GUI
-      # android-studio-full
-      # ripgrep
-      # sentry-cli
-      # zigpkgs."0.13.0"
-      asciinema
-      bat
-      bottom
-      comma
-      eza
-      fd
-      fzf
-      gh
-      git
-      git-lfs
-      gnumake
-      gopls
-      htop
-      jq
-      killall
-      niv
-      nodejs # Node is required for Copilot.vim      
-      procs
-      tailscale
-      tmux
-      tree
-      vim
-      watch
-      weechat
-      wget
-      xclip
-      xsel
-      zenith
-    ] ++ (lib.optionals (isLinux && !isWSL) [
-      _1password-gui
-      chromium
-      discord
-      element-desktop-wayland
-      firefox
-      freetube
-      rxvt_unicode
-      signal-desktop
-      spotube
-      synology-drive-client
-      vscodium
-    ]);
+    packages = with pkgs;
+      [
+        _1password
+        # alpaca # ollama GUI
+        # android-studio-full
+        # ripgrep
+        # sentry-cli
+        # zigpkgs."0.13.0"
+        asciinema
+        bat
+        bottom
+        comma
+        eza
+        fd
+        fzf
+        gh
+        git
+        git-lfs
+        gnumake
+        gopls
+        htop
+        jq
+        killall
+        niv
+        nodejs # Node is required for Copilot.vim
+        procs
+        tailscale
+        tmux
+        tree
+        vim
+        watch
+        weechat
+        wget
+        xclip
+        xsel
+        zenith
+      ]
+      ++ (lib.optionals (isLinux && !isWSL) [
+        _1password-gui
+        chromium
+        discord
+        element-desktop-wayland
+        firefox
+        freetube
+        rxvt_unicode
+        signal-desktop
+        spotube
+        synology-drive-client
+        vscodium
+      ]);
 
     #---------------------------------------------------------------------
     # Env vars and dotfiles
@@ -99,7 +105,7 @@ in {
       EDITOR = "nvim";
       PAGER = "less -FirSwX";
       # MANPAGER = "${manpager}/bin/manpager";
-      
+
       # XDG Config Dirs
       GHCUP_USE_XDG_DIRS = 1; # $HOME/.ghcup
       PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
@@ -114,37 +120,43 @@ in {
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
     };
 
-    shellAliases = {
-      ".." = "cd ..";
-      "..." = "cd ../..";
-      top = "btm";
-      btop = "btm";
-      ls = "eza";
-      cat = "bat -pp";
-      tree = "erd --layout inverted --icons --human";
-      ga = "git add";
-      gc = "git commit";
-      gco = "git checkout";
-      gcp = "git cherry-pick";
-      gdiff = "git diff";
-      gl = "git prettylog";
-      gp = "git push";
-      gs = "git status";
-      gt = "git tag";
+    shellAliases =
+      {
+        ".." = "cd ..";
+        "..." = "cd ../..";
+        top = "btm";
+        btop = "btm";
+        ls = "eza";
+        cat = "bat -pp";
+        tree = "erd --layout inverted --icons --human";
+        ga = "git add";
+        gc = "git commit";
+        gco = "git checkout";
+        gcp = "git cherry-pick";
+        gdiff = "git diff";
+        gl = "git prettylog";
+        gp = "git push";
+        gs = "git status";
+        gt = "git tag";
 
-      jf = "jj git fetch";
-      jn = "jj new";
-      js = "jj st";
+        jf = "jj git fetch";
+        jn = "jj new";
+        js = "jj st";
 
-      # XDG Config Dirs
-      # yarn = "yarn --use-yarnrc ${configHome}/yarn/config"; # $HOME/.yarnrc
-      wget = "wget - -hsts-file=${dataHome}/wget-hsts"; # $HOME/wget-hsts
-    } // (if isLinux then {
-      # Two decades of using a Mac has made this such a strong memory
-      # that I'm just going to keep it consistent.
-      pbcopy = "xclip";
-      pbpaste = "xclip -o";
-    } else {});
+        # XDG Config Dirs
+        # yarn = "yarn --use-yarnrc ${configHome}/yarn/config"; # $HOME/.yarnrc
+        wget = "wget - -hsts-file=${dataHome}/wget-hsts"; # $HOME/wget-hsts
+      }
+      // (
+        if isLinux
+        then {
+          # Two decades of using a Mac has made this such a strong memory
+          # that I'm just going to keep it consistent.
+          pbcopy = "xclip";
+          pbpaste = "xclip -o";
+        }
+        else {}
+      );
   };
 
   #---------------------------------------------------------------------
@@ -161,7 +173,7 @@ in {
       enable = true;
       shellOptions = [];
       enableCompletion = true;
-      historyControl = [ "ignoredups" "ignorespace" ];
+      historyControl = ["ignoredups" "ignorespace"];
       initExtra = builtins.readFile ./files/bashrc;
 
       shellAliases = {
@@ -177,7 +189,7 @@ in {
       };
     };
 
-    direnv= {
+    direnv = {
       enable = true;
       enableZshIntegration = true;
       # enableFishIntegration = true;
@@ -195,10 +207,10 @@ in {
 
     fish = {
       enable = true;
-      interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
+      interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" [
         (builtins.readFile ./files/config.fish)
         "set -g SHELL ${pkgs.fish}/bin/fish"
-      ]));
+      ]);
 
       # shellAliases = {};
 
@@ -231,19 +243,19 @@ in {
 
         set -s set-clipboard external
         set -s copy-command 'xsel -i'
-        
+
         # Vim style pane selection
         set -g status-keys vi
         setw -g mode-keys vi
         bind h select-pane -L
-        bind j select-pane -D 
+        bind j select-pane -D
         bind k select-pane -U
         bind l select-pane -R
-        
+
         # Fix my clear screen obsession
         bind-key -n C-l send-keys -R ^M \; clear-history
       '';
-      
+
       plugins = [
         {
           plugin = tmuxPlugins.resurrect;
@@ -295,12 +307,12 @@ in {
         tmuxPlugins.sensible
         tmuxPlugins.vim-tmux-navigator
         tmuxPlugins.resurrect
-        tmuxPlugins.open        
+        tmuxPlugins.open
         tmuxPlugins.continuum
         tmuxPlugins.tmux-fzf
       ];
     };
-    
+
     zsh = {
       enable = true;
       # enableBashCompletion = true;
@@ -339,7 +351,7 @@ in {
     go = {
       enable = true;
       goPath = "Projects/go";
-      goPrivate = [ "github.com/johnrizzo1" "rfc822.mx" ];
+      goPrivate = ["github.com/johnrizzo1" "rfc822.mx"];
     };
 
     jujutsu = {
@@ -348,7 +360,7 @@ in {
       # I don't use "settings" because the path is wrong on macOS at
       # the time of writing this.
     };
-    
+
     ssh = {
       enable = true;
 
@@ -368,7 +380,7 @@ in {
       forwardAgent = false;
       compression = true;
 
-      extraConfig = 
+      extraConfig =
         if pkgs.stdenv.isDarwin
         then "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
         else "";
@@ -401,14 +413,33 @@ in {
         };
 
         keyboard.bindings = [
-          { key = "K"; mods = "Command"; chars = "ClearHistory"; }
-          { key = "V"; mods = "Command"; action = "Paste"; }
-          { key = "C"; mods = "Command"; action = "Copy"; }
-          { key = "Key0"; mods = "Command"; action = "ResetFontSize"; }
-          { key = "Equals"; mods = "Command"; action = "IncreaseFontSize"; }
+          {
+            key = "K";
+            mods = "Command";
+            chars = "ClearHistory";
+          }
+          {
+            key = "V";
+            mods = "Command";
+            action = "Paste";
+          }
+          {
+            key = "C";
+            mods = "Command";
+            action = "Copy";
+          }
+          {
+            key = "Key0";
+            mods = "Command";
+            action = "ResetFontSize";
+          }
+          {
+            key = "Equals";
+            mods = "Command";
+            action = "IncreaseFontSize";
+          }
           # { key = "Subtract"; mods = "Command"; action = "DecreaseFontSize"; }
         ];
-
       };
     };
 

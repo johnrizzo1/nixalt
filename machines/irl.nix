@@ -1,8 +1,13 @@
-{ inputs, config, pkgs, lib, 
-  currentSystem, currentSystemUser, currentSystemName,
-  ... }:
-  
-{  
+{
+  inputs,
+  config,
+  pkgs,
+  lib,
+  currentSystem,
+  currentSystemUser,
+  currentSystemName,
+  ...
+}: {
   imports = [
     ./hardware/irl.nix
     ../modules/nixos/networking.nix
@@ -20,14 +25,14 @@
       allowed-users = ["*"];
       auto-optimise-store = false;
       cores = 0;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = ["nix-command" "flakes"];
       extra-sandbox-paths = [];
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;
-      substituters = [ "https://cache.nixos.org/" ];
-      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-      trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+      substituters = ["https://cache.nixos.org/"];
+      system-features = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+      trusted-public-keys = ["cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="];
       trusted-substituters = [];
       trusted-users = ["root" "jrizzo"];
     };
@@ -43,7 +48,7 @@
   # 80/443 for web traffic
   # 3080 for gns3
   # 5432 for postgresql
-  networking.firewall.allowedTCPPorts = [ 80 443 5432 8335 8334 8332 9735 4224 ];
+  networking.firewall.allowedTCPPorts = [80 443 5432 8335 8334 8332 9735 4224];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -52,7 +57,7 @@
   # VMware, Parallels both only support this being 0 otherwise you see
   # "error switching console mode" on boot.
   boot.loader.systemd-boot.consoleMode = "0";
-  
+
   # Set your time zone.
   time.timeZone = "America/New_York";
 
@@ -69,11 +74,11 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-  
+
   users.mutableUsers = false;
-  
+
   # Host Specific Applications
-  environment.systemPackages = with pkgs; [ 
+  environment.systemPackages = with pkgs; [
     nixos-generators # various image generators
     cachix
     devenv
@@ -88,7 +93,7 @@
     weechat
     wget
   ];
-  
+
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.hardware.bolt.enable = true;

@@ -1,4 +1,8 @@
-{ inputs, pkgs, ... }: {
+{
+  inputs,
+  pkgs,
+  ...
+}: {
   environment.systemPackages = [
     # pkgs.proxmove
     # pkgs.terraform

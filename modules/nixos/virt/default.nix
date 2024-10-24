@@ -1,4 +1,10 @@
-{ pkgs, lib, config, inputs, ... }: {
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}: {
   imports = [
     # inputs.proxmox-nixos.nixosModules.proxmox-ve
     # ./libvirt.nix
@@ -52,7 +58,7 @@
           package = pkgs.qemu_kvm;
           swtpm.enable = true;
           ovmf.enable = true;
-          ovmf.packages = [ pkgs.OVMFFull.fd ];
+          ovmf.packages = [pkgs.OVMFFull.fd];
         };
       };
       spiceUSBRedirection.enable = true;
@@ -113,10 +119,10 @@
       #   enableOnBoot = true;
       # };
       # podman = {
-        # enable = true;
-        # dockerSocket.enable = true;
-        # dockerCompat = true;
-        # defaultNetwork.settings.dns_enabled = true;
+      # enable = true;
+      # dockerSocket.enable = true;
+      # dockerCompat = true;
+      # defaultNetwork.settings.dns_enabled = true;
       # };
       # containers.cdi.dynamic.nvidia.enable = true;
     };
@@ -128,11 +134,11 @@
     networking.nftables.enable = true;
 
     networking.firewall.enable = true;
-    networking.firewall.trustedInterfaces = [ "incusbr0" ];
+    networking.firewall.trustedInterfaces = ["incusbr0"];
 
     programs.virt-manager.enable = true;
 
-    # services.proxmox-ve = { 
+    # services.proxmox-ve = {
     #   enable = true;
     #   vms = {
     #     myvm1 = {
@@ -176,7 +182,5 @@
     #   };
     #   linkConfig.RequiredForOnline = "routable";
     # };
-
-
-    };
+  };
 }

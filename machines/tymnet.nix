@@ -1,13 +1,20 @@
-{ inputs, config, pkgs, lib, 
-  currentSystem, currentSystemUser, currentSystemName, 
-  ... }: {
-  imports = [ ../modules/darwin ];
+{
+  inputs,
+  config,
+  pkgs,
+  lib,
+  currentSystem,
+  currentSystemUser,
+  currentSystemName,
+  ...
+}: {
+  imports = [../modules/darwin];
 
   networking.hostName = currentSystemName;
   networking.computerName = currentSystemName;
   networking.localHostName = currentSystemName;
 
-  # users.users.jrizzo.home = 
+  # users.users.jrizzo.home =
   #   if pkgs.stdenv.isDarwin
   #   then "/Users/jrizzo"
   #   else "/home/jrizzo";
@@ -21,7 +28,7 @@
       . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
     fi
     # End Nix
-    '';
+  '';
 
   programs.fish.enable = true;
   programs.fish.shellInit = ''
@@ -30,9 +37,9 @@
       source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
     end
     # End Nix
-    '';
-    
-  environment.shells = with pkgs; [ bashInteractive zsh fish ];
+  '';
+
+  environment.shells = with pkgs; [bashInteractive zsh fish];
 
   #
   # Packages
@@ -67,7 +74,7 @@
       "figma"
       "gimp"
       "gns3"
-      "google-drive" 
+      "google-drive"
       "inkscape"
       "jan" # Offline AI Tool like LMStudio
       "krita"
@@ -140,7 +147,7 @@
   #   serverAddress = "coda.technobable.com:24800";
   #   # tls.enable = true;
   # };
-  
+
   #
   # Other Options
   nix.settings.experimental-features = "nix-command flakes";

@@ -1,6 +1,11 @@
-{ config, pkgs, lib, currentSystem, currentSystemName,... }:
-
-let
+{
+  config,
+  pkgs,
+  lib,
+  currentSystem,
+  currentSystemName,
+  ...
+}: let
   # Turn this to true to use gnome instead of i3. This is a bit
   # of a hack, I just flip it on as I need to develop gnome stuff
   # for now.
@@ -17,14 +22,14 @@ in {
       allowed-users = ["*"];
       auto-optimise-store = false;
       cores = 0;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = ["nix-command" "flakes"];
       extra-sandbox-paths = [];
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;
-      substituters = [ "https://cache.nixos.org/" ];
-      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-      trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+      substituters = ["https://cache.nixos.org/"];
+      system-features = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+      trusted-public-keys = ["cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="];
       trusted-substituters = [];
       trusted-users = ["root" "jrizzo"];
     };
@@ -74,36 +79,39 @@ in {
   };
 
   # setup windowing environment
-  services.xserver = if linuxGnome then {
-    enable = true;
-    xkb.layout = "us";
-    desktopManager.gnome.enable = true;
-    displayManager.gdm.enable = true;
-  } else {
-    enable = true;
-    xkb.layout = "us";
-    dpi = 220;
+  services.xserver =
+    if linuxGnome
+    then {
+      enable = true;
+      xkb.layout = "us";
+      desktopManager.gnome.enable = true;
+      displayManager.gdm.enable = true;
+    }
+    else {
+      enable = true;
+      xkb.layout = "us";
+      dpi = 220;
 
-    desktopManager = {
-      xterm.enable = false;
-      wallpaper.mode = "fill";
+      desktopManager = {
+        xterm.enable = false;
+        wallpaper.mode = "fill";
+      };
+
+      displayManager = {
+        defaultSession = "none+i3";
+        lightdm.enable = true;
+
+        # AARCH64: For now, on Apple Silicon, we must manually set the
+        # display resolution. This is a known issue with VMware Fusion.
+        sessionCommands = ''
+          ${pkgs.xorg.xset}/bin/xset r rate 200 40
+        '';
+      };
+
+      windowManager = {
+        i3.enable = true;
+      };
     };
-
-    displayManager = {
-      defaultSession = "none+i3";
-      lightdm.enable = true;
-
-      # AARCH64: For now, on Apple Silicon, we must manually set the
-      # display resolution. This is a known issue with VMware Fusion.
-      sessionCommands = ''
-        ${pkgs.xorg.xset}/bin/xset r rate 200 40
-      '';
-    };
-
-    windowManager = {
-      i3.enable = true;
-    };
-  };
 
   # Enable tailscale. We manually authenticate when we want with
   # "sudo tailscale up". If you don't use tailscale, you should comment
@@ -126,25 +134,27 @@ in {
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    cachix
-    gnumake
-    killall
-    niv
-    rxvt_unicode
-    xclip
+  environment.systemPackages = with pkgs;
+    [
+      cachix
+      gnumake
+      killall
+      niv
+      rxvt_unicode
+      xclip
 
-    # For hypervisors that support auto-resizing, this script forces it.
-    # I've noticed not everyone listens to the udev events so this is a hack.
-    (writeShellScriptBin "xrandr-auto" ''
-      xrandr --output Virtual-1 --auto
-    '')
-  ] ++ lib.optionals (currentSystemName == "vm-aarch64") [
-    # This is needed for the vmware user tools clipboard to work.
-    # You can test if you don't need this by deleting this and seeing
-    # if the clipboard sill works.
-    gtkmm3
-  ];
+      # For hypervisors that support auto-resizing, this script forces it.
+      # I've noticed not everyone listens to the udev events so this is a hack.
+      (writeShellScriptBin "xrandr-auto" ''
+        xrandr --output Virtual-1 --auto
+      '')
+    ]
+    ++ lib.optionals (currentSystemName == "vm-aarch64") [
+      # This is needed for the vmware user tools clipboard to work.
+      # You can test if you don't need this by deleting this and seeing
+      # if the clipboard sill works.
+      gtkmm3
+    ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

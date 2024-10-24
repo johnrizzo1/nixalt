@@ -1,4 +1,8 @@
-{ pkgs, lib, ... }: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./fonts.nix
     ./kde.nix
@@ -22,7 +26,7 @@
 
   services.xserver = {
     # Enable the X11 windowing system.
-    enable = true; 
+    enable = true;
 
     # Configure keymap in X11
     xkb.layout = "us";

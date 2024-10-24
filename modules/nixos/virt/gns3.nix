@@ -1,4 +1,8 @@
-{ pkgs, config, ... }: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     gns3-gui
     gns3-server
@@ -26,14 +30,16 @@
     RestrictSUIDSGID = pkgs.lib.mkForce false;
     PrivateUsers = pkgs.lib.mkForce false;
     UMask = pkgs.lib.mkForce "0022";
-    DeviceAllow = [
-      "/dev/net/tun rw"
-      "/dev/net/tap rw"
-    ] ++ pkgs.lib.optionals config.virtualisation.libvirtd.enable [
-      "/dev/kvm"
-    ];
+    DeviceAllow =
+      [
+        "/dev/net/tun rw"
+        "/dev/net/tap rw"
+      ]
+      ++ pkgs.lib.optionals config.virtualisation.libvirtd.enable [
+        "/dev/kvm"
+      ];
   };
 
   # 3080 is gns3
-  networking.firewall.allowedTCPPorts = [ 3080 ];
+  networking.firewall.allowedTCPPorts = [3080];
 }

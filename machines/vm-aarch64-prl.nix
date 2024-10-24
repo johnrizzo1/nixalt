@@ -1,4 +1,10 @@
-{ config, pkgs, lib, modulesPath, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}: {
   imports = [
     # Parallels is qemu under the covers. This brings in important kernel
     # modules to get a lot of the stuff working.
@@ -11,7 +17,7 @@
 
   # The official parallels guest support does not work currently.
   # https://github.com/NixOS/nixpkgs/pull/153665
-  disabledModules = [ "virtualisation/parallels-guest.nix" ];
+  disabledModules = ["virtualisation/parallels-guest.nix"];
   hardware.parallels = {
     enable = true;
     # package = (config.boot.kernelPackages.callPackage ../pkgs/parallels-tools/default.nix { });

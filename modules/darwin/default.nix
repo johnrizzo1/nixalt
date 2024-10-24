@@ -1,9 +1,6 @@
-{
-  lib,
-  ...
-} : {
+{lib, ...}: {
   imports = [
-    # ./nix.nix 
+    # ./nix.nix
     # ./nixpkgs.nix
     ./fonts.nix
     ./packages.nix

@@ -26,7 +26,6 @@
       config.allowUnfree = true;
     };
   };
-
   # darwin-packages = final: _prev: {
   #   darwin = import inputs.nixpkgs-darwin {
   #     system = final.system;

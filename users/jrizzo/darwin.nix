@@ -1,18 +1,19 @@
-{ inputs, pkgs, ... }:
-
 {
+  inputs,
+  pkgs,
+  ...
+}: {
   # nixpkgs.overlays = import ../../lib/overlays.nix;
   #nixpkgs.overlays = import ../../lib/overlays.nix ++ [
   #  (import ./vim.nix { inherit inputs; })
   #];
-
 
   security.pam.enableSudoTouchIdAuth = true;
   services.activate-system.enable = true;
 
   homebrew = {
     enable = true;
-    casks  = [
+    casks = [
       "1password"
       "blender"
       "cleanshot"
@@ -49,10 +50,10 @@
     home = "/Users/jrizzo";
     shell = pkgs.zsh;
   };
-  
+
   services.nix-daemon.enable = true;
   # nix.useDaemon = true;
-  
+
   # Find more options here
   # https://daiderd.com/nix-darwin/manual/index.html
 

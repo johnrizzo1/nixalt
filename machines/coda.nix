@@ -1,14 +1,19 @@
-{ inputs, config, pkgs, lib, 
-  currentSystem, currentSystemUser, currentSystemName, 
-  ... }:
-
-let
+{
+  inputs,
+  config,
+  pkgs,
+  lib,
+  currentSystem,
+  currentSystemUser,
+  currentSystemName,
+  ...
+}: let
   # Turn this to true to use gnome instead of i3. This is a bit
   # of a hack, I just flip it on as I need to develop gnome stuff
   # for now.
   linuxGnome = true;
 in {
-  imports = [ 
+  imports = [
     ./hardware/coda.nix
     # ../modules/nixos/secureboot.nix
     ../modules/nixos/desktop.nix
@@ -23,22 +28,22 @@ in {
     settings = {
       # keep-derivations = true;
       # keep-outputs = true;
-      allowed-users = [ "*" ];
+      allowed-users = ["*"];
       auto-optimise-store = false;
       cores = 0;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = ["nix-command" "flakes"];
       extra-sandbox-paths = [];
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;
-      substituters = [ 
+      substituters = [
         "https://cache.nixos.org/"
         "https://devenv.cachix.org"
         "https://nix-community.cachix.org"
         "https://cuda-maintainers.cachix.org"
       ];
-      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-      trusted-public-keys = [ 
+      system-features = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+      trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
@@ -60,7 +65,7 @@ in {
     # Be careful updating this.
     # boot.kernelPackages = pkgs.linuxPackages_latest;
     # Use the systemd-boot EFI boot loader.
-    supportedFilesystems = [ "ntfs" ];
+    supportedFilesystems = ["ntfs"];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -102,7 +107,7 @@ in {
     openssh.enable = true;
     openssh.settings.PasswordAuthentication = true;
     openssh.settings.PermitRootLogin = "no";
-  
+
     synergy.server = {
       enable = true;
       address = "0.0.0.0";
@@ -127,7 +132,7 @@ in {
       # nvidiaPersistenced = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    opengl.enable=true; # in stable
+    opengl.enable = true; # in stable
     # graphics.enable = true; # for unstable
     logitech.wireless = {
       enable = true;
@@ -136,7 +141,7 @@ in {
     hackrf.enable = true;
     flipperzero.enable = true;
   };
-  
+
   # Don't require password for sudo
   # security.sudo.wheelNeedsPassword = false;
 
