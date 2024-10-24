@@ -172,15 +172,15 @@
     #     '';
     # });
 
-    checks = forEachSupportedSystem ({ pkgs }: {
-      pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
-        src = ./.;
-        hooks = {
-          alejandra.enable = true;
-          # statix.enable = false;
-        };
-      };
-    });
+checks = forEachSupportedSystem ({ pkgs }: {
+  pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
+    src = ./.;
+    hooks = {
+      alejandra.enable = true;
+      # statix.enable = false;
+    };
+  };
+});
 
     #
     # Setting up my dev shells
