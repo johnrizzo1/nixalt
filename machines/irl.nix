@@ -106,7 +106,7 @@
 
   # Enable Ollama
   services.ollama = {
-    enable = true;
+    enable = false;
     # acceleration = "rocm";
   };
 
