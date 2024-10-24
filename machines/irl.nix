@@ -105,7 +105,7 @@
   # services.secureboot.enable = true;
 
   # Enable Ollama
-  ollama = {
+  services.ollama = {
     enable = true;
     # acceleration = "rocm";
   };
