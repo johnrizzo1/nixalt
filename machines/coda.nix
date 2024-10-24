@@ -86,11 +86,17 @@
     colord.enable = true;
     hardware.bolt.enable = true;
     xserver.videoDrivers = ["nvidia"];
+
     ollama = {
       enable = false;
       acceleration = "cuda";
     };
-    #? tabby.acceleration = "cpu|rocm|cuda|metal";
+    tabby = {
+      enable = false;
+      accelleration = "cuda";
+      usageCollection = false;
+    };
+
     #- yubikey-agent.enable = true;
     # Enable automatic login for the user.
     displayManager.autoLogin.enable = true;
@@ -129,8 +135,16 @@
       # nvidiaPersistenced = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    opengl.enable = true; # in stable
+    opengl = {
+      enable = true; # in stable
+      driSupport = true;
+      driSupport32Bit = true;
+    };
     # graphics.enable = true; # for unstable
+    # graphics = {
+    #   enable = true;
+    #   enable32Bit = true;
+    # };
     logitech.wireless = {
       enable = true;
       enableGraphical = true;

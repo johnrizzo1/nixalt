@@ -99,6 +99,16 @@
   hardware.bluetooth.powerOnBoot = true;
   services.hardware.bolt.enable = true;
 
+  hardware.amdgpu.opencl.enable = true;
+  hardware.opengl = {
+    enable = true; # in stable
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      rocmPackages.clr.icd
+    ];
+  };
+
   #############################################################################
   # List services that you want to enable:
 
@@ -106,8 +116,15 @@
 
   # Enable Ollama
   services.ollama = {
-    enable = true;
-    # acceleration = "rocm";
+    enable = false;
+    acceleration = "rocm";
+  };
+
+  # Another AI Interface
+  services.tabby = {
+    enable = false;
+    accelleration = "rocm";
+    usageCollection = false;
   };
 
   # TailScale
