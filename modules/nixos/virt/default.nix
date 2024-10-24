@@ -39,6 +39,7 @@
     virtualisation = {
       libvirtd = {
         enable = true;
+        allowedBridges = ["virbr0"];
         qemu = {
           package = pkgs.qemu_kvm;
           swtpm.enable = true;
@@ -51,45 +52,48 @@
       incus = {
         enable = true;
         ui.enable = true;
-        # preseed = {
-        #   networks = [
-        #     {
-        #       config = {
-        #         "ipv4.address" = "10.0.100.1/24";
-        #         "ipv4.nat" = "true";
-        #       };
-        #       name = "incusbr0";
-        #       type = "bridge";
-        #     }
-        #   ];
-        #   profiles = [
-        #     {
-        #       devices = {
-        #         eth0 = {
-        #           name = "eth0";
-        #           network = "incusbr0";
-        #           type = "nic";
-        #         };
-        #         root = {
-        #           path = "/";
-        #           pool = "default";
-        #           size = "35GiB";
-        #           type = "disk";
-        #         };
-        #       };
-        #       name = "default";
-        #     }
-        #   ];
-        #   storage_pools = [
-        #     {
-        #       config = {
-        #         source = "/var/lib/incus/storage-pools/default";
-        #       };
-        #       driver = "dir";
-        #       name = "default";
-        #     }
-        #   ];
-        # };
+        preseed = {
+          config = {
+            "core.https_address" = ":8443";
+          };
+          networks = [
+            {
+              config = {
+                "ipv4.address" = "10.0.100.1/24";
+                "ipv4.nat" = "true";
+              };
+              name = "incusbr0";
+              type = "bridge";
+            }
+          ];
+          profiles = [
+            {
+              devices = {
+                eth0 = {
+                  name = "eth0";
+                  network = "incusbr0";
+                  type = "nic";
+                };
+                root = {
+                  path = "/";
+                  pool = "default";
+                  size = "35GiB";
+                  type = "disk";
+                };
+              };
+              name = "default";
+            }
+          ];
+          storage_pools = [
+            {
+              config = {
+                source = "/var/lib/incus/storage-pools/default";
+              };
+              driver = "dir";
+              name = "default";
+            }
+          ];
+        };
       };
     };
 
@@ -100,7 +104,7 @@
     networking.nftables.enable = true;
 
     # networking.firewall.enable = true;
-    # networking.firewall.trustedInterfaces = ["incusbr0"];
+    networking.firewall.trustedInterfaces = ["incusbr0" "virbr0"];
 
     programs.virt-manager.enable = true;
 
