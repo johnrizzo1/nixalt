@@ -104,6 +104,7 @@
     tmux
     vim
     wget
+    rocm
   ];
 
   #######################################################################
@@ -151,17 +152,26 @@
     };
 
     # Enable my virt setup
+    # cat preseed.yml | sudo incus admin init --preseed
+    # preseed.yml
+    # cluster:
+    #   enabled: true
+    #   server_address: 192.168.2.125:8443
+    #   cluster_token: eyJzZXJ2ZXJfbmFtZSI6ImNvZGEiLCJmaW5nZXJwcmludCI6ImI2NGI2NmQyYTBjNzU4Nzk4NDgxYTFiZjhhOTU1YmFhZjg3Mzk5M2U2MzNhMDcxZDkzZTFjNjUzZmIxZDU1MzkiLCJhZGRyZXNzZXMiOlsiaXJsOjg0NDMiXSwic2VjcmV0IjoiZGE1NjkzYjZmYmM5MzU1YzJlYzBiM2VjMTQ1NWNiOTMyNjM5ZmU2N2IyMWY5ODZiOTExYTlkYjJkOGQyZmQ0ZSIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDIyOjQwOjA1Ljg5ODc2MzIxNi0wNDowMCJ9
     virt = {
       enable = true;
-      preseed = {
-        cluster = {
-          enabled = true;
-          server_address = "${currentSystemName}:8443";
-          cluster_token = "eyJzZXJ2ZXJfbmFtZSI6ImlybCIsImZpbmdlcnByaW50IjoiZDhmYjJkNjllZWE5NDc5ZjQxMzNjZjZiNTVmMWViMmJkOTg4ZWI2Nzk0ZTcwMjY2ZTBhNzhkN2ZhZWI1MmNkYiIsImFkZHJlc3NlcyI6WyIxOTIuMTY4LjIuMTI1Ojg0NDMiXSwic2VjcmV0IjoiNmNlMTE5OTJjZDIyZjA3N2RjZGI1MTcxYzQ1YzE3ZWMxNGU0NWViMTA1OWMyZWZlZTZjNDcwZTYzMmI0OGViNCIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDE5OjAxOjQ3LjExOTIxMjIzLTA0OjAwIn0=";
-        };
-      };
+      preseed = {};
+      # preseed = {
+      #   cluster = {
+      #     enabled = true;
+      #     server_address = "${currentSystemName}:8443";
+      #     cluster_token = "eyJzZXJ2ZXJfbmFtZSI6ImlybCIsImZpbmdlcnByaW50IjoiZDhmYjJkNjllZWE5NDc5ZjQxMzNjZjZiNTVmMWViMmJkOTg4ZWI2Nzk0ZTcwMjY2ZTBhNzhkN2ZhZWI1MmNkYiIsImFkZHJlc3NlcyI6WyIxOTIuMTY4LjIuMTI1Ojg0NDMiXSwic2VjcmV0IjoiNmNlMTE5OTJjZDIyZjA3N2RjZGI1MTcxYzQ1YzE3ZWMxNGU0NWViMTA1OWMyZWZlZTZjNDcwZTYzMmI0OGViNCIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDE5OjAxOjQ3LjExOTIxMjIzLTA0OjAwIn0=";
+      #   };
+      # };
     };
   };
+
+  # security.apparmor.enable = true;
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
