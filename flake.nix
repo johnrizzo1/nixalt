@@ -166,18 +166,8 @@
       default = pkgs.nixfmt-rfc-style.type;
     });
 
-    # shfmt -d -s -i 2 -ci ${files}
-    # shellcheck -x ${files}
-    # mkdir "$out"
-    # checks = forEachSupportedSystem ({ pkgs }: {
-    #   default = pkgs.runCommandLocal "fmt-check" {
-    #     src = ./.;
-    #     nativeBuildInputs = with pkgs; [alejandra shellcheck shfmt];
-    #   } ''
-    #       alejandra -c .
-    #     '';
-    # });
-
+    #
+    # nix flake check
     checks = forEachSupportedSystem ({pkgs}: {
       pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
         src = ./.;
@@ -192,26 +182,19 @@
     #
     # Setting up my dev shells
     # nix develop
-    # devShells = forEachSupportedSystem ({pkgs}: {
-    #   default = pkgs.mkShell {
-    #     packages = with pkgs; [
-    #       jq
-    #       wget
-    #       curl
-    #     ];
-    #   };
-    # });
-    # devShells = forAllSystems (system: {
-    #     default = nixpkgs.legacyPackages.${system}.mkShell {
-    #       inherit (self.checks.${system}.pre-commit-check) shellHook;
-    #       buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
-    #     };
-    #   });
-
     devShells = forEachSupportedSystem ({pkgs}: {
       default = pkgs.mkShell {
         inherit (self.checks.${pkgs.system}.pre-commit-check) shellHook;
         buildInputs = self.checks.${pkgs.system}.pre-commit-check.enabledPackages;
+        packages = with pkgs; [
+          jq
+          wget
+          curl
+          git
+          nixpkgs-fmt
+          alejandra
+          statix
+        ];
       };
     });
   };
