@@ -52,7 +52,7 @@
   # 80/443 for web traffic
   # 3080 for gns3
   # 5432 for postgresql
-  networking.firewall.allowedTCPPorts = [80 443 5432 8335 8334 8332 9735 4224];
+  networking.firewall.allowedTCPPorts = [22 443 631 8443];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;

@@ -56,6 +56,7 @@
     # Disable the firewall since we're in a VM and we want to make it
     # easy to visit stuff in here. We only use NAT networking anyways.
     # firewall.enable = false;
+    firewall.allowedTCPPorts = [22 443 631 8443];
   };
 
   boot = {
