@@ -123,7 +123,7 @@
   # Another AI Interface
   services.tabby = {
     enable = false;
-    accelleration = "rocm";
+    acceleration = "rocm";
     usageCollection = false;
   };
 
