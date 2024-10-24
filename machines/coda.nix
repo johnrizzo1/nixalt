@@ -56,7 +56,7 @@
     # Disable the firewall since we're in a VM and we want to make it
     # easy to visit stuff in here. We only use NAT networking anyways.
     # firewall.enable = false;
-    firewall.allowedTCPPorts = [22 443 631 8443];
+    firewall.allowedTCPPorts = [22 443 631 3080 8443];
   };
 
   boot = {
@@ -87,7 +87,6 @@
     colord.enable = true;
     hardware.bolt.enable = true;
     xserver.videoDrivers = ["nvidia"];
-
     ollama = {
       enable = false;
       acceleration = "cuda";
@@ -97,9 +96,7 @@
       acceleration = "cuda";
       usageCollection = false;
     };
-
     #- yubikey-agent.enable = true;
-    # Enable automatic login for the user.
     displayManager.autoLogin.enable = true;
     displayManager.autoLogin.user = currentSystemUser;
 
@@ -107,11 +104,13 @@
     # "sudo tailscale up". If you don't use tailscale, you should comment
     # out or delete all of this.
     tailscale.enable = true;
-    # Enable the OpenSSH daemon.
-    openssh.enable = true;
-    openssh.settings.PasswordAuthentication = true;
-    openssh.settings.PermitRootLogin = "no";
-
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = true;
+        PermitRootLogin = "no";
+      };
+    };
     # synergy.server = {
     #   enable = true;
     #   address = "0.0.0.0";
@@ -120,6 +119,52 @@
     # };
 
     virt.enable = true;
+    virt.preseed = {
+      config = {
+        "core.https_address" = ":8443";
+      };
+      networks = [
+        {
+          config = {
+            "ipv4.address" = "10.10.10.1/24";
+            "ipv4.nat" = "true";
+          };
+          name = "incusbr0";
+          type = "bridge";
+        }
+      ];
+      profiles = [
+        {
+          devices = {
+            eth0 = {
+              name = "eth0";
+              network = "incusbr0";
+              type = "nic";
+            };
+            root = {
+              path = "/";
+              pool = "default";
+              size = "35GiB";
+              type = "disk";
+            };
+          };
+          name = "default";
+        }
+      ];
+      storage_pools = [
+        {
+          config = {
+            source = "/var/lib/incus/storage-pools/default";
+          };
+          driver = "dir";
+          name = "default";
+        }
+      ];
+      cluster = {
+        server_name = currentSystemName;
+        enabled = true;
+      };
+    };
   };
 
   hardware = {
@@ -174,9 +219,12 @@
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.mutableUsers = false;
-  users.users.root = {
-    hashedPassword = "$y$j9T$huQi//1srOgV4dSHFgVrh/$mZbJwRhMuqOTAPWssVxlL1d9YCjDxugoQejlN8I4K70";
+  users = {
+    mutableUsers = false;
+    users.root = {
+      isSystemUser = true;
+      hashedPassword = "$y$j9T$huQi//1srOgV4dSHFgVrh/$mZbJwRhMuqOTAPWssVxlL1d9YCjDxugoQejlN8I4K70";
+    };
   };
   # nixpkgs.config.permittedInsecurePackages = [ ];
 

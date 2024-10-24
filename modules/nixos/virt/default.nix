@@ -16,6 +16,57 @@
       example = true;
       description = "Enable my virtualisation stack";
     };
+    preseed = lib.mkOption {
+      description = "Pre-seed to apply for incus setup";
+      type = lib.types.attrs;
+      default = null;
+      example = {
+        config = {
+          "core.https_address" = ":8443";
+        };
+        networks = [
+          {
+            config = {
+              "ipv4.address" = "10.10.10.1/24";
+              "ipv4.nat" = "true";
+            };
+            name = "incusbr0";
+            type = "bridge";
+          }
+        ];
+        profiles = [
+          {
+            devices = {
+              eth0 = {
+                name = "eth0";
+                network = "incusbr0";
+                type = "nic";
+              };
+              root = {
+                path = "/";
+                pool = "default";
+                size = "35GiB";
+                type = "disk";
+              };
+            };
+            name = "default";
+          }
+        ];
+        storage_pools = [
+          {
+            config = {
+              source = "/var/lib/incus/storage-pools/default";
+            };
+            driver = "dir";
+            name = "default";
+          }
+        ];
+        cluster = {
+          server_name = "coda";
+          enabled = true;
+        };
+      };
+    };
   };
 
   config = lib.mkIf config.services.virt.enable {
@@ -52,48 +103,7 @@
       incus = {
         enable = true;
         ui.enable = true;
-        preseed = {
-          config = {
-            "core.https_address" = ":8443";
-          };
-          networks = [
-            {
-              config = {
-                "ipv4.address" = "10.0.100.1/24";
-                "ipv4.nat" = "true";
-              };
-              name = "incusbr0";
-              type = "bridge";
-            }
-          ];
-          profiles = [
-            {
-              devices = {
-                eth0 = {
-                  name = "eth0";
-                  network = "incusbr0";
-                  type = "nic";
-                };
-                root = {
-                  path = "/";
-                  pool = "default";
-                  size = "35GiB";
-                  type = "disk";
-                };
-              };
-              name = "default";
-            }
-          ];
-          storage_pools = [
-            {
-              config = {
-                source = "/var/lib/incus/storage-pools/default";
-              };
-              driver = "dir";
-              name = "default";
-            }
-          ];
-        };
+        preseed = config.services.virt.preseed;
       };
     };
 
@@ -107,7 +117,7 @@
     # networking.firewall.enable = true;
     networking.firewall.trustedInterfaces = ["incusbr0" "virbr0"];
 
-    programs.virt-manager.enable = false;
+    programs.virt-manager.enable = true;
 
     # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
     # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;

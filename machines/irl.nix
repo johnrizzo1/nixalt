@@ -17,8 +17,6 @@
     # ../modules/nixos/vscode-server.nix
   ];
 
-  # services.secureboot.enable = true;
-
   nix = {
     enable = true;
     settings = {
@@ -40,43 +38,56 @@
     };
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.mutableUsers = false;
-  users.users.root = {
-    isSystemUser = true;
-    initialHashedPassword = "$y$j9T$nF3bvV8Ta/mmPCELOr5hB/$jRPG1EZ0rPuCuzKdPgn0VsAsfTyZMiEkrVneqOr7ci0";
+  users = {
+    mutableUsers = false;
+    users.root = {
+      isSystemUser = true;
+      initialHashedPassword = "$y$j9T$nF3bvV8Ta/mmPCELOr5hB/$jRPG1EZ0rPuCuzKdPgn0VsAsfTyZMiEkrVneqOr7ci0";
+    };
   };
 
-  networking.hostName = currentSystemName;
+  networking = {
+    hostName = currentSystemName;
 
-  # 80/443 for web traffic
-  # 3080 for gns3
-  # 5432 for postgresql
-  networking.firewall.allowedTCPPorts = [22 443 631 8443];
+    # 443 for web traffic
+    # 631 for ?
+    # 3080 for gns3
+    # 5432 for postgresql
+    # 8443 for nginx rev proxy
+    firewall.allowedTCPPorts = [22 443 631 3080 8443];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+    interfaces.enp36s0f0.useDHCP = lib.mkDefault true;
+    interfaces.enp36s0f1.useDHCP = lib.mkDefault true;
+    interfaces.wlp38s0.useDHCP = lib.mkDefault true;
+  };
 
-  # VMware, Parallels both only support this being 0 otherwise you see
-  # "error switching console mode" on boot.
-  boot.loader.systemd-boot.consoleMode = "0";
+  boot.loader = {
+    # Use the systemd-boot EFI boot loader.
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+
+    # VMware, Parallels both only support this being 0 otherwise you see
+    # "error switching console mode" on boot.
+    systemd-boot.consoleMode = "0";
+  };
 
   # Set your time zone.
   time.timeZone = "America/New_York";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      LC_ADDRESS = "en_US.UTF-8";
+      LC_IDENTIFICATION = "en_US.UTF-8";
+      LC_MEASUREMENT = "en_US.UTF-8";
+      LC_MONETARY = "en_US.UTF-8";
+      LC_NAME = "en_US.UTF-8";
+      LC_NUMERIC = "en_US.UTF-8";
+      LC_PAPER = "en_US.UTF-8";
+      LC_TELEPHONE = "en_US.UTF-8";
+      LC_TIME = "en_US.UTF-8";
+    };
   };
 
   # Host Specific Applications
@@ -95,52 +106,62 @@
     wget
   ];
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
-  services.hardware.bolt.enable = true;
-
-  hardware.amdgpu.opencl.enable = true;
-  hardware.opengl = {
-    enable = true; # in stable
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-    ];
+  #######################################################################
+  # Hardware configuration
+  hardware = {
+    bluetooth.enable = true;
+    bluetooth.powerOnBoot = true;
+    amdgpu.opencl.enable = true;
+    opengl = {
+      enable = true; # in stable
+      driSupport = true;
+      driSupport32Bit = true;
+      extraPackages = with pkgs; [
+        rocmPackages.clr.icd
+      ];
+    };
   };
 
   #############################################################################
   # List services that you want to enable:
+  services = {
+    hardware.bolt.enable = true;
+    # services.secureboot.enable = true;
 
-  # services.secureboot.enable = true;
+    ollama = {
+      enable = false;
+      acceleration = "rocm";
+    };
 
-  # Enable Ollama
-  services.ollama = {
-    enable = false;
-    acceleration = "rocm";
+    tabby = {
+      # Another AI Interface
+      enable = false;
+      acceleration = "rocm";
+      usageCollection = false;
+    };
+
+    tailscale.enable = true;
+
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = true;
+        PermitRootLogin = "no";
+      };
+    };
+
+    # Enable my virt setup
+    virt = {
+      enable = true;
+      preseed = {
+        cluster = {
+          enabled = true;
+          server_address = "${currentSystemName}:8443";
+          cluster_token = "eyJzZXJ2ZXJfbmFtZSI6ImlybCIsImZpbmdlcnByaW50IjoiZDhmYjJkNjllZWE5NDc5ZjQxMzNjZjZiNTVmMWViMmJkOTg4ZWI2Nzk0ZTcwMjY2ZTBhNzhkN2ZhZWI1MmNkYiIsImFkZHJlc3NlcyI6WyIxOTIuMTY4LjIuMTI1Ojg0NDMiXSwic2VjcmV0IjoiNmNlMTE5OTJjZDIyZjA3N2RjZGI1MTcxYzQ1YzE3ZWMxNGU0NWViMTA1OWMyZWZlZTZjNDcwZTYzMmI0OGViNCIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDE5OjAxOjQ3LjExOTIxMjIzLTA0OjAwIn0=";
+        };
+      };
+    };
   };
-
-  # Another AI Interface
-  services.tabby = {
-    enable = false;
-    acceleration = "rocm";
-    usageCollection = false;
-  };
-
-  # TailScale
-  services.tailscale.enable = true;
-
-  networking.interfaces.enp36s0f0.useDHCP = lib.mkDefault true;
-  networking.interfaces.enp36s0f1.useDHCP = lib.mkDefault true;
-  networking.interfaces.wlp38s0.useDHCP = lib.mkDefault true;
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true;
-  services.openssh.settings.PermitRootLogin = "no";
-
-  # Enable my virt setup
-  services.virt.enable = true;
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
