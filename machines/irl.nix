@@ -105,6 +105,8 @@
     vim
     wget
     clinfo
+    amdgpu_top
+    lact # amdgpu controller
   ];
 
   #######################################################################

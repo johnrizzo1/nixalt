@@ -245,6 +245,7 @@
       ollama
       tmux
       wget
+      element-desktop-wayland
       # For hypervisors that support auto-resizing, this script forces it.
       # I've noticed not everyone listens to the udev events so this is a hack.
       (writeShellScriptBin "xrandr-auto" ''
