@@ -71,6 +71,9 @@
       # "error switching console mode" on boot.
       systemd-boot.consoleMode = "0";
     };
+    kernel.sysctl = {
+      "vm.max_map_count" = 262144;
+    };
   };
 
   # Set your time zone.
@@ -246,6 +249,7 @@
       tmux
       wget
       element-desktop-wayland
+      jan
       # For hypervisors that support auto-resizing, this script forces it.
       # I've noticed not everyone listens to the udev events so this is a hack.
       (writeShellScriptBin "xrandr-auto" ''

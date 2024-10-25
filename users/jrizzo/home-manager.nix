@@ -79,6 +79,7 @@ in {
         xclip
         xsel
         zenith
+        spacevim
       ]
       ++ (lib.optionals (isLinux && !isWSL) [
         _1password-gui

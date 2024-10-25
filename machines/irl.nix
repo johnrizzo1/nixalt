@@ -61,14 +61,19 @@
     interfaces.wlp38s0.useDHCP = lib.mkDefault true;
   };
 
-  boot.loader = {
-    # Use the systemd-boot EFI boot loader.
-    systemd-boot.enable = true;
-    efi.canTouchEfiVariables = true;
-
-    # VMware, Parallels both only support this being 0 otherwise you see
-    # "error switching console mode" on boot.
-    systemd-boot.consoleMode = "0";
+  boot = {
+    supportedFilesystems = ["ntfs"];
+    loader = {
+      # Use the systemd-boot EFI boot loader.
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      # VMware, Parallels both only support this being 0 otherwise you see
+      # "error switching console mode" on boot.
+      systemd-boot.consoleMode = "0";
+    };
+    kernel.sysctl = {
+      "vm.max_map_count" = 262144;
+    };
   };
 
   # Set your time zone.
