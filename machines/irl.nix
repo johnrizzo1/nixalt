@@ -105,8 +105,8 @@
     vim
     wget
     clinfo
-    amdgpu_top
-    lact # amdgpu controller
+    # amdgpu_top
+    # lact # amdgpu controller
   ];
 
   #######################################################################
@@ -114,14 +114,22 @@
   hardware = {
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
-    amdgpu.opencl.enable = true;
+    # amdgpu.opencl.enable = true;
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = true;
+      powerManagement.finegrained = false;
+      open = false;
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
     opengl = {
       enable = true; # in stable
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        rocmPackages.clr.icd
-      ];
+      # extraPackages = with pkgs; [
+      #   rocmPackages.clr.icd
+      # ];
     };
   };
 
@@ -133,13 +141,13 @@
 
     ollama = {
       enable = false;
-      acceleration = "rocm";
+      acceleration = "cuda";
     };
 
     tabby = {
       # Another AI Interface
       enable = false;
-      acceleration = "rocm";
+      acceleration = "cuda";
       usageCollection = false;
     };
 
