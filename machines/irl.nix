@@ -138,7 +138,7 @@
   services = {
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
-
+    xserver.videoDrivers = ["nvidia"];
     ollama = {
       enable = false;
       acceleration = "cuda";
