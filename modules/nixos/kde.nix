@@ -24,14 +24,18 @@
   ];
 
   # Enable the KDE Desktop Environment
-  services.displayManager = {
-    sddm = {
-      enable = true;
-      wayland.enable = true;
+  services = {
+    displayManager = {
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
     };
-    plasma6 = {
-      enable = true;
-      enableQt5Integration = true;
+    desktopManager = {
+      plasma6 = {
+        enable = true;
+        enableQt5Integration = true;
+      };
     };
   };
 }
