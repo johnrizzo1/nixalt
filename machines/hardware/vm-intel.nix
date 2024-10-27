@@ -1,14 +1,13 @@
 # This file is normally automatically generated. Since we build a VM
 # and have full control over that hardware I can hardcode this into my
 # repository.
-{
-  config,
-  lib,
-  pkgs,
-  modulesPath,
-  ...
+{ config
+, lib
+, pkgs
+, modulesPath
+, ...
 }: {
-  imports = [];
+  imports = [ ];
 
   boot.initrd.availableKernelModules = [
     "ata_piix"
@@ -19,9 +18,9 @@
     "sr_mod"
     "nvme"
   ];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = [];
-  boot.extraModulePackages = [];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
@@ -33,5 +32,5 @@
     fsType = "vfat";
   };
 
-  swapDevices = [];
+  swapDevices = [ ];
 }

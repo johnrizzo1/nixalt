@@ -1,12 +1,11 @@
-{
-  inputs,
-  config,
-  pkgs,
-  lib,
-  currentSystem,
-  currentSystemUser,
-  currentSystemName,
-  ...
+{ inputs
+, config
+, pkgs
+, lib
+, currentSystem
+, currentSystemUser
+, currentSystemName
+, ...
 }: {
   imports = [
     ./hardware/coda.nix
@@ -25,11 +24,11 @@
     settings = {
       # keep-derivations = true;
       # keep-outputs = true;
-      allowed-users = ["*"];
+      allowed-users = [ "*" ];
       auto-optimise-store = false;
       cores = 0;
-      experimental-features = ["nix-command" "flakes"];
-      extra-sandbox-paths = [];
+      experimental-features = [ "nix-command" "flakes" ];
+      extra-sandbox-paths = [ ];
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;
@@ -39,15 +38,23 @@
         "https://nix-community.cachix.org"
         "https://cuda-maintainers.cachix.org"
       ];
-      system-features = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
       ];
-      trusted-substituters = [];
-      trusted-users = ["root" "jrizzo"];
+      trusted-substituters = [ ];
+      trusted-users = [ "root" "jrizzo" ];
+    };
+  };
+
+  users = {
+    mutableUsers = false;
+    users.root = {
+      isSystemUser = true;
+      hashedPassword = "$y$j9T$huQi//1srOgV4dSHFgVrh/$mZbJwRhMuqOTAPWssVxlL1d9YCjDxugoQejlN8I4K70";
     };
   };
 
@@ -56,14 +63,14 @@
     # Disable the firewall since we're in a VM and we want to make it
     # easy to visit stuff in here. We only use NAT networking anyways.
     firewall.enable = lib.mkForce false;
-    firewall.allowedTCPPorts = [22 443 631 3080 3389 8080 8443];
+    firewall.allowedTCPPorts = [ 22 443 631 3080 3389 8080 8443 ];
   };
 
   boot = {
     # Be careful updating this.
     # boot.kernelPackages = pkgs.linuxPackages_latest;
     # Use the systemd-boot EFI boot loader.
-    supportedFilesystems = ["ntfs"];
+    supportedFilesystems = [ "ntfs" ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -76,9 +83,103 @@
     };
   };
 
-  # Set your time zone.
   time.timeZone = "America/New_York";
 
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      LC_ADDRESS = "en_US.UTF-8";
+      LC_IDENTIFICATION = "en_US.UTF-8";
+      LC_MEASUREMENT = "en_US.UTF-8";
+      LC_MONETARY = "en_US.UTF-8";
+      LC_NAME = "en_US.UTF-8";
+      LC_NUMERIC = "en_US.UTF-8";
+      LC_PAPER = "en_US.UTF-8";
+      LC_TELEPHONE = "en_US.UTF-8";
+      LC_TIME = "en_US.UTF-8";
+    };
+  };
+
+  # Host Specific Applications
+  environment = {
+    systemPackages = with pkgs; [
+      cachix
+      cudatoolkit
+      devenv
+      direnv
+      git
+      home-manager
+      niv
+      obsidian
+      obs-studio
+      ollama
+      tmux
+      wget
+      element-desktop
+      keybase
+      keybase-gui
+      jan
+      jetbrains.pycharm-community
+      alpaca # ollama GUI
+      # android-studio-full
+
+      _1password-gui
+      chromium
+      discord
+      element-desktop-wayland
+      firefox
+      freetube
+      signal-desktop
+      spotube
+      synology-drive-client
+      vscodium
+
+      # For hypervisors that support auto-resizing, this script forces it.
+      # I've noticed not everyone listens to the udev events so this is a hack.
+      (writeShellScriptBin "xrandr-auto" ''
+        xrandr --output Virtual-1 --auto
+      '')
+    ];
+
+    sessionVariables.NIXOS_OZONE_WL = "1";
+  };
+
+  #######################################################################
+  # Hardware configuration
+  hardware = {
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = true;
+      powerManagement.finegrained = false;
+      open = false;
+      nvidiaSettings = true;
+      # nvidiaPersistenced = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
+    # opengl = {
+    #   enable = true; # in stable
+    #   driSupport = true;
+    #   driSupport32Bit = true;
+    # };
+    # graphics.enable = true; # for unstable
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+    logitech.wireless = {
+      enable = true;
+      enableGraphical = true;
+    };
+    hackrf.enable = true;
+    flipperzero.enable = true;
+  };
+
+  #######################################################################
+  # List services that you want to enable:
   services = {
     # Don't forget to run the following to enable the service
     # systemctl --user enable auto-fix-vscode-server.service
@@ -89,7 +190,7 @@
     printing.enable = true;
     colord.enable = true;
     hardware.bolt.enable = true;
-    xserver.videoDrivers = ["nvidia"];
+    xserver.videoDrivers = [ "nvidia" ];
     ollama = {
       enable = false;
       acceleration = "cuda";
@@ -123,7 +224,7 @@
     # };
 
     virt.enable = true;
-    virt.preseed = {};
+    virt.preseed = { };
     # virt.preseed = {
     #   config = {
     #     "core.https_address" = ":8443";
@@ -171,99 +272,8 @@
     #   };
     # };
   };
+
   # security.apparmor.enable = true;
-
-  hardware = {
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
-    nvidia = {
-      modesetting.enable = true;
-      powerManagement.enable = true;
-      powerManagement.finegrained = false;
-      open = false;
-      nvidiaSettings = true;
-      # nvidiaPersistenced = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-    };
-    # opengl = {
-    #   enable = true; # in stable
-    #   driSupport = true;
-    #   driSupport32Bit = true;
-    # };
-    # graphics.enable = true; # for unstable
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
-    logitech.wireless = {
-      enable = true;
-      enableGraphical = true;
-    };
-    hackrf.enable = true;
-    flipperzero.enable = true;
-  };
-
-  # Don't require password for sudo
-  # security.sudo.wheelNeedsPassword = false;
-
-  # Select internationalisation properties.
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-    extraLocaleSettings = {
-      LC_ADDRESS = "en_US.UTF-8";
-      LC_IDENTIFICATION = "en_US.UTF-8";
-      LC_MEASUREMENT = "en_US.UTF-8";
-      LC_MONETARY = "en_US.UTF-8";
-      LC_NAME = "en_US.UTF-8";
-      LC_NUMERIC = "en_US.UTF-8";
-      LC_PAPER = "en_US.UTF-8";
-      LC_TELEPHONE = "en_US.UTF-8";
-      LC_TIME = "en_US.UTF-8";
-    };
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users = {
-    mutableUsers = false;
-    users.root = {
-      isSystemUser = true;
-      hashedPassword = "$y$j9T$huQi//1srOgV4dSHFgVrh/$mZbJwRhMuqOTAPWssVxlL1d9YCjDxugoQejlN8I4K70";
-    };
-  };
-  # nixpkgs.config.permittedInsecurePackages = [ ];
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment = {
-    systemPackages = with pkgs; [
-      cachix
-      cudatoolkit
-      devenv
-      direnv
-      git
-      home-manager
-      niv
-      obsidian
-      obs-studio
-      ollama
-      tmux
-      wget
-      element-desktop-wayland
-      keybase
-      keybase-gui
-      jan
-      jetbrains.pycharm-community
-      # For hypervisors that support auto-resizing, this script forces it.
-      # I've noticed not everyone listens to the udev events so this is a hack.
-      (writeShellScriptBin "xrandr-auto" ''
-        xrandr --output Virtual-1 --auto
-      '')
-    ];
-
-    sessionVariables.NIXOS_OZONE_WL = "1";
-  };
 
   # system.autoUpgrade.enable = true;
   # system.autoUpgrade.allowReboot = false;

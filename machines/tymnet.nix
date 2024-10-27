@@ -1,14 +1,13 @@
-{
-  inputs,
-  config,
-  pkgs,
-  lib,
-  currentSystem,
-  currentSystemUser,
-  currentSystemName,
-  ...
+{ inputs
+, config
+, pkgs
+, lib
+, currentSystem
+, currentSystemUser
+, currentSystemName
+, ...
 }: {
-  imports = [../modules/darwin];
+  imports = [ ../modules/darwin ];
 
   networking.hostName = currentSystemName;
   networking.computerName = currentSystemName;
@@ -39,7 +38,7 @@
     # End Nix
   '';
 
-  environment.shells = with pkgs; [bashInteractive zsh fish];
+  environment.shells = with pkgs; [ bashInteractive zsh fish ];
 
   #
   # Packages

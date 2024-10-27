@@ -1,21 +1,21 @@
 # Credit: https://github.com/wegank/nixos-config/tree/main/hardware/parallels-unfree
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  p7zip,
-  gawk,
-  util-linux,
-  xorg,
-  glib,
-  dbus-glib,
-  zlib,
-  kernel,
-  libsOnly ? false,
-  fetchurl,
-  undmg,
-  perl,
-  autoPatchelfHook,
+{ stdenv
+, lib
+, makeWrapper
+, p7zip
+, gawk
+, util-linux
+, xorg
+, glib
+, dbus-glib
+, zlib
+, kernel
+, libsOnly ? false
+, fetchurl
+, undmg
+, perl
+, autoPatchelfHook
+,
 }:
 stdenv.mkDerivation rec {
   version = "18.3.1-53614";
@@ -30,18 +30,18 @@ stdenv.mkDerivation rec {
 
   # patches = [./prl-tools-6.0.patch];
 
-  hardeningDisable = ["pic" "format"];
+  hardeningDisable = [ "pic" "format" ];
 
   nativeBuildInputs =
-    [p7zip undmg perl autoPatchelfHook]
-    ++ lib.optionals (!libsOnly) [makeWrapper]
+    [ p7zip undmg perl autoPatchelfHook ]
+    ++ lib.optionals (!libsOnly) [ makeWrapper ]
     ++ kernel.moduleBuildDependencies;
 
   buildInputs = with xorg;
-    [libXrandr libXext libX11 libXcomposite libXinerama]
-    ++ lib.optionals (!libsOnly) [libXi glib dbus-glib zlib];
+    [ libXrandr libXext libX11 libXcomposite libXinerama ]
+    ++ lib.optionals (!libsOnly) [ libXi glib dbus-glib zlib ];
 
-  runtimeDependencies = [glib xorg.libXrandr];
+  runtimeDependencies = [ glib xorg.libXrandr ];
 
   inherit libsOnly;
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   kernelVersion = lib.optionalString (!libsOnly) kernel.modDirVersion;
   kernelDir = lib.optionalString (!libsOnly) "${kernel.dev}/lib/modules/${kernelVersion}";
-  scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) ["${util-linux}/bin" "${gawk}/bin"]);
+  scriptPath = lib.concatStringsSep ":" (lib.optionals (!libsOnly) [ "${util-linux}/bin" "${gawk}/bin" ]);
 
   buildPhase = ''
     if test -z "$libsOnly"; then
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
-    platforms = ["aarch64-linux" "i686-linux" "x86_64-linux"];
+    platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" ];
     license = licenses.unfree;
   };
 }

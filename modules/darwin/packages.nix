@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     # chromium
     direnv
@@ -8,7 +8,7 @@
 
   homebrew = {
     enable = true;
-    brews = [];
+    brews = [ ];
     masApps = {
       "Apple Configurator" = 1037126344;
       "Microsoft Remote Desktop" = 1295203466;

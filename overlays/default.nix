@@ -1,4 +1,5 @@
-{inputs, ...}: let
+{ inputs, ... }:
+let
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs final.pkgs;
 
@@ -15,31 +16,28 @@
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
-      system = final.system;
+      inherit (final) system;
       config.allowUnfree = true;
     };
   };
 
   stable-packages = final: _prev: {
     stable = import inputs.nixpkgs-stable {
-      system = final.system;
+      inherit (final) system;
       config.allowUnfree = true;
     };
   };
   # darwin-packages = final: _prev: {
   #   darwin = import inputs.nixpkgs-darwin {
-  #     system = final.system;
+  #     inherit (final) system;
   #     config.allowUnfree = true;
   #   };
   # };
-in [
+in
+[
   additions
   modifications
   unstable-packages
   stable-packages
   # darwin-packages
-  # inputs.nix.overlays.default
-  # inputs.proxmox-nixos.overlays.x86_64-linux
-  # inputs.jujutsu.overlays.default
-  # inputs.zig.overlays.default
 ]

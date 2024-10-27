@@ -1,7 +1,6 @@
-{
-  pkgs,
-  lib,
-  ...
+{ pkgs
+, lib
+, ...
 }: {
   environment.systemPackages = with pkgs; [
     kdePackages.konsole
@@ -25,8 +24,14 @@
   ];
 
   # Enable the KDE Desktop Environment
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
-  services.desktopManager.plasma6.enable = true;
-  services.desktopManager.plasma6.enableQt5Integration = true;
+  services.displayManager = {
+    sddm = {
+      enable = true;
+      wayland.enable = true;
+    };
+    plasma6 = {
+      enable = true;
+      enableQt5Integration = true;
+    };
+  };
 }

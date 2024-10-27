@@ -1,8 +1,7 @@
-{
-  inputs,
-  lib,
-  pkgs,
-  ...
+{ inputs
+, lib
+, pkgs
+, ...
 }: {
   nixpkgs.overlays = [
     inputs.nix-alien.overlays.default

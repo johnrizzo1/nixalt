@@ -1,34 +1,25 @@
-{
-  isWSL,
-  inputs,
-  ...
-}: {
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
+{ isWSL
+, inputs
+, ...
+}: { config
+   , lib
+   , pkgs
+   , ...
+   }:
+let
   inherit (pkgs) tmuxPlugins;
   inherit (config.xdg) cacheHome configHome dataHome;
-  # sources = import ../../nix/sources.nix;
   inherit (pkgs.stdenv) isDarwin isLinux;
-  # For our MANPAGER env var
-  # https://github.com/sharkdp/bat/issues/1145
-  # manpager = (pkgs.writeShellScriptBin "manpager" (if isDarwin then ''
-  #   sh -c 'col -bx | bat -l man -p'
-  #   '' else ''
-  #   cat "$1" | col -bx | bat --language man --style plain
-  # ''));
-in {
+in
+{
   imports = [
-    #   # catppuccin
-    #   ./editor.nix
-    #   ./home-manager.nix
-    #   ./packages.nix
-    #   ./shell.nix
-    #   ./xdg.nix
+    # ./editor.nix
+    # ./home-manager.nix
+    # ./packages.nix
+    # ./shell.nix
+    # ./xdg.nix
     # ./obs.nix
-    #   ./git.nix
+    # ./git.nix
   ];
 
   home = {
@@ -46,8 +37,6 @@ in {
     packages = with pkgs;
       [
         _1password
-        # alpaca # ollama GUI
-        # android-studio-full
         # ripgrep
         # sentry-cli
         # zigpkgs."0.13.0"
@@ -84,18 +73,7 @@ in {
         terragrunt
         nmap
       ]
-      ++ (lib.optionals (isLinux && !isWSL) [
-        _1password-gui
-        chromium
-        discord
-        element-desktop-wayland
-        firefox
-        freetube
-        signal-desktop
-        spotube
-        synology-drive-client
-        vscodium
-      ]);
+      ++ (lib.optionals (isLinux && !isWSL) [ ]);
 
     #---------------------------------------------------------------------
     # Env vars and dotfiles
@@ -159,7 +137,7 @@ in {
           pbcopy = "xclip";
           pbpaste = "xclip -o";
         }
-        else {}
+        else { }
       );
   };
 
@@ -171,13 +149,12 @@ in {
   #---------------------------------------------------------------------
   # Programs
   #---------------------------------------------------------------------
-
   programs = {
     bash = {
       enable = true;
-      shellOptions = [];
+      shellOptions = [ ];
       enableCompletion = true;
-      historyControl = ["ignoredups" "ignorespace"];
+      historyControl = [ "ignoredups" "ignorespace" ];
       initExtra = builtins.readFile ./files/bashrc;
 
       shellAliases = {
@@ -204,7 +181,7 @@ in {
           #   "$HOME/code/go/src/github.com/mitchellh"
           # ];
 
-          exact = ["$HOME/.envrc"];
+          exact = [ "$HOME/.envrc" ];
         };
       };
     };
@@ -235,27 +212,42 @@ in {
           plugin = tmuxPlugins.yank;
           extraConfig = ''
             set -g @yank_action 'copy-pipe'
-            set-clipboard on
-            # set -s set-clipboard external
-            # set -s copy-command 'xsel -i'
           '';
         }
         {
           plugin = tmuxPlugins.catppuccin;
           extraConfig = ''
-            set -g @catppuccin_flavour 'latte' # latte macchiato mocha frappe
+            set -g @catppuccin_flavour 'frappe' # latte macchiato mocha frappe
+            set -g @catppuccin_window_left_separator ""
+            set -g @catppuccin_window_right_separator " "
+            set -g @catppuccin_window_middle_separator " █"
+            set -g @catppuccin_window_number_position "right"
+
+            set -g @catppuccin_window_default_fill "number"
+            set -g @catppuccin_window_default_text "#W"
+
+            set -g @catppuccin_window_current_fill "number"
+            set -g @catppuccin_window_current_text "#W"
+
+            set -g @catppuccin_status_modules_right "session date_time"
+            set -g @catppuccin_status_left_separator  " "
+            set -g @catppuccin_status_right_separator ""
+            set -g @catppuccin_status_right_separator_inverse "no"
+            set -g @catppuccin_status_fill "icon"
+            set -g @catppuccin_status_connect_separator "no"
+
+            set -g @catppuccin_date_time_text "%a %-d %b %H:%M"
           '';
         }
+        tmuxPlugins.vim-tmux-navigator
         tmuxPlugins.tmux-fzf
       ];
     };
 
     zsh = {
       enable = true;
-      # enableBashCompletion = true;
       enableCompletion = true;
       syntaxHighlighting.enable = true;
-      # enableLsColors = true;
       autosuggestion.enable = true;
     };
     dircolors.enableZshIntegration = true;
@@ -290,28 +282,15 @@ in {
       };
     };
 
-    go = {
-      enable = true;
-      goPath = "Projects/go";
-      goPrivate = ["github.com/johnrizzo1" "rfc822.mx"];
-    };
-
-    jujutsu = {
-      enable = true;
-
-      # I don't use "settings" because the path is wrong on macOS at
-      # the time of writing this.
-    };
-
     ssh = {
       enable = true;
 
       matchBlocks = {
-        "coda" = lib.hm.dag.entryBefore ["*"] {
+        "coda" = lib.hm.dag.entryBefore [ "*" ] {
           hostname = "coda";
           forwardAgent = true;
         };
-        "irl" = lib.hm.dag.entryBefore ["coda"] {
+        "irl" = lib.hm.dag.entryBefore [ "coda" ] {
           hostname = "irl";
           forwardAgent = true;
         };
@@ -398,28 +377,6 @@ in {
       enable = true;
       enableZshIntegration = true;
       enableFishIntegration = true;
-    };
-
-    # kitty = {
-    #   enable = !isWSL;
-    #   extraConfig = builtins.readFile ./kitty;
-    # };
-
-    i3status = {
-      enable = isLinux && !isWSL;
-
-      general = {
-        colors = true;
-        color_good = "#8C9440";
-        color_bad = "#A54242";
-        color_degraded = "#DE935F";
-      };
-
-      modules = {
-        ipv6.enable = false;
-        "wireless _first_".enable = false;
-        "battery all".enable = false;
-      };
     };
 
     neovim = {

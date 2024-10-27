@@ -97,105 +97,107 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    flake-utils,
-    ...
-  } @ inputs: let
-    inherit (inputs.flake-schemas) schemas;
+  outputs =
+    { self
+    , nixpkgs
+    , home-manager
+    , flake-utils
+    , ...
+    } @ inputs:
+    let
+      inherit (inputs.flake-schemas) schemas;
 
-    # Overlays is the list of overlays we want to apply from flake inputs.
-    overlays = import ./overlays {inherit inputs;};
+      # Overlays is the list of overlays we want to apply from flake inputs.
+      overlays = import ./overlays { inherit inputs; };
 
-    mkSystem = import ./lib/mksystem.nix {
-      inherit overlays nixpkgs inputs;
-    };
-
-    supportedSystems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
-    forEachSupportedSystem = f:
-      nixpkgs.lib.genAttrs supportedSystems (system:
-        f {
-          pkgs = import nixpkgs {inherit system;};
-        });
-  in {
-    #
-    # Linux
-    # sudo nixos-rebuild --flake .#coda switch
-    nixosConfigurations.coda = mkSystem "coda" {
-      system = "x86_64-linux";
-      user = "jrizzo";
-    };
-
-    # sudo nixos-rebuild --flake .#irl switch
-    nixosConfigurations.irl = mkSystem "irl" {
-      system = "x86_64-linux";
-      user = "jrizzo";
-      isHypervisor = true;
-    };
-
-    #
-    # MacOS
-    # nix run nix-darwin -- switch --flake .#tymnet
-    # darwin-rebuild --flake .#tymnet
-    darwinConfigurations = {
-      tymnet = mkSystem "tymnet" {
-        system = "aarch64-darwin";
-        user = "jrizzo";
-        darwin = true;
+      mkSystem = import ./lib/mksystem.nix {
+        inherit overlays nixpkgs inputs;
       };
-    };
 
-    #
-    # Virtual Machines & Containers
-    # nixos-rebuild --flake .#vm-intel build-vm
-    nixosConfigurations.vm-intel = mkSystem "vm-intel" {
-      system = "x86_64-linux";
-      user = "jrizzo";
-    };
-    # nixos-rebuild --flake .#vm-aarch64-prl build-vm
-    # nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
-    #   system = "aarch64-linux";
-    #   user = "jrizzo";
-    # };
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      forEachSupportedSystem = f:
+        nixpkgs.lib.genAttrs supportedSystems (system:
+          f {
+            pkgs = import nixpkgs { inherit system; };
+          });
+    in
+    {
+      #
+      # Linux
+      # sudo nixos-rebuild --flake .#coda switch
+      nixosConfigurations.coda = mkSystem "coda" {
+        system = "x86_64-linux";
+        user = "jrizzo";
+      };
 
-    #
-    # Setting up the formatter
-    formatter = forEachSupportedSystem ({pkgs}: {
-      default = pkgs.nixfmt-rfc-style.type;
-    });
+      # sudo nixos-rebuild --flake .#irl switch
+      nixosConfigurations.irl = mkSystem "irl" {
+        system = "x86_64-linux";
+        user = "jrizzo";
+        isHypervisor = true;
+      };
 
-    #
-    # nix flake check
-    checks = forEachSupportedSystem ({pkgs}: {
-      pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
-        src = ./.;
-        hooks = {
-          # nixpkgs-fmt.enable = true;
-          alejandra.enable = true;
-          statix.enable = false;
+      #
+      # MacOS
+      # nix run nix-darwin -- switch --flake .#tymnet
+      # darwin-rebuild --flake .#tymnet
+      darwinConfigurations = {
+        tymnet = mkSystem "tymnet" {
+          system = "aarch64-darwin";
+          user = "jrizzo";
+          darwin = true;
         };
       };
-    });
 
-    #
-    # Setting up my dev shells
-    # nix develop
-    devShells = forEachSupportedSystem ({pkgs}: {
-      default = pkgs.mkShell {
-        inherit (self.checks.${pkgs.system}.pre-commit-check) shellHook;
-        buildInputs = self.checks.${pkgs.system}.pre-commit-check.enabledPackages;
-        packages = with pkgs; [
-          jq
-          wget
-          curl
-          git
-          nixpkgs-fmt
-          alejandra
-          statix
-        ];
+      #
+      # Virtual Machines & Containers
+      # nixos-rebuild --flake .#vm-intel build-vm
+      nixosConfigurations.vm-intel = mkSystem "vm-intel" {
+        system = "x86_64-linux";
+        user = "jrizzo";
       };
-    });
-  };
+      # nixos-rebuild --flake .#vm-aarch64-prl build-vm
+      # nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
+      #   system = "aarch64-linux";
+      #   user = "jrizzo";
+      # };
+
+      #
+      # Setting up the formatter
+      formatter = forEachSupportedSystem ({ pkgs }: {
+        default = pkgs.nixfmt-rfc-style.type;
+      });
+
+      #
+      # nix flake check
+      checks = forEachSupportedSystem ({ pkgs }: {
+        pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
+          src = ./.;
+          hooks = {
+            nixpkgs-fmt.enable = true;
+            # alejandra.enable = true;
+            statix.enable = false;
+          };
+        };
+      });
+
+      #
+      # Setting up my dev shells
+      # nix develop
+      devShells = forEachSupportedSystem ({ pkgs }: {
+        default = pkgs.mkShell {
+          inherit (self.checks.${pkgs.system}.pre-commit-check) shellHook;
+          buildInputs = self.checks.${pkgs.system}.pre-commit-check.enabledPackages;
+          packages = with pkgs; [
+            jq
+            wget
+            curl
+            git
+            nixpkgs-fmt
+            alejandra
+            statix
+          ];
+        };
+      });
+    };
 }

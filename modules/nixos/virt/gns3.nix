@@ -1,7 +1,6 @@
-{
-  pkgs,
-  config,
-  ...
+{ pkgs
+, config
+, ...
 }: {
   environment.systemPackages = with pkgs; [
     gns3-gui
@@ -18,7 +17,7 @@
   services.gns3-server.settings = {
     Server.ubridge_path = pkgs.lib.mkForce "/run/wrappers/bin/ubridge";
   };
-  users.groups.gns3 = {};
+  users.groups.gns3 = { };
   users.users.gns3 = {
     group = "gns3";
     isSystemUser = true;
@@ -41,5 +40,5 @@
   };
 
   # 3080 is gns3
-  networking.firewall.allowedTCPPorts = [3080];
+  networking.firewall.allowedTCPPorts = [ 3080 ];
 }

@@ -1,16 +1,17 @@
-{
-  config,
-  pkgs,
-  lib,
-  currentSystem,
-  currentSystemName,
-  ...
-}: let
+{ config
+, pkgs
+, lib
+, currentSystem
+, currentSystemName
+, ...
+}:
+let
   # Turn this to true to use gnome instead of i3. This is a bit
   # of a hack, I just flip it on as I need to develop gnome stuff
   # for now.
   linuxGnome = true;
-in {
+in
+{
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -19,19 +20,19 @@ in {
     settings = {
       # keep-derivations = true;
       # keep-outputs = true;
-      allowed-users = ["*"];
+      allowed-users = [ "*" ];
       auto-optimise-store = false;
       cores = 0;
-      experimental-features = ["nix-command" "flakes"];
-      extra-sandbox-paths = [];
+      experimental-features = [ "nix-command" "flakes" ];
+      extra-sandbox-paths = [ ];
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;
-      substituters = ["https://cache.nixos.org/"];
-      system-features = ["nixos-test" "benchmark" "big-parallel" "kvm"];
-      trusted-public-keys = ["cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="];
-      trusted-substituters = [];
-      trusted-users = ["root" "jrizzo"];
+      substituters = [ "https://cache.nixos.org/" ];
+      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+      trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+      trusted-substituters = [ ];
+      trusted-users = [ "root" "jrizzo" ];
     };
   };
 

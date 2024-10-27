@@ -1,5 +1,5 @@
 # { inputs, lib, ... }: {
-{...}: {
+_: {
   nixpkgs.config = {
     allowUnfree = true;
     # allowUnfreePredicate =

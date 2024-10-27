@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  inputs,
-  lib,
-  ...
+{ config
+, pkgs
+, inputs
+, lib
+, ...
 }: {
   imports = [
     inputs.lanzaboote.nixosModules.lanzaboote
@@ -24,12 +23,16 @@
       pkgs.sbctl # for troubleshooting SecureBoot
     ];
 
-    boot.loader.systemd-boot.enable = lib.mkForce false;
-    boot.loader.efi.canTouchEfiVariables = true;
+    boot = {
+      loader = {
+        systemd-boot.enable = lib.mkForce false;
+        efi.canTouchEfiVariables = true;
+      };
 
-    boot.lanzaboote = {
-      enable = true;
-      pkiBundle = "/etc/secureboot";
+      lanzaboote = {
+        enable = true;
+        pkiBundle = "/etc/secureboot";
+      };
     };
   };
 }

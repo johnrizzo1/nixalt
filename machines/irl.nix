@@ -1,12 +1,11 @@
-{
-  inputs,
-  config,
-  pkgs,
-  lib,
-  currentSystem,
-  currentSystemUser,
-  currentSystemName,
-  ...
+{ inputs
+, config
+, pkgs
+, lib
+, currentSystem
+, currentSystemUser
+, currentSystemName
+, ...
 }: {
   imports = [
     ./hardware/irl.nix
@@ -17,24 +16,26 @@
     # ../modules/nixos/vscode-server.nix
   ];
 
+  # services.secureboot.enable = true;
+
   nix = {
     enable = true;
     settings = {
       # keep-derivations = true;
       # keep-outputs = true;
-      allowed-users = ["*"];
+      allowed-users = [ "*" ];
       auto-optimise-store = false;
       cores = 0;
-      experimental-features = ["nix-command" "flakes"];
-      extra-sandbox-paths = [];
+      experimental-features = [ "nix-command" "flakes" ];
+      extra-sandbox-paths = [ ];
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;
-      substituters = ["https://cache.nixos.org/"];
-      system-features = ["nixos-test" "benchmark" "big-parallel" "kvm"];
-      trusted-public-keys = ["cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="];
-      trusted-substituters = [];
-      trusted-users = ["root" "jrizzo"];
+      substituters = [ "https://cache.nixos.org/" ];
+      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+      trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+      trusted-substituters = [ ];
+      trusted-users = [ "root" "jrizzo" ];
     };
   };
 
@@ -54,7 +55,7 @@
     # 3080 for gns3
     # 5432 for postgresql
     # 8443 for nginx rev proxy
-    firewall.allowedTCPPorts = [22 443 631 3080 8443];
+    firewall.allowedTCPPorts = [ 22 443 631 3080 8443 ];
 
     interfaces.enp36s0f0.useDHCP = lib.mkDefault true;
     interfaces.enp36s0f1.useDHCP = lib.mkDefault true;
@@ -62,7 +63,7 @@
   };
 
   boot = {
-    supportedFilesystems = ["ntfs"];
+    supportedFilesystems = [ "ntfs" ];
     loader = {
       # Use the systemd-boot EFI boot loader.
       systemd-boot.enable = true;
@@ -76,10 +77,8 @@
     };
   };
 
-  # Set your time zone.
   time.timeZone = "America/New_York";
 
-  # Select internationalisation properties.
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
@@ -142,12 +141,12 @@
     };
   };
 
-  #############################################################################
+  #######################################################################
   # List services that you want to enable:
   services = {
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
-    xserver.videoDrivers = ["nvidia"];
+    xserver.videoDrivers = [ "nvidia" ];
     ollama = {
       enable = false;
       acceleration = "cuda";
@@ -179,7 +178,7 @@
     #   cluster_token: eyJzZXJ2ZXJfbmFtZSI6ImNvZGEiLCJmaW5nZXJwcmludCI6ImI2NGI2NmQyYTBjNzU4Nzk4NDgxYTFiZjhhOTU1YmFhZjg3Mzk5M2U2MzNhMDcxZDkzZTFjNjUzZmIxZDU1MzkiLCJhZGRyZXNzZXMiOlsiaXJsOjg0NDMiXSwic2VjcmV0IjoiZGE1NjkzYjZmYmM5MzU1YzJlYzBiM2VjMTQ1NWNiOTMyNjM5ZmU2N2IyMWY5ODZiOTExYTlkYjJkOGQyZmQ0ZSIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDIyOjQwOjA1Ljg5ODc2MzIxNi0wNDowMCJ9
     virt = {
       enable = true;
-      preseed = {};
+      preseed = { };
       # preseed = {
       #   cluster = {
       #     enabled = true;

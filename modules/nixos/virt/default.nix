@@ -1,9 +1,8 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
+{ pkgs
+, lib
+, config
+, inputs
+, ...
 }: {
   imports = [
     # ./gns3.nix
@@ -70,7 +69,7 @@
   };
 
   config = lib.mkIf config.services.virt.enable {
-    users.users.jrizzo.extraGroups = ["incus-admin"];
+    users.users.jrizzo.extraGroups = [ "incus-admin" ];
     environment.systemPackages = with pkgs; [
       bridge-utils
       spice
@@ -90,12 +89,12 @@
     virtualisation = {
       libvirtd = {
         enable = true;
-        allowedBridges = ["virbr0"];
+        allowedBridges = [ "virbr0" ];
         qemu = {
           package = pkgs.qemu_kvm;
           swtpm.enable = true;
           ovmf.enable = true;
-          ovmf.packages = [pkgs.OVMFFull.fd];
+          ovmf.packages = [ pkgs.OVMFFull.fd ];
         };
       };
       spiceUSBRedirection.enable = true;
@@ -104,7 +103,8 @@
         enable = true;
         package = pkgs.incus;
         ui.enable = true;
-        preseed = config.services.virt.preseed;
+
+        inherit (config.services.virt) preseed;
       };
       docker = {
         enable = true;
@@ -127,7 +127,7 @@
     networking.nftables.enable = true;
 
     # networking.firewall.enable = true;
-    networking.firewall.trustedInterfaces = ["incusbr0" "virbr0"];
+    networking.firewall.trustedInterfaces = [ "incusbr0" "virbr0" ];
 
     programs.virt-manager.enable = true;
 

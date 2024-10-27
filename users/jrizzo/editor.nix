@@ -1,9 +1,9 @@
-{
-  pkgs,
-  lib,
-  inputs,
-  ...
-}: let
+{ pkgs
+, lib
+, inputs
+, ...
+}:
+let
   _extensions = with pkgs.vscode-extensions; [
     arrterian.nix-env-selector
     bbenoist.nix
@@ -13,8 +13,9 @@
     vscodevim.vim
     yzhang.markdown-all-in-one
   ];
-in {
-  home.packages = with pkgs; [spacevim];
+in
+{
+  home.packages = with pkgs; [ spacevim ];
 
   programs.vscode = {
     enable = true;

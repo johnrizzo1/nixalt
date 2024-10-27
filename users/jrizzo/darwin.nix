@@ -1,7 +1,6 @@
-{
-  inputs,
-  pkgs,
-  ...
+{ inputs
+, pkgs
+, ...
 }: {
   # nixpkgs.overlays = import ../../lib/overlays.nix;
   #nixpkgs.overlays = import ../../lib/overlays.nix ++ [
