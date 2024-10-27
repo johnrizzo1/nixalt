@@ -162,7 +162,6 @@
         };
       };
 
-
       #
       # Setting up the formatter
       formatter = forEachSupportedSystem ({ pkgs }: {

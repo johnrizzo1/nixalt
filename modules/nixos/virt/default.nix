@@ -71,6 +71,7 @@
   config = lib.mkIf config.services.virt.enable {
     users.users.jrizzo.extraGroups = [ "incus-admin" ];
     environment.systemPackages = with pkgs; [
+      docker-compose
       bridge-utils
       spice
       spice-gtk
@@ -108,6 +109,8 @@
       };
       docker = {
         enable = true;
+        enableOnBoot = true;
+        enableNvidia = true;
         # daemon.settings=  {
         #   userland-proxy = false;
         #   experimental = true;
