@@ -9,19 +9,24 @@
     inetutils
   ];
 
-  services.gns3-server.enable = true;
-  services.gns3-server.vpcs.enable = true;
-  services.gns3-server.ubridge.enable = true;
-  services.gns3-server.dynamips.enable = true;
+  services.gns3-server = {
+    enable = true;
+    vpcs.enable = true;
+    ubridge.enable = true;
+    dynamips.enable = true;
+    settings = {
+      Server.ubridge_path = pkgs.lib.mkForce "/run/wrappers/bin/ubridge";
+    };
+  };
 
-  services.gns3-server.settings = {
-    Server.ubridge_path = pkgs.lib.mkForce "/run/wrappers/bin/ubridge";
+  users = {
+    groups.gns3 = { };
+    users.gns3 = {
+      group = "gns3";
+      isSystemUser = true;
+    };
   };
-  users.groups.gns3 = { };
-  users.users.gns3 = {
-    group = "gns3";
-    isSystemUser = true;
-  };
+
   systemd.services.gns3-server.serviceConfig = {
     User = "gns3";
     DynamicUser = pkgs.lib.mkForce false;

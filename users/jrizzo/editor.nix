@@ -15,7 +15,19 @@ let
   ];
 in
 {
-  home.packages = with pkgs; [ spacevim ];
+  home = {
+    packages = with pkgs; [ spacevim ];
+
+    shellAliases = {
+      vi = "vim";
+      # vim = "nvim";
+    };
+
+    sessionVariables = {
+      EDITOR = "vim";
+      VISUAL = "vim";
+    };
+  };
 
   programs.vscode = {
     enable = true;
@@ -25,15 +37,5 @@ in
     # );
     package = pkgs.vscode;
     extensions = _extensions;
-  };
-
-  home.shellAliases = {
-    vi = "vim";
-    # vim = "nvim";
-  };
-
-  home.sessionVariables = {
-    EDITOR = "vim";
-    VISUAL = "vim";
   };
 }

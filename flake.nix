@@ -122,19 +122,32 @@
           });
     in
     {
-      #
-      # Linux
-      # sudo nixos-rebuild --flake .#coda switch
-      nixosConfigurations.coda = mkSystem "coda" {
-        system = "x86_64-linux";
-        user = "jrizzo";
-      };
+      nixosConfigurations = {
+        #
+        # Linux
+        # sudo nixos-rebuild --flake .#coda switch
+        coda = mkSystem "coda" {
+          system = "x86_64-linux";
+          user = "jrizzo";
+        };
 
-      # sudo nixos-rebuild --flake .#irl switch
-      nixosConfigurations.irl = mkSystem "irl" {
-        system = "x86_64-linux";
-        user = "jrizzo";
-        isHypervisor = true;
+        # sudo nixos-rebuild --flake .#irl switch
+        irl = mkSystem "irl" {
+          system = "x86_64-linux";
+          user = "jrizzo";
+          isHypervisor = true;
+        };
+        # Virtual Machines & Containers
+        # nixos-rebuild --flake .#vm-intel build-vm
+        vm-intel = mkSystem "vm-intel" {
+          system = "x86_64-linux";
+          user = "jrizzo";
+        };
+        # nixos-rebuild --flake .#vm-aarch64-prl build-vm
+        # nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
+        #   system = "aarch64-linux";
+        #   user = "jrizzo";
+        # };
       };
 
       #
@@ -149,18 +162,6 @@
         };
       };
 
-      #
-      # Virtual Machines & Containers
-      # nixos-rebuild --flake .#vm-intel build-vm
-      nixosConfigurations.vm-intel = mkSystem "vm-intel" {
-        system = "x86_64-linux";
-        user = "jrizzo";
-      };
-      # nixos-rebuild --flake .#vm-aarch64-prl build-vm
-      # nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
-      #   system = "aarch64-linux";
-      #   user = "jrizzo";
-      # };
 
       #
       # Setting up the formatter

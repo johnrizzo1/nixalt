@@ -58,11 +58,13 @@ systemFunc rec {
     userOSConfig
     home-manager.home-manager
     {
-      home-manager.useGlobalPkgs = true;
-      home-manager.useUserPackages = true;
-      home-manager.backupFileExtension = "backup";
-      home-manager.users.${user} = import userHMConfig {
-        inherit isWSL isHypervisor inputs;
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        backupFileExtension = "backup";
+        users.${user} = import userHMConfig {
+          inherit isWSL isHypervisor inputs;
+        };
       };
     }
 

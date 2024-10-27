@@ -9,42 +9,52 @@
 }: {
   imports = [ ../modules/darwin ];
 
-  networking.hostName = currentSystemName;
-  networking.computerName = currentSystemName;
-  networking.localHostName = currentSystemName;
+  networking = {
+    hostName = currentSystemName;
+    computerName = currentSystemName;
+    localHostName = currentSystemName;
+  };
 
   # users.users.jrizzo.home =
   #   if pkgs.stdenv.isDarwin
   #   then "/Users/jrizzo"
   #   else "/home/jrizzo";
 
-  # zsh is the default shell on Mac and we want to make sure that we're
-  # configuring the rc correctly with nix-darwin paths.
-  programs.zsh.enable = true;
-  programs.zsh.shellInit = ''
-    # Nix
-    if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-      . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-    fi
-    # End Nix
-  '';
+  programs = {
+    # zsh is the default shell on Mac and we want to make sure that we're
+    # configuring the rc correctly with nix-darwin paths.
+    zsh = {
+      enable = true;
+      shellInit = ''
+        # Nix
+        if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+          . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+        fi
+        # End Nix
+      '';
+    };
 
-  programs.fish.enable = true;
-  programs.fish.shellInit = ''
-    # Nix
-    if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
-      source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
-    end
-    # End Nix
-  '';
+    fish = {
+      enable = true;
+      shellInit = ''
+        # Nix
+        if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+          source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+        end
+        # End Nix
+      '';
+    };
+  };
 
-  environment.shells = with pkgs; [ bashInteractive zsh fish ];
+  environment = {
+    shells = with pkgs; [ bashInteractive zsh fish ];
 
-  #
-  # Packages
-  environment.systemPackages = with pkgs; [
-    synergy
-  ];
+    #
+    # Packages
+    systemPackages = with pkgs; [
+      synergy
+    ];
+  };
 
   # nixpkgs.config.android_sdk.accept_license = true;
 
@@ -139,20 +149,26 @@
     ];
   };
 
-  services.tailscale.enable = true;
-  # services.synergy.client = {
-  #   enable = true;
-  #   autoStart = true;
-  #   serverAddress = "coda.technobable.com:24800";
-  #   # tls.enable = true;
-  # };
+  services = {
+    tailscale.enable = true;
+    # synergy.client = {
+    #   enable = true;
+    #   autoStart = true;
+    #   serverAddress = "coda.technobable.com:24800";
+    #   # tls.enable = true;
+    # };
+  };
 
   #
   # Other Options
-  nix.settings.experimental-features = "nix-command flakes";
-  nix.package = pkgs.nix;
+  nix = {
+    settings.experimental-features = "nix-command flakes";
+    package = pkgs.nix;
+  };
+
+  nixpkgs.hostPlatform = currentSystem;
+
   # Set Git commit hash for darwin-version.
   # system.configurationRevision = self.rev or self.dirtyRev or null;
-  nixpkgs.hostPlatform = currentSystem;
   system.stateVersion = 5;
 }

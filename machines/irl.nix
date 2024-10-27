@@ -57,9 +57,11 @@
     # 8443 for nginx rev proxy
     firewall.allowedTCPPorts = [ 22 443 631 3080 8443 ];
 
-    interfaces.enp36s0f0.useDHCP = lib.mkDefault true;
-    interfaces.enp36s0f1.useDHCP = lib.mkDefault true;
-    interfaces.wlp38s0.useDHCP = lib.mkDefault true;
+    interfaces = {
+      enp36s0f0.useDHCP = lib.mkDefault true;
+      enp36s0f1.useDHCP = lib.mkDefault true;
+      wlp38s0.useDHCP = lib.mkDefault true;
+    };
   };
 
   boot = {

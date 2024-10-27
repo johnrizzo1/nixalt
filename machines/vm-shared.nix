@@ -4,16 +4,22 @@
 , currentSystem
 , currentSystemName
 , ...
-}:
-let
-  # Turn this to true to use gnome instead of i3. This is a bit
-  # of a hack, I just flip it on as I need to develop gnome stuff
-  # for now.
-  linuxGnome = true;
-in
-{
+}: {
   # Be careful updating this.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    # Use the systemd-boot EFI boot loader.
+    loader = {
+      efi.canTouchEfiVariables = true;
+
+      # VMware, Parallels both only support this being 0 otherwise you see
+      # "error switching console mode" on boot.
+      systemd-boot = {
+        enable = true;
+        consoleMode = "0";
+      };
+    };
+  };
 
   nix = {
     enable = true;
@@ -41,24 +47,22 @@ in
     "mupdf-1.17.0"
   ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  networking = {
+    # Define your hostname.
+    hostName = "dev";
 
-  # VMware, Parallels both only support this being 0 otherwise you see
-  # "error switching console mode" on boot.
-  boot.loader.systemd-boot.consoleMode = "0";
+    # Disable the firewall since we're in a VM and we want to make it
+    # easy to visit stuff in here. We only use NAT networking anyways.
+    firewall.enable = false;
 
-  # Define your hostname.
-  networking.hostName = "dev";
+    # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+    # Per-interface useDHCP will be mandatory in the future, so this generated config
+    # replicates the default behaviour.
+    useDHCP = false;
+  };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
 
   # Don't require password for sudo
   security.sudo.wheelNeedsPassword = false;
@@ -79,45 +83,54 @@ in
     };
   };
 
-  # setup windowing environment
-  services.xserver =
-    if linuxGnome
-    then {
+  services = {
+    # setup windowing environment
+    # xserver =
+    #   if linuxGnome
+    #   then {
+    #     enable = true;
+    #     xkb.layout = "us";
+    #     desktopManager.gnome.enable = true;
+    #     displayManager.gdm.enable = true;
+    #   }
+    #   else {
+    #     enable = true;
+    #     xkb.layout = "us";
+    #     dpi = 220;
+
+    #     desktopManager = {
+    #       xterm.enable = false;
+    #       wallpaper.mode = "fill";
+    #     };
+
+    #     displayManager = {
+    #       defaultSession = "none+i3";
+    #       lightdm.enable = true;
+
+    #       # AARCH64: For now, on Apple Silicon, we must manually set the
+    #       # display resolution. This is a known issue with VMware Fusion.
+    #       sessionCommands = ''
+    #         ${pkgs.xorg.xset}/bin/xset r rate 200 40
+    #       '';
+    #     };
+
+    #     windowManager = {
+    #       i3.enable = true;
+    #     };
+    #   };
+
+    # Enable tailscale. We manually authenticate when we want with
+    # "sudo tailscale up". If you don't use tailscale, you should comment
+    # out or delete all of this.
+    tailscale.enable = true;
+    openssh = {
       enable = true;
-      xkb.layout = "us";
-      desktopManager.gnome.enable = true;
-      displayManager.gdm.enable = true;
-    }
-    else {
-      enable = true;
-      xkb.layout = "us";
-      dpi = 220;
-
-      desktopManager = {
-        xterm.enable = false;
-        wallpaper.mode = "fill";
-      };
-
-      displayManager = {
-        defaultSession = "none+i3";
-        lightdm.enable = true;
-
-        # AARCH64: For now, on Apple Silicon, we must manually set the
-        # display resolution. This is a known issue with VMware Fusion.
-        sessionCommands = ''
-          ${pkgs.xorg.xset}/bin/xset r rate 200 40
-        '';
-      };
-
-      windowManager = {
-        i3.enable = true;
+      settings = {
+        PasswordAuthentication = true;
+        PermitRootLogin = "no";
       };
     };
-
-  # Enable tailscale. We manually authenticate when we want with
-  # "sudo tailscale up". If you don't use tailscale, you should comment
-  # out or delete all of this.
-  services.tailscale.enable = true;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
@@ -164,15 +177,6 @@ in
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true;
-  services.openssh.settings.PermitRootLogin = "no";
-
-  # Disable the firewall since we're in a VM and we want to make it
-  # easy to visit stuff in here. We only use NAT networking anyways.
-  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
