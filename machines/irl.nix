@@ -128,13 +128,17 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    opengl = {
-      enable = true; # in stable
-      driSupport = true;
-      driSupport32Bit = true;
-      # extraPackages = with pkgs; [
-      #   rocmPackages.clr.icd
-      # ];
+    # opengl = {
+    # enable = true; # in stable
+    # driSupport = true;
+    # driSupport32Bit = true;
+    # extraPackages = with pkgs; [
+    #   rocmPackages.clr.icd
+    # ];
+    # };
+    graphics = {
+      enable = true;
+      enable32Bit = true;
     };
   };
 

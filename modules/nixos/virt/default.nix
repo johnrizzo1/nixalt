@@ -82,7 +82,7 @@
       qemu_full
       quickemu
       swtpm
-      swtpm-tpm2
+      # swtpm-tpm2
       OVMFFull
       opentofu
     ];
@@ -102,6 +102,7 @@
       # containers.cdi.dynamic.nvidia.enable = true;
       incus = {
         enable = true;
+        package = pkgs.incus;
         ui.enable = true;
         preseed = config.services.virt.preseed;
       };

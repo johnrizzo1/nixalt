@@ -140,7 +140,7 @@ in {
       gnumake
       killall
       niv
-      rxvt_unicode
+      # rxvt_unicode
       xclip
 
       # For hypervisors that support auto-resizing, this script forces it.

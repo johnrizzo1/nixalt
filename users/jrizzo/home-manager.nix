@@ -80,6 +80,8 @@ in {
         xsel
         zenith
         spacevim
+        opentofu
+        terragrunt
       ]
       ++ (lib.optionals (isLinux && !isWSL) [
         _1password-gui
@@ -88,7 +90,6 @@ in {
         element-desktop-wayland
         firefox
         freetube
-        rxvt_unicode
         signal-desktop
         spotube
         synology-drive-client
@@ -144,6 +145,7 @@ in {
         jn = "jj new";
         js = "jj st";
 
+        tg = "terragrunt";
         # XDG Config Dirs
         # yarn = "yarn --use-yarnrc ${configHome}/yarn/config"; # $HOME/.yarnrc
         wget = "wget - -hsts-file=${dataHome}/wget-hsts"; # $HOME/wget-hsts

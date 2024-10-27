@@ -186,16 +186,16 @@
       # nvidiaPersistenced = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    opengl = {
-      enable = true; # in stable
-      driSupport = true;
-      driSupport32Bit = true;
-    };
-    # graphics.enable = true; # for unstable
-    # graphics = {
-    #   enable = true;
-    #   enable32Bit = true;
+    # opengl = {
+    #   enable = true; # in stable
+    #   driSupport = true;
+    #   driSupport32Bit = true;
     # };
+    # graphics.enable = true; # for unstable
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
     logitech.wireless = {
       enable = true;
       enableGraphical = true;
