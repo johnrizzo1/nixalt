@@ -106,11 +106,22 @@
         ui.enable = true;
         preseed = config.services.virt.preseed;
       };
+      docker = {
+        enable = true;
+        # daemon.settings=  {
+        #   userland-proxy = false;
+        #   experimental = true;
+        #   metrics-addr = "0.0.0.0:9323";
+        #   ipv6 = true;
+        #   fixed-cidr-v6 = "fd00::/80";
+        # };
+      };
     };
 
     # This is to support nvidia cards on docker
     # enable this after you create an option for cuda/rocm
-    # hardware.nvidia-container-toolkit.enable = true;
+    # --device=nvidia.com/gpu=all
+    hardware.nvidia-container-toolkit.enable = true;
 
     # Required for incus
     networking.nftables.enable = true;

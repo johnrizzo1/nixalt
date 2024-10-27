@@ -55,8 +55,8 @@
     hostName = currentSystemName;
     # Disable the firewall since we're in a VM and we want to make it
     # easy to visit stuff in here. We only use NAT networking anyways.
-    # firewall.enable = false;
-    firewall.allowedTCPPorts = [22 443 631 3080 8443];
+    firewall.enable = lib.mkForce false;
+    firewall.allowedTCPPorts = [22 443 631 3080 3389 8080 8443];
   };
 
   boot = {
@@ -107,6 +107,7 @@
     # "sudo tailscale up". If you don't use tailscale, you should comment
     # out or delete all of this.
     tailscale.enable = true;
+    keybase.enable = true;
     openssh = {
       enable = true;
       settings = {
@@ -245,11 +246,15 @@
       home-manager
       niv
       obsidian
+      obs-studio
       ollama
       tmux
       wget
       element-desktop-wayland
+      keybase
+      keybase-gui
       jan
+      jetbrains.pycharm-community
       # For hypervisors that support auto-resizing, this script forces it.
       # I've noticed not everyone listens to the udev events so this is a hack.
       (writeShellScriptBin "xrandr-auto" ''

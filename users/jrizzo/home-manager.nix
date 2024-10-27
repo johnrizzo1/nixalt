@@ -82,6 +82,7 @@ in {
         spacevim
         opentofu
         terragrunt
+        nmap
       ]
       ++ (lib.optionals (isLinux && !isWSL) [
         _1password-gui
@@ -214,104 +215,37 @@ in {
         (builtins.readFile ./files/config.fish)
         "set -g SHELL ${pkgs.fish}/bin/fish"
       ]);
-
-      # shellAliases = {};
-
-      # plugins = [
-      #   "fish-fzf"
-      #   "fish-foreign-env"
-      #   "theme-bobthefish"
-      # ];
     };
 
     tmux = {
       enable = true;
-      baseIndex = 1;
-      clock24 = true;
-      mouse = true;
-      newSession = true;
-      terminal = "screen-256color";
-      prefix = "C-a";
+      aggressiveResize = true;
+      mouse = false;
       keyMode = "vi";
-      # shortcut = "l";
-      # secureSocket = false;
+      prefix = "C-b";
+      package = pkgs.tmux;
 
+      # These customize the sensible plugin
       extraConfig = ''
         set-option -g status-position top
-
-        # Opens new windows in the current directory
-        bind '"' split-window -c "#{pane_current_path}"
-        bind % split-window -h -c "#{pane_current_path}"
-        bind c new-window -c "#{pane_current_path}"
-
-        set -s set-clipboard external
-        set -s copy-command 'xsel -i'
-
-        # Vim style pane selection
-        set -g status-keys vi
-        setw -g mode-keys vi
-        bind h select-pane -L
-        bind j select-pane -D
-        bind k select-pane -U
-        bind l select-pane -R
-
-        # Fix my clear screen obsession
-        bind-key -n C-l send-keys -R ^M \; clear-history
       '';
 
       plugins = [
         {
-          plugin = tmuxPlugins.resurrect;
-          extraConfig = ''
-            set -g @resurrect-dir ${config.xdg.stateHome}/tmux-ressurect
-            set -g @resurrect-strategy-nvim 'session'
-          '';
-        }
-        {
           plugin = tmuxPlugins.yank;
           extraConfig = ''
             set -g @yank_action 'copy-pipe'
+            set-clipboard on
+            # set -s set-clipboard external
+            # set -s copy-command 'xsel -i'
           '';
         }
         {
-          plugin = tmuxPlugins.catppuccin.overrideAttrs (_: {
-            version = "unstable-2023-11-01";
-            src = pkgs.fetchFromGitHub {
-              owner = "catppuccin";
-              repo = "tmux";
-              rev = "47e33044b4b47b1c1faca1e42508fc92be12131a";
-              hash = "sha256-kn3kf7eiiwXj57tgA7fs5N2+B2r441OtBlM8IBBLl4I=";
-            };
-          });
+          plugin = tmuxPlugins.catppuccin;
           extraConfig = ''
-            set -g @catppuccin_flavour 'frappe'
-
-            set -g @catppuccin_window_left_separator ""
-            set -g @catppuccin_window_right_separator " "
-            set -g @catppuccin_window_middle_separator " █"
-            set -g @catppuccin_window_number_position "right"
-
-            set -g @catppuccin_window_default_fill "number"
-            set -g @catppuccin_window_default_text "#W"
-
-            set -g @catppuccin_window_current_fill "number"
-            set -g @catppuccin_window_current_text "#W"
-
-            set -g @catppuccin_status_modules_right "session date_time"
-            set -g @catppuccin_status_left_separator  " "
-            set -g @catppuccin_status_right_separator ""
-            set -g @catppuccin_status_right_separator_inverse "no"
-            set -g @catppuccin_status_fill "icon"
-            set -g @catppuccin_status_connect_separator "no"
-
-            set -g @catppuccin_date_time_text "%a %-d %b %H:%M"
+            set -g @catppuccin_flavour 'latte' # latte macchiato mocha frappe
           '';
         }
-        tmuxPlugins.sensible
-        tmuxPlugins.vim-tmux-navigator
-        tmuxPlugins.resurrect
-        tmuxPlugins.open
-        tmuxPlugins.continuum
         tmuxPlugins.tmux-fzf
       ];
     };
@@ -320,9 +254,14 @@ in {
       enable = true;
       # enableBashCompletion = true;
       enableCompletion = true;
-      # enableFzfCompletion = true;
       syntaxHighlighting.enable = true;
+      # enableLsColors = true;
+      autosuggestion.enable = true;
     };
+    dircolors.enableZshIntegration = true;
+    eza.enableZshIntegration = true;
+    fzf.enable = true;
+    fzf.enableZshIntegration = true;
 
     git = {
       enable = true;
@@ -386,7 +325,7 @@ in {
       extraConfig =
         if pkgs.stdenv.isDarwin
         then "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
-        else "";
+        else "IdentityAgent \"~/.1password/agent.sock\"";
     };
 
     alacritty = {
@@ -410,7 +349,8 @@ in {
             else 15;
 
           normal = {
-            family = "CaskaydiaCove Nerd Font";
+            # family = "CaskaydiaCove Nerd Font";
+            family = "AnonymicePro Nerd Font";
             style = "Regular";
           };
         };
