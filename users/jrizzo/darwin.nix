@@ -12,12 +12,16 @@
 
   homebrew = {
     enable = true;
+    brews = [
+      "mas"
+    ];
     casks = [
       "1password"
       "blender"
       "cleanshot"
       "discord"
       "figma"
+      "freetube"
       "gimp"
       "gns3"
       "google-chrome"
@@ -25,6 +29,7 @@
       "imageoptim"
       "inkscape"
       "istat-menus"
+      "iterm2"
       "krita"
       "monodraw"
       "raycast"
@@ -36,14 +41,9 @@
     ];
   };
 
-  # environment.systemPackages = [
-  #   pkgs.darwin-packages.darwin-zsh-completions
-  # ];
+  # environment.systemPackages = [ ];
 
-  home.packages = with pkgs; [
-    mas
-    iterm2
-  ];
+  # home.packages = with pkgs; [ ];
 
   users.users.jrizzo = {
     home = "/Users/jrizzo";
