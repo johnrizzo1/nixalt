@@ -175,6 +175,7 @@ in
       enableZshIntegration = true;
       # enableFishIntegration = true;
       config = {
+        load_dotenv = true;
         whitelist = {
           # prefix= [
           #   "$HOME/code/go/src/github.com/hashicorp"
@@ -199,12 +200,16 @@ in
       aggressiveResize = true;
       mouse = false;
       keyMode = "vi";
-      prefix = "C-b";
+      prefix = "C-a";
       package = pkgs.tmux;
+      baseIndex = 1;
+      escapeTime = 0;
 
       # These customize the sensible plugin
       extraConfig = ''
         set-option -g status-position top
+        bind -n C-l send-keys "clear"\; send-keys "Enter"
+        bind r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
       '';
 
       plugins = [

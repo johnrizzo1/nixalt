@@ -110,7 +110,7 @@
       docker = {
         enable = true;
         enableOnBoot = true;
-        enableNvidia = true;
+        # enableNvidia = true;
         # daemon.settings=  {
         #   userland-proxy = false;
         #   experimental = true;
