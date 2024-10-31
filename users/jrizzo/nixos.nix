@@ -19,13 +19,13 @@
     isNormalUser = true;
     home = "/home/jrizzo";
     extraGroups = [
+      "docker"
+      "gns3"
+      "incus-admin"
+      "libvirtd"
+      "lxd"
       "networkmanager"
       "wheel"
-      "libvirtd"
-      "docker"
-      "lxd"
-      "incus-admin"
-      "gns3"
     ];
     shell = pkgs.zsh;
     hashedPassword = "$y$j9T$b5Q1pCL/pua.UUsOV3TKi/$8nkwFkKrHjUu5cr8b4TQnFgSpcYbVuFW63w88UppUF1";

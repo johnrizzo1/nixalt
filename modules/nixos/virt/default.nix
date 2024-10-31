@@ -88,6 +88,7 @@
     ];
 
     virtualisation = {
+      vswitch.enable = true;
       libvirtd = {
         enable = true;
         allowedBridges = [ "virbr0" ];
@@ -110,14 +111,6 @@
       docker = {
         enable = true;
         enableOnBoot = true;
-        # enableNvidia = true;
-        # daemon.settings=  {
-        #   userland-proxy = false;
-        #   experimental = true;
-        #   metrics-addr = "0.0.0.0:9323";
-        #   ipv6 = true;
-        #   fixed-cidr-v6 = "fd00::/80";
-        # };
       };
     };
 
@@ -129,8 +122,27 @@
     # Required for incus
     networking.nftables.enable = true;
 
+    # project: default
+    # name: incusbr0
+    # description: ''
+    # type: bridge
+    # config:
+    #   bridge.driver: openvswitch
+    #   dns.domain: technobable.com
+    #   dns.search: tail577f.ts.net, technobable.com
+    #   ipv4.address: 10.159.34.1/24
+    #   ipv4.nat: 'true'
+    #   ipv6.address: none
+
+    # networking.vswitches = {
+    #   "ovsbr0" = {
+    #     interfaces = { }
+    #   }
+    # };
+
     # networking.firewall.enable = true;
-    networking.firewall.trustedInterfaces = [ "incusbr0" "virbr0" ];
+    networking.networkmanager.unmanaged = [ "incusbr0" "virbr0" "docker0" "tailscale0" ];
+    networking.firewall.trustedInterfaces = [ "incusbr0" "virbr0" "docker0" "tailscale0" ];
 
     programs.virt-manager.enable = true;
 
