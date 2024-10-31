@@ -85,6 +85,7 @@
       # swtpm-tpm2
       OVMFFull
       opentofu
+      ovn
     ];
 
     virtualisation = {
