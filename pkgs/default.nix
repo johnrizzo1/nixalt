@@ -3,4 +3,5 @@
 pkgs: {
   ovn = pkgs.callPackage ./ovn { inherit pkgs; };
   # fmt = pkgs.callPackage ./fmt.nix {};
+  ovn = pkgs.callPackage ./ovn.nix { };
 }

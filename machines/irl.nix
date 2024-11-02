@@ -9,35 +9,14 @@
 }: {
   imports = [
     ./hardware/irl.nix
+    ../modules/nixos/nix.nix
+    # .../modules/nixos/desktop.nix
     ../modules/nixos/networking.nix
     ../modules/nixos/nix-ld.nix
     ../modules/nixos/virt
     # ../modules/nixos/secureboot.nix
     # ../modules/nixos/vscode-server.nix
   ];
-
-  # services.secureboot.enable = true;
-
-  nix = {
-    enable = true;
-    settings = {
-      # keep-derivations = true;
-      # keep-outputs = true;
-      allowed-users = [ "*" ];
-      auto-optimise-store = false;
-      cores = 0;
-      experimental-features = [ "nix-command" "flakes" ];
-      extra-sandbox-paths = [ ];
-      max-jobs = "auto";
-      require-sigs = true;
-      sandbox = true;
-      substituters = [ "https://cache.nixos.org/" ];
-      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-      trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
-      trusted-substituters = [ ];
-      trusted-users = [ "root" "jrizzo" ];
-    };
-  };
 
   users = {
     mutableUsers = false;
@@ -50,11 +29,7 @@
   networking = {
     hostName = currentSystemName;
 
-    # 443 for web traffic
-    # 631 for ?
-    # 3080 for gns3
-    # 5432 for postgresql
-    # 8443 for nginx rev proxy
+    firewall.enable = lib.mkForce true;
     firewall.allowedTCPPorts = [ 22 443 631 3080 8443 ];
 
     interfaces = {
@@ -65,6 +40,9 @@
   };
 
   boot = {
+    # Be careful updating this.
+    # boot.kernelPackages = pkgs.linuxPackages_latest;
+    # Use the systemd-boot EFI boot loader.
     supportedFilesystems = [ "ntfs" ];
     loader = {
       # Use the systemd-boot EFI boot loader.
@@ -120,7 +98,7 @@
   hardware = {
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
-    # amdgpu.opencl.enable = true;
+
     nvidia = {
       modesetting.enable = true;
       powerManagement.enable = true;
@@ -129,14 +107,6 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    # opengl = {
-    # enable = true; # in stable
-    # driSupport = true;
-    # driSupport32Bit = true;
-    # extraPackages = with pkgs; [
-    #   rocmPackages.clr.icd
-    # ];
-    # };
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -171,23 +141,9 @@
       };
     };
 
-    # Enable my virt setup
-    # cat preseed.yml | sudo incus admin init --preseed
-    # preseed.yml
-    # cluster:
-    #   enabled: true
-    #   server_address: 192.168.2.125:8443
-    #   cluster_token: eyJzZXJ2ZXJfbmFtZSI6ImNvZGEiLCJmaW5nZXJwcmludCI6ImI2NGI2NmQyYTBjNzU4Nzk4NDgxYTFiZjhhOTU1YmFhZjg3Mzk5M2U2MzNhMDcxZDkzZTFjNjUzZmIxZDU1MzkiLCJhZGRyZXNzZXMiOlsiaXJsOjg0NDMiXSwic2VjcmV0IjoiZGE1NjkzYjZmYmM5MzU1YzJlYzBiM2VjMTQ1NWNiOTMyNjM5ZmU2N2IyMWY5ODZiOTExYTlkYjJkOGQyZmQ0ZSIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDIyOjQwOjA1Ljg5ODc2MzIxNi0wNDowMCJ9
     virt = {
       enable = true;
       preseed = { };
-      # preseed = {
-      #   cluster = {
-      #     enabled = true;
-      #     server_address = "${currentSystemName}:8443";
-      #     cluster_token = "eyJzZXJ2ZXJfbmFtZSI6ImlybCIsImZpbmdlcnByaW50IjoiZDhmYjJkNjllZWE5NDc5ZjQxMzNjZjZiNTVmMWViMmJkOTg4ZWI2Nzk0ZTcwMjY2ZTBhNzhkN2ZhZWI1MmNkYiIsImFkZHJlc3NlcyI6WyIxOTIuMTY4LjIuMTI1Ojg0NDMiXSwic2VjcmV0IjoiNmNlMTE5OTJjZDIyZjA3N2RjZGI1MTcxYzQ1YzE3ZWMxNGU0NWViMTA1OWMyZWZlZTZjNDcwZTYzMmI0OGViNCIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDE5OjAxOjQ3LjExOTIxMjIzLTA0OjAwIn0=";
-      #   };
-      # };
     };
   };
 

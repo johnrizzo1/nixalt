@@ -1,7 +1,4 @@
-{ lib
-, inputs
-, ...
-}: {
+{ pkgs, .. }: {
   nix = {
     enable = true;
     settings = {
@@ -41,15 +38,5 @@
       #   Weekday = 6;
       # };
     };
-
-    registry = {
-      nixpkgs.flake = inputs.nixpkgs-darwin;
-    };
-
-    nixPath = [
-      "nixpkgs=${inputs.nixpkgs-darwin}"
-    ];
   };
-
-  services.nix-daemon.enable = true;
 }

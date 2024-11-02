@@ -72,6 +72,10 @@
       Xcode = 497799835;
     };
 
+    brews = [
+      "incus"
+    ];
+
     casks = [
       "android-studio"
       "balenaetcher"
@@ -105,6 +109,7 @@
       "synology-drive"
       "transmission"
       "vscodium"
+      "whatsapp-for-mac"
       "zoom"
       # "aircrack-ng" # failed
       # "aldente"
@@ -158,15 +163,6 @@
     #   # tls.enable = true;
     # };
   };
-
-  #
-  # Other Options
-  nix = {
-    settings.experimental-features = "nix-command flakes";
-    package = pkgs.nix;
-  };
-
-  nixpkgs.hostPlatform = currentSystem;
 
   # Set Git commit hash for darwin-version.
   # system.configurationRevision = self.rev or self.dirtyRev or null;

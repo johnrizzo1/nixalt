@@ -9,6 +9,7 @@
 }: {
   imports = [
     ./hardware/coda.nix
+    ../modules/nixos/nix.nix
     ../modules/nixos/desktop.nix
     ../modules/nixos/networking.nix
     ../modules/nixos/nix-ld.nix
@@ -16,39 +17,6 @@
     # ../modules/nixos/secureboot.nix
     # ../modules/nixos/vscode-server.nix
   ];
-
-  # services.secureboot.enable = true;
-
-  nix = {
-    enable = true;
-    settings = {
-      # keep-derivations = true;
-      # keep-outputs = true;
-      allowed-users = [ "*" ];
-      auto-optimise-store = false;
-      cores = 0;
-      experimental-features = [ "nix-command" "flakes" ];
-      extra-sandbox-paths = [ ];
-      max-jobs = "auto";
-      require-sigs = true;
-      sandbox = true;
-      substituters = [
-        "https://cache.nixos.org/"
-        "https://devenv.cachix.org"
-        "https://nix-community.cachix.org"
-        "https://cuda-maintainers.cachix.org"
-      ];
-      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-      trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
-      ];
-      trusted-substituters = [ ];
-      trusted-users = [ "root" "jrizzo" ];
-    };
-  };
 
   users = {
     mutableUsers = false;
@@ -60,10 +28,13 @@
 
   networking = {
     hostName = currentSystemName;
-    # Disable the firewall since we're in a VM and we want to make it
-    # easy to visit stuff in here. We only use NAT networking anyways.
-    firewall.enable = lib.mkForce false;
+
+    firewall.enable = lib.mkForce true;
     firewall.allowedTCPPorts = [ 22 443 631 3080 3389 8080 8443 ];
+
+    interfaces = {
+      enp3s0.useDHCP = lib.mkDefault true;
+    }
   };
 
   boot = {
@@ -147,10 +118,9 @@
   #######################################################################
   # Hardware configuration
   hardware = {
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
+    bluetooth.enable = true;
+    bluetooth.powerOnBoot = true;
+
     nvidia = {
       modesetting.enable = true;
       powerManagement.enable = true;
@@ -160,12 +130,6 @@
       # nvidiaPersistenced = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    # opengl = {
-    #   enable = true; # in stable
-    #   driSupport = true;
-    #   driSupport32Bit = true;
-    # };
-    # graphics.enable = true; # for unstable
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -181,18 +145,13 @@
   #######################################################################
   # List services that you want to enable:
   services = {
-    # Don't forget to run the following to enable the service
-    # systemctl --user enable auto-fix-vscode-server.service
-    # systemctl --user start auto-fix-vscode-server.service
-    # FIX: ln -sfT /run/current-system/etc/systemd/user/auto-fix-vscode-server.service ~/.config/systemd/user/auto-fix-vscode-server.service
-    # vscode-server.enable = true;
-    # vscode-server.enableFHS = true;
+    hardware.bolt.enable = true;
+    # services.secureboot.enable = true;
     printing.enable = true;
     colord.enable = true;
-    hardware.bolt.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
     ollama = {
-      enable = false;
+      enable = true;
       acceleration = "cuda";
     };
     tabby = {
@@ -200,6 +159,9 @@
       acceleration = "cuda";
       usageCollection = false;
     };
+
+    # 
+    # X/Wayland Config
     #- yubikey-agent.enable = true;
     displayManager.autoLogin.enable = true;
     displayManager.autoLogin.user = currentSystemUser;
@@ -223,54 +185,62 @@
     #   tls.enable = true;
     # };
 
-    virt.enable = true;
-    virt.preseed = { };
-    # virt.preseed = {
-    #   config = {
-    #     "core.https_address" = ":8443";
-    #   };
-    #   networks = [
-    #     {
-    #       config = {
-    #         "ipv4.address" = "10.10.10.1/24";
-    #         "ipv4.nat" = "true";
-    #       };
-    #       name = "incusbr0";
-    #       type = "bridge";
-    #     }
-    #   ];
-    #   profiles = [
-    #     {
-    #       devices = {
-    #         eth0 = {
-    #           name = "eth0";
-    #           network = "incusbr0";
-    #           type = "nic";
-    #         };
-    #         root = {
-    #           path = "/";
-    #           pool = "default";
-    #           size = "35GiB";
-    #           type = "disk";
-    #         };
-    #       };
-    #       name = "default";
-    #     }
-    #   ];
-    #   storage_pools = [
-    #     {
-    #       config = {
-    #         source = "/var/lib/incus/storage-pools/default";
-    #       };
-    #       driver = "dir";
-    #       name = "default";
-    #     }
-    #   ];
-    #   cluster = {
-    #     server_name = currentSystemName;
-    #     enabled = true;
-    #   };
-    # };
+    virt = {
+      enable = true;
+      preseed = { };
+      # preseed = {
+      #   cluster = {
+      #     enabled = true;
+      #     server_address = "${currentSystemName}:8443";
+      #     cluster_token = "eyJzZXJ2ZXJfbmFtZSI6ImlybCIsImZpbmdlcnByaW50IjoiZDhmYjJkNjllZWE5NDc5ZjQxMzNjZjZiNTVmMWViMmJkOTg4ZWI2Nzk0ZTcwMjY2ZTBhNzhkN2ZhZWI1MmNkYiIsImFkZHJlc3NlcyI6WyIxOTIuMTY4LjIuMTI1Ojg0NDMiXSwic2VjcmV0IjoiNmNlMTE5OTJjZDIyZjA3N2RjZGI1MTcxYzQ1YzE3ZWMxNGU0NWViMTA1OWMyZWZlZTZjNDcwZTYzMmI0OGViNCIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDE5OjAxOjQ3LjExOTIxMjIzLTA0OjAwIn0=";
+      #   };
+      # };
+      # virt.preseed = {
+      #   config = {
+      #     "core.https_address" = ":8443";
+      #   };
+      #   networks = [
+      #     {
+      #       config = {
+      #         "ipv4.address" = "10.10.10.1/24";
+      #         "ipv4.nat" = "true";
+      #       };
+      #       name = "incusbr0";
+      #       type = "bridge";
+      #     }
+      #   ];
+      #   profiles = [
+      #     {
+      #       devices = {
+      #         eth0 = {
+      #           name = "eth0";
+      #           network = "incusbr0";
+      #           type = "nic";
+      #         };
+      #         root = {
+      #           path = "/";
+      #           pool = "default";
+      #           size = "35GiB";
+      #           type = "disk";
+      #         };
+      #       };
+      #       name = "default";
+      #     }
+      #   ];
+      #   storage_pools = [
+      #     {
+      #       config = {
+      #         source = "/var/lib/incus/storage-pools/default";
+      #       };
+      #       driver = "dir";
+      #       name = "default";
+      #     }
+      #   ];
+      #   cluster = {
+      #     server_name = currentSystemName;
+      #     enabled = true;
+      #   };
+    };
   };
 
   security.apparmor.enable = true;
