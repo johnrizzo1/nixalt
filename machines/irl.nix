@@ -147,7 +147,10 @@
     };
   };
 
-  # security.apparmor.enable = true;
+  security.apparmor.enable = true;
 
+  # system.autoUpgrade.enable = true;
+  # system.autoUpgrade.allowReboot = false;
+  # system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.05";
   system.stateVersion = "24.05"; # Did you read the comment?
 }
