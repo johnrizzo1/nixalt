@@ -273,7 +273,7 @@
     # };
   };
 
-  # security.apparmor.enable = true;
+  security.apparmor.enable = true;
 
   # system.autoUpgrade.enable = true;
   # system.autoUpgrade.allowReboot = false;

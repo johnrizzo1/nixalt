@@ -97,13 +97,7 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    , home-manager
-    , flake-utils
-    , ...
-    } @ inputs:
+  outputs = { self, nixpkgs, home-manager, flake-utils, ... } @ inputs:
     let
       inherit (inputs.flake-schemas) schemas;
 
@@ -161,6 +155,13 @@
           darwin = true;
         };
       };
+
+
+      #
+      # Setup the packages
+      packages = forEachSupportedSystem ({ pkgs }: {
+        ovn = import ./pkgs/ovn { inherit pkgs; };
+      });
 
       #
       # Setting up the formatter
