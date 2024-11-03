@@ -142,6 +142,7 @@
       spotube
       synology-drive-client
       vscodium
+      kitty
 
       # For hypervisors that support auto-resizing, this script forces it.
       # I've noticed not everyone listens to the udev events so this is a hack.
@@ -216,70 +217,14 @@
         PermitRootLogin = "no";
       };
     };
-    # synergy.server = {
-    #   enable = true;
-    #   address = "0.0.0.0";
-    #   autoStart = true;
-    #   tls.enable = true;
-    # };
 
     virt = {
       enable = true;
       preseed = { };
-      # preseed = {
-      #   cluster = {
-      #     enabled = true;
-      #     server_address = "${currentSystemName}:8443";
-      #     cluster_token = "eyJzZXJ2ZXJfbmFtZSI6ImlybCIsImZpbmdlcnByaW50IjoiZDhmYjJkNjllZWE5NDc5ZjQxMzNjZjZiNTVmMWViMmJkOTg4ZWI2Nzk0ZTcwMjY2ZTBhNzhkN2ZhZWI1MmNkYiIsImFkZHJlc3NlcyI6WyIxOTIuMTY4LjIuMTI1Ojg0NDMiXSwic2VjcmV0IjoiNmNlMTE5OTJjZDIyZjA3N2RjZGI1MTcxYzQ1YzE3ZWMxNGU0NWViMTA1OWMyZWZlZTZjNDcwZTYzMmI0OGViNCIsImV4cGlyZXNfYXQiOiIyMDI0LTEwLTI0VDE5OjAxOjQ3LjExOTIxMjIzLTA0OjAwIn0=";
-      #   };
-      # };
-      # virt.preseed = {
-      #   config = {
-      #     "core.https_address" = ":8443";
-      #   };
-      #   networks = [
-      #     {
-      #       config = {
-      #         "ipv4.address" = "10.10.10.1/24";
-      #         "ipv4.nat" = "true";
-      #       };
-      #       name = "incusbr0";
-      #       type = "bridge";
-      #     }
-      #   ];
-      #   profiles = [
-      #     {
-      #       devices = {
-      #         eth0 = {
-      #           name = "eth0";
-      #           network = "incusbr0";
-      #           type = "nic";
-      #         };
-      #         root = {
-      #           path = "/";
-      #           pool = "default";
-      #           size = "35GiB";
-      #           type = "disk";
-      #         };
-      #       };
-      #       name = "default";
-      #     }
-      #   ];
-      #   storage_pools = [
-      #     {
-      #       config = {
-      #         source = "/var/lib/incus/storage-pools/default";
-      #       };
-      #       driver = "dir";
-      #       name = "default";
-      #     }
-      #   ];
-      #   cluster = {
-      #     server_name = currentSystemName;
-      #     enabled = true;
-      #   };
     };
   };
+
+  # programs.hyprland.enable = true;
 
   # security.apparmor.enable = true;
 

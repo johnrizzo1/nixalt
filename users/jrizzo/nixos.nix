@@ -16,6 +16,9 @@
   programs.fish.enable = true;
   programs.zsh.enable = true;
 
+  programs.kitty.enable = true;
+  # wayland.windowManager.hyprland.enable = true;
+
   users.users.jrizzo = {
     isNormalUser = true;
     home = "/home/jrizzo";
