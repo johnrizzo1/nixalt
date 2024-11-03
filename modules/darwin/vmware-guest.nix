@@ -7,18 +7,26 @@
 , pkgs
 , ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.virtualisation.vmware.guest;
-  open-vm-tools =
-    if cfg.headless
-    then pkgs.open-vm-tools-headless
-    else pkgs.open-vm-tools;
+  open-vm-tools = if cfg.headless then pkgs.open-vm-tools-headless else pkgs.open-vm-tools;
 
   inherit (pkgs.xorg) xf86inputvmmouse;
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
+    (mkRenamedOptionModule
+      [
+        "services"
+        "vmwareGuest"
+      ]
+      [
+        "virtualisation"
+        "vmware"
+        "guest"
+      ]
+    )
   ];
 
   options.virtualisation.vmware.guest = {
@@ -55,7 +63,9 @@ in
     systemd.mounts = [
       {
         description = "VMware vmblock fuse mount";
-        documentation = [ "https://github.com/vmware/open-vm-tools/blob/master/open-vm-tools/vmblock-fuse/design.txt" ];
+        documentation = [
+          "https://github.com/vmware/open-vm-tools/blob/master/open-vm-tools/vmblock-fuse/design.txt"
+        ];
         unitConfig.ConditionVirtualization = "vmware";
         what = "${open-vm-tools}/bin/vmware-vmblock-fuse";
         where = "/run/vmblock-fuse";

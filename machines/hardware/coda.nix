@@ -6,15 +6,22 @@
 , pkgs
 , modulesPath
 , ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-
   boot = {
     initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "nvme"
+        "usb_storage"
+        "usbhid"
+        "sd_mod"
+      ];
       kernelModules = [ ];
     };
     kernelModules = [ "kvm-intel" ];
@@ -30,13 +37,19 @@
     "/boot" = {
       device = "/dev/disk/by-uuid/3886-65E3";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
     };
 
     "/mnt/windows" = {
       device = "/dev/disk/by-label/Windows";
       fsType = "ntfs";
-      options = [ "rw" "uid=1000" ];
+      options = [
+        "rw"
+        "uid=1000"
+      ];
     };
   };
 

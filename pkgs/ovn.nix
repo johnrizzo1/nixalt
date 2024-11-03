@@ -1,22 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gnused,
-  libbpf,
-  libcap_ng,
-  nix-update-script,
-  numactl,
-  openssl,
-  pkg-config,
-  procps,
-  python3,
-  unbound,
-  xdp-tools,
-}:
+{ pkgs, ... }:
+let
+  inherit (pkgs)
+    stdenv
+    fetchFromGitHub
+    nix-update-script
+    lib
+    writeShellApplication
+    ;
+  inherit (pkgs.lib) licenses maintainers platforms;
+  inherit (pkgs.stdenv) mkDerivation;
 
-stdenv.mkDerivation rec {
+in
+mkDerivation rec {
+
   pname = "ovn";
   version = "24.09.1";
 

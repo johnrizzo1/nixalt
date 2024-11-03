@@ -3,7 +3,8 @@
 , config
 , inputs
 , ...
-}: {
+}:
+{
   imports = [
     # ./gns3.nix
   ];
@@ -120,35 +121,48 @@
     # --device=nvidia.com/gpu=all
     hardware.nvidia-container-toolkit.enable = true;
 
-    # Required for incus
-    networking.nftables.enable = true;
-
-    # project: default
-    # name: incusbr0
-    # description: ''
-    # type: bridge
-    # config:
-    #   bridge.driver: openvswitch
-    #   dns.domain: technobable.com
-    #   dns.search: tail577f.ts.net, technobable.com
-    #   ipv4.address: 10.159.34.1/24
-    #   ipv4.nat: 'true'
-    #   ipv6.address: none
-
-    # networking.vswitches = {
-    #   "ovsbr0" = {
-    #     interfaces = { }
-    #   }
-    # };
-
-    # networking.firewall.enable = true;
-    networking.networkmanager.unmanaged = [ "incusbr0" "virbr0" "docker0" "tailscale0" ];
-    networking.firewall.trustedInterfaces = [ "incusbr0" "virbr0" "docker0" "tailscale0" ];
-
     programs.virt-manager.enable = true;
 
-    # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
-    # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
+    networking = {
+      # Required for incus
+      nftables.enable = true;
+
+      # project: default
+      # name: incusbr0
+      # description: ''
+      # type: bridge
+      # config:
+      #   bridge.driver: openvswitch
+      #   dns.domain: technobable.com
+      #   dns.search: tail577f.ts.net, technobable.com
+      #   ipv4.address: 10.159.34.1/24
+      #   ipv4.nat: 'true'
+      #   ipv6.address: none
+
+      # networking.vswitches = {
+      #   "ovsbr0" = {
+      #     interfaces = { }
+      #   }
+      # };
+
+      # networking.firewall.enable = true;
+      networkmanager.unmanaged = [
+        "incusbr0"
+        "virbr0"
+        "docker0"
+        "tailscale0"
+      ];
+      firewall.trustedInterfaces = [
+        "incusbr0"
+        "virbr0"
+        "docker0"
+        "tailscale0"
+      ];
+
+      # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
+      # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
+    };
+
     # systemd.network.networks."10-lan" = {
     #   matchConfig.Name = [ "enp3s0" ];
     #   networkConfig = {

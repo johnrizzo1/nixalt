@@ -6,7 +6,8 @@
 , pkgs
 , modulesPath
 , ...
-}: {
+}:
+{
   imports = [ ];
 
   boot = {

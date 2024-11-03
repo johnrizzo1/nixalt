@@ -6,7 +6,8 @@
 , currentSystemUser
 , currentSystemName
 , ...
-}: {
+}:
+{
   imports = [
     ./hardware/coda.nix
     ../modules/nixos/nix.nix
@@ -14,9 +15,12 @@
     ../modules/nixos/networking.nix
     ../modules/nixos/nix-ld.nix
     ../modules/nixos/virt
+    ../modules/common/nix.nix
     # ../modules/nixos/secureboot.nix
     # ../modules/nixos/vscode-server.nix
   ];
+
+  # services.secureboot.enable = true;
 
   users = {
     mutableUsers = false;
@@ -30,7 +34,15 @@
     hostName = currentSystemName;
 
     firewall.enable = lib.mkForce true;
-    firewall.allowedTCPPorts = [ 22 443 631 3080 3389 8080 8443 ];
+    firewall.allowedTCPPorts = [
+      22
+      443
+      631
+      3080
+      3389
+      8080
+      8443
+    ];
 
     interfaces = {
       enp3s0.useDHCP = lib.mkDefault true;
@@ -43,15 +55,41 @@
     # Use the systemd-boot EFI boot loader.
     supportedFilesystems = [ "ntfs" ];
     loader = {
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+        # VMware, Parallels both only support this being 0 otherwise you see
+        # "error switching console mode" on boot.
+        consoleMode = "0";
+        # Copy EDK2 Shell to boot partition
+        extraFiles."efi/shell.efi" = "${pkgs.edk2-uefi-shell}/shell.efi";
+        extraEntries = {
+          "windows.conf" =
+            let
+              boot-drive = "FS1";
+            in
+            ''
+              title Windows Bootloader
+              efi /efi/shell.efi
+              options - nointerrupt -nomap -noversion ${boot-drive}:EFI\Microsoft\Boot\Bootmgfw.efi 
+              sort-key y_windows
+            '';
+
+          "edk2-uefi-shell.conf" = ''
+            title EDK2 UEFI Shell
+            efi /efi/shell.efi
+            sort-key z_edk2
+          '';
+        };
+      };
+
       efi.canTouchEfiVariables = true;
-      # VMware, Parallels both only support this being 0 otherwise you see
-      # "error switching console mode" on boot.
-      systemd-boot.consoleMode = "0";
+
+      # efi.efiSysMountPoint = "/boot"; # not sure about this
     };
     kernel.sysctl = {
       "vm.max_map_count" = 262144;
     };
+    plymouth.enable = true;
   };
 
   time.timeZone = "America/New_York";
@@ -92,7 +130,7 @@
       jan
       jetbrains.pycharm-community
       alpaca # ollama GUI
-      # android-studio-full
+      libreoffice
 
       _1password-gui
       chromium

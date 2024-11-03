@@ -2,7 +2,8 @@
 , pkgs
 , modulesPath
 , ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ./hardware/vm-intel.nix

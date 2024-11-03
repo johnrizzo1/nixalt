@@ -1,11 +1,12 @@
 { isWSL
 , inputs
 , ...
-}: { config
-   , lib
-   , pkgs
-   , ...
-   }:
+}:
+{ config
+, lib
+, pkgs
+, ...
+}:
 let
   inherit (pkgs) tmuxPlugins;
   inherit (config.xdg) cacheHome configHome dataHome;
@@ -34,9 +35,10 @@ in
     # Packages I always want installed. Most packages I install using
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
-    packages = with pkgs;
+    packages =
+      with pkgs;
       [
-        _1password
+        _1password-cli
         # ripgrep
         # sentry-cli
         # zigpkgs."0.13.0"
@@ -130,14 +132,15 @@ in
         wget = "wget - -hsts-file=${dataHome}/wget-hsts"; # $HOME/wget-hsts
       }
       // (
-        if isLinux
-        then {
-          # Two decades of using a Mac has made this such a strong memory
-          # that I'm just going to keep it consistent.
-          pbcopy = "xclip";
-          pbpaste = "xclip -o";
-        }
-        else { }
+        if isLinux then
+          {
+            # Two decades of using a Mac has made this such a strong memory
+            # that I'm just going to keep it consistent.
+            pbcopy = "xclip";
+            pbpaste = "xclip -o";
+          }
+        else
+          { }
       );
   };
 
@@ -154,7 +157,10 @@ in
       enable = true;
       shellOptions = [ ];
       enableCompletion = true;
-      historyControl = [ "ignoredups" "ignorespace" ];
+      historyControl = [
+        "ignoredups"
+        "ignorespace"
+      ];
       initExtra = builtins.readFile ./files/bashrc;
 
       shellAliases = {
@@ -189,10 +195,12 @@ in
 
     fish = {
       enable = true;
-      interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" [
-        (builtins.readFile ./files/config.fish)
-        "set -g SHELL ${pkgs.fish}/bin/fish"
-      ]);
+      interactiveShellInit = lib.strings.concatStrings (
+        lib.strings.intersperse "\n" [
+          (builtins.readFile ./files/config.fish)
+          "set -g SHELL ${pkgs.fish}/bin/fish"
+        ]
+      );
     };
 
     tmux = {
@@ -307,9 +315,10 @@ in
       compression = true;
 
       extraConfig =
-        if pkgs.stdenv.isDarwin
-        then "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
-        else "IdentityAgent \"~/.1password/agent.sock\"";
+        if pkgs.stdenv.isDarwin then
+          "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
+        else
+          "IdentityAgent \"~/.1password/agent.sock\"";
     };
 
     alacritty = {
@@ -327,10 +336,7 @@ in
           italic.style = "Italic";
           bold.style = "Bold";
           bold_italic.style = "Bold Italic";
-          size =
-            if isLinux
-            then 13
-            else 15;
+          size = if isLinux then 13 else 15;
 
           normal = {
             # family = "CaskaydiaCove Nerd Font";

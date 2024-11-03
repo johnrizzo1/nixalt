@@ -27,13 +27,13 @@ let
       config.allowUnfree = true;
     };
   };
-  # darwin-packages = final: _prev: {
+in
+# darwin-packages = final: _prev: {
   #   darwin = import inputs.nixpkgs-darwin {
   #     inherit (final) system;
   #     config.allowUnfree = true;
   #   };
   # };
-in
 [
   additions
   modifications

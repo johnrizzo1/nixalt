@@ -1,7 +1,8 @@
 { pkgs
 , currentSystemUser
 , ...
-}: {
+}:
+{
   imports = [ ];
 
   wsl = {

@@ -6,7 +6,8 @@
 , currentSystemUser
 , currentSystemName
 , ...
-}: {
+}:
+{
   imports = [
     ./hardware/irl.nix
     ../modules/nixos/nix.nix

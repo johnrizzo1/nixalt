@@ -97,7 +97,13 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, home-manager, flake-utils, ... } @ inputs:
+  outputs =
+    { self
+    , nixpkgs
+    , home-manager
+    , flake-utils
+    , ...
+    }@inputs:
     let
       inherit (inputs.flake-schemas) schemas;
 
@@ -108,12 +114,30 @@
         inherit overlays nixpkgs inputs;
       };
 
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      forEachSupportedSystem = f:
-        nixpkgs.lib.genAttrs supportedSystems (system:
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      forEachSupportedSystem =
+        f:
+        nixpkgs.lib.genAttrs supportedSystems (
+          system:
           f {
             pkgs = import nixpkgs { inherit system; };
-          });
+          }
+        );
+      forAllSystems =
+        f:
+        builtins.listToAttrs (
+          map
+            (system: {
+              name = system;
+              value = f system;
+            })
+            supportedSystems
+        );
     in
     {
       nixosConfigurations = {
@@ -156,49 +180,53 @@
         };
       };
 
-
       #
       # Setup the packages
-      packages = forEachSupportedSystem ({ pkgs }: {
-        ovn = import ./pkgs/ovn { inherit pkgs; };
-      });
+      packages = forEachSupportedSystem (
+        { pkgs }:
+        {
+          ovn = import ./pkgs/ovn { inherit pkgs; };
+        }
+      );
 
       #
       # Setting up the formatter
-      formatter = forEachSupportedSystem ({ pkgs }: {
-        default = pkgs.nixfmt-rfc-style.type;
-      });
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
       #
       # nix flake check
-      checks = forEachSupportedSystem ({ pkgs }: {
-        pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
-          src = ./.;
-          hooks = {
-            nixpkgs-fmt.enable = true;
-            # alejandra.enable = true;
-            statix.enable = false;
+      checks = forEachSupportedSystem (
+        { pkgs }:
+        {
+          pre-commit-check = inputs.pre-commit-hooks.lib.${pkgs.system}.run {
+            src = ./.;
+            hooks = {
+              nixpkgs-fmt.enable = true;
+              statix.enable = false;
+            };
           };
-        };
-      });
+        }
+      );
 
       #
       # Setting up my dev shells
       # nix develop
-      devShells = forEachSupportedSystem ({ pkgs }: {
-        default = pkgs.mkShell {
-          # inherit (self.checks.${pkgs.system}.pre-commit-check) shellHook;
-          # buildInputs = self.checks.${pkgs.system}.pre-commit-check.enabledPackages;
-          packages = with pkgs; [
-            jq
-            wget
-            curl
-            git
-            nixpkgs-fmt
-            alejandra
-            statix
-          ];
-        };
-      });
+      devShells = forEachSupportedSystem (
+        { pkgs }:
+        {
+          default = pkgs.mkShell {
+            # inherit (self.checks.${pkgs.system}.pre-commit-check) shellHook;
+            # buildInputs = self.checks.${pkgs.system}.pre-commit-check.enabledPackages;
+            packages = with pkgs; [
+              jq
+              wget
+              curl
+              git
+              nixpkgs-fmt
+              statix
+            ];
+          };
+        }
+      );
     };
 }

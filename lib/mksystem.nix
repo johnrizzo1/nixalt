@@ -4,32 +4,30 @@
 , overlays
 , inputs
 ,
-}: name: { system
-         , user
-         , darwin ? false
-         , isWSL ? false
-         , isHypervisor ? false
-         ,
-         }:
+}:
+name:
+{ system
+, user
+, darwin ? false
+, isWSL ? false
+, isHypervisor ? false
+,
+}:
 let
   # The config files for this system.
   machineConfig = ../machines/${name}.nix;
-  userOSConfig = ../users/${user}/${ if darwin then "darwin" else "nixos" }.nix;
+  userOSConfig = ../users/${user}/${if darwin then "darwin" else "nixos"}.nix;
   userHMConfig = ../users/${user}/home-manager.nix;
 
   # NixOS vs nix-darwin functionst
-  systemFunc =
-    if darwin
-    then inputs.nix-darwin.lib.darwinSystem
-    else nixpkgs.lib.nixosSystem;
+  systemFunc = if darwin then inputs.nix-darwin.lib.darwinSystem else nixpkgs.lib.nixosSystem;
   home-manager =
-    if darwin
-    then inputs.home-manager.darwinModules
-    else inputs.home-manager.nixosModules;
+    if darwin then inputs.home-manager.darwinModules else inputs.home-manager.nixosModules;
   determinate =
-    if darwin
-    then inputs.determinate.darwinModules.default
-    else inputs.determinate.nixosModules.default;
+    if darwin then
+      inputs.determinate.darwinModules.default
+    else
+      inputs.determinate.nixosModules.default;
 in
 systemFunc rec {
   inherit system;
@@ -50,9 +48,7 @@ systemFunc rec {
     # (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
     # inputs.proxmox-nixos.nixosModules.proxmox-ve
     # Bring in WSL if this is a WSL build
-    (if isWSL
-    then inputs.nixos-wsl.nixosModules.wsl
-    else { })
+    (if isWSL then inputs.nixos-wsl.nixosModules.wsl else { })
 
     machineConfig
     userOSConfig

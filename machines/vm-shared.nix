@@ -4,7 +4,8 @@
 , currentSystem
 , currentSystemName
 , ...
-}: {
+}:
+{
   # Be careful updating this.
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -29,16 +30,27 @@
       allowed-users = [ "*" ];
       auto-optimise-store = false;
       cores = 0;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       extra-sandbox-paths = [ ];
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;
       substituters = [ "https://cache.nixos.org/" ];
-      system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+      system-features = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+      ];
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
       trusted-substituters = [ ];
-      trusted-users = [ "root" "jrizzo" ];
+      trusted-users = [
+        "root"
+        "jrizzo"
+      ];
     };
   };
 
@@ -148,7 +160,8 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs;
+  environment.systemPackages =
+    with pkgs;
     [
       cachix
       gnumake

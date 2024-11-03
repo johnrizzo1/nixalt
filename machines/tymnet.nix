@@ -6,7 +6,8 @@
 , currentSystemUser
 , currentSystemName
 , ...
-}: {
+}:
+{
   imports = [ ../modules/darwin ];
 
   networking = {
@@ -47,13 +48,15 @@
   };
 
   environment = {
-    shells = with pkgs; [ bashInteractive zsh fish ];
+    shells = with pkgs; [
+      bashInteractive
+      zsh
+      fish
+    ];
 
     #
     # Packages
-    systemPackages = with pkgs; [
-      synergy
-    ];
+    systemPackages = with pkgs; [ ];
   };
 
   # nixpkgs.config.android_sdk.accept_license = true;

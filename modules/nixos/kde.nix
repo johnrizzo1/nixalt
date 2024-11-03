@@ -1,7 +1,8 @@
 { pkgs
 , lib
 , ...
-}: {
+}:
+{
   environment.systemPackages = with pkgs; [
     kdePackages.konsole
     kdePackages.plasma-browser-integration

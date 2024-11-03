@@ -3,12 +3,17 @@
 , pkgs
 , modulesPath
 , ...
-}: {
+}:
+{
   imports = [ ];
 
   boot = {
     initrd = {
-      availableKernelModules = [ "xhci_pci" "usbhid" "sr_mod" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "usbhid"
+        "sr_mod"
+      ];
       kernelModules = [ ];
     };
     kernelModules = [ ];

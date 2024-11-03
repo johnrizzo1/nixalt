@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   programs.obs-studio.enable = pkgs.stdenv.isLinux;
   programs.obs-studio.plugins = with pkgs.obs-studio-plugins; [
     input-overlay

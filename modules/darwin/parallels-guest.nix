@@ -3,7 +3,8 @@
 , pkgs
 , ...
 }:
-with lib; let
+with lib;
+let
   prl-tools = config.hardware.parallels.package;
   aarch64 = pkgs.stdenv.hostPlatform.system == "aarch64-linux";
 in
@@ -49,7 +50,11 @@ in
 
     boot.extraModulePackages = [ prl-tools ];
 
-    boot.kernelModules = [ "prl_fs" "prl_fs_freeze" "prl_tg" ] ++ optional aarch64 "prl_notifier";
+    boot.kernelModules = [
+      "prl_fs"
+      "prl_fs_freeze"
+      "prl_tg"
+    ] ++ optional aarch64 "prl_notifier";
 
     # services.timesyncd.enable = false;
 

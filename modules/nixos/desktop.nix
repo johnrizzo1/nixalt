@@ -1,7 +1,8 @@
 { pkgs
 , lib
 , ...
-}: {
+}:
+{
   imports = [
     ./fonts.nix
     ./kde.nix
