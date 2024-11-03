@@ -27,17 +27,20 @@ let
       config.allowUnfree = true;
     };
   };
-in
-# darwin-packages = final: _prev: {
+
+  # darwin-packages = final: _prev: {
   #   darwin = import inputs.nixpkgs-darwin {
   #     inherit (final) system;
   #     config.allowUnfree = true;
   #   };
   # };
-[
-  additions
-  modifications
-  unstable-packages
-  stable-packages
-  # darwin-packages
-]
+in
+{
+  nixpkgs.overlays = [
+    additions
+    modifications
+    unstable-packages
+    stable-packages
+    # darwin-packages
+  ];
+}

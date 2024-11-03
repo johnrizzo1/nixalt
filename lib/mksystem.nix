@@ -20,14 +20,18 @@ let
   userHMConfig = ../users/${user}/home-manager.nix;
 
   # NixOS vs nix-darwin functionst
-  systemFunc = if darwin then inputs.nix-darwin.lib.darwinSystem else nixpkgs.lib.nixosSystem;
+  systemFunc =
+    if darwin
+    then inputs.nix-darwin.lib.darwinSystem
+    else nixpkgs.lib.nixosSystem;
   home-manager =
-    if darwin then inputs.home-manager.darwinModules else inputs.home-manager.nixosModules;
+    if darwin
+    then inputs.home-manager.darwinModules
+    else inputs.home-manager.nixosModules;
   determinate =
-    if darwin then
-      inputs.determinate.darwinModules.default
-    else
-      inputs.determinate.nixosModules.default;
+    if darwin
+    then inputs.determinate.darwinModules.default
+    else inputs.determinate.nixosModules.default;
 in
 systemFunc rec {
   inherit system;
@@ -38,10 +42,9 @@ systemFunc rec {
     # Apply our overlays. Overlays are keyed by system type so we have
     # to go through and apply our system type. We do this first so
     # the overlays are available globally.
-    { nixpkgs.overlays = overlays; }
-    { nixpkgs.config.android_sdk.accept_license = true; }
-    { nixpkgs.config.cudaSupport = true; }
-    { nixpkgs.config.allowUnfree = true; }
+    # { nixpkgs.overlays = overlays; }
+    ../overlays
+    ../modules/common/nixpkgs.nix
 
     # inputs.vscode-server.nixosModules.default
 

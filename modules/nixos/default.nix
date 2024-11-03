@@ -2,7 +2,7 @@
 {
   imports = [
     ../common/nix.nix
-    ./nix.nix
+    ../common/nixpkgs.nix
     ./networking.nix
     ./nix-ld.nix
     ./virt
