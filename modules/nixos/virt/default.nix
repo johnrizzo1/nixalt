@@ -90,7 +90,7 @@
     ];
 
     virtualisation = {
-      vswitch.enable = true;
+      # vswitch.enable = true;
       # libvirtd = {
       #   enable = true;
       #   allowedBridges = [ "virbr0" ];
@@ -107,7 +107,6 @@
         enable = true;
         package = pkgs.incus;
         ui.enable = true;
-
         inherit (config.services.virt) preseed;
       };
       # docker = {
