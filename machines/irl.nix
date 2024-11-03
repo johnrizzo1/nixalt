@@ -10,13 +10,7 @@
 {
   imports = [
     ./hardware/irl.nix
-    ../modules/nixos/nix.nix
-    # .../modules/nixos/desktop.nix
-    ../modules/nixos/networking.nix
-    ../modules/nixos/nix-ld.nix
-    ../modules/nixos/virt
-    # ../modules/nixos/secureboot.nix
-    # ../modules/nixos/vscode-server.nix
+    ../modules/nixos
   ];
 
   users = {

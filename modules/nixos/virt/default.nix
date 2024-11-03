@@ -91,16 +91,16 @@
 
     virtualisation = {
       # vswitch.enable = true;
-      # libvirtd = {
-      #   enable = true;
-      #   allowedBridges = [ "virbr0" ];
-      #   qemu = {
-      #     package = pkgs.qemu_kvm;
-      #     swtpm.enable = true;
-      #     ovmf.enable = true;
-      #     ovmf.packages = [ pkgs.OVMFFull.fd ];
-      #   };
-      # };
+      libvirtd = {
+        enable = true;
+        allowedBridges = [ "virbr0" ];
+        qemu = {
+          package = pkgs.qemu_kvm;
+          swtpm.enable = true;
+          ovmf.enable = true;
+          ovmf.packages = [ pkgs.OVMFFull.fd ];
+        };
+      };
       spiceUSBRedirection.enable = true;
       # containers.cdi.dynamic.nvidia.enable = true;
       incus = {

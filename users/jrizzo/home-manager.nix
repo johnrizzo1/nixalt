@@ -153,6 +153,7 @@ in
   # Programs
   #---------------------------------------------------------------------
   programs = {
+
     bash = {
       enable = true;
       shellOptions = [ ];

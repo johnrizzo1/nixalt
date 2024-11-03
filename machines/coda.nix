@@ -10,17 +10,9 @@
 {
   imports = [
     ./hardware/coda.nix
-    ../modules/nixos/nix.nix
+    ../modules/nixos
     ../modules/nixos/desktop.nix
-    ../modules/nixos/networking.nix
-    ../modules/nixos/nix-ld.nix
-    ../modules/nixos/virt
-    ../modules/common/nix.nix
-    # ../modules/nixos/secureboot.nix
-    # ../modules/nixos/vscode-server.nix
   ];
-
-  # services.secureboot.enable = true;
 
   users = {
     mutableUsers = false;
@@ -218,13 +210,13 @@
       };
     };
 
+    # services.secureboot.enable = true;
+
     virt = {
       enable = true;
       preseed = { };
     };
   };
-
-  # programs.hyprland.enable = true;
 
   # security.apparmor.enable = true;
 
