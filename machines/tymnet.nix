@@ -114,6 +114,7 @@
       "vscodium"
       "whatsapp-for-mac"
       "zoom"
+      "microsoft-teams"
       # "aircrack-ng" # failed
       # "aldente"
       # "anydesk"
