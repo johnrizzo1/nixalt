@@ -12,7 +12,8 @@
 
     ./hardware/vm-aarch64-prl.nix
     ../modules/darwin/parallels-guest.nix
-    ./vm-shared.nix
+    # ./vm-shared.nix
+    ../modules/common/vm-shared.nix
   ];
 
   # The official parallels guest support does not work currently.
