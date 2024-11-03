@@ -6,7 +6,7 @@
 
 {
   nix = {
-    enable = true;
+    # enable = true;
     settings = {
       # keep-derivations = true;
       # keep-outputs = true;
