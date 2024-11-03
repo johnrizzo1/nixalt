@@ -105,13 +105,10 @@ in
 
     shellAliases =
       {
-        ".." = "cd ..";
         "..." = "cd ../..";
-        top = "btm";
+        ".." = "cd ..";
         btop = "btm";
-        ls = "eza";
         cat = "bat -pp";
-        tree = "erd --layout inverted --icons --human";
         ga = "git add";
         gc = "git commit";
         gco = "git checkout";
@@ -121,15 +118,12 @@ in
         gp = "git push";
         gs = "git status";
         gt = "git tag";
-
-        jf = "jj git fetch";
-        jn = "jj new";
-        js = "jj st";
-
+        ls = "eza";
         tg = "terragrunt";
-        # XDG Config Dirs
-        # yarn = "yarn --use-yarnrc ${configHome}/yarn/config"; # $HOME/.yarnrc
+        top = "btm";
+        tree = "erd --layout inverted --icons --human";
         wget = "wget - -hsts-file=${dataHome}/wget-hsts"; # $HOME/wget-hsts
+        yarn = "yarn --use-yarnrc ${configHome}/yarn/config"; # $HOME/.yarnrc
       }
       // (
         if isLinux then
@@ -164,17 +158,7 @@ in
       ];
       initExtra = builtins.readFile ./files/bashrc;
 
-      shellAliases = {
-        ga = "git add";
-        gc = "git commit";
-        gco = "git checkout";
-        gcp = "git cherry-pick";
-        gdiff = "git diff";
-        gl = "git prettylog";
-        gp = "git push";
-        gs = "git status";
-        gt = "git tag";
-      };
+      # shellAliases = { };
     };
 
     direnv = {
