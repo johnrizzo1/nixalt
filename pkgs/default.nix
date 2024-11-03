@@ -2,5 +2,5 @@
 # You can build them using 'nix build .#example'
 pkgs: {
   # fmt = pkgs.callPackage ./fmt.nix {};
-  ovn = pkgs.callPackage ./ovn.nix { };
+  # ovn = pkgs.callPackage ./ovn.nix { };
 }

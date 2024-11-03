@@ -46,7 +46,7 @@
 
     interfaces = {
       enp3s0.useDHCP = lib.mkDefault true;
-    }
+    };
   };
 
   boot = {

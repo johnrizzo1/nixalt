@@ -182,12 +182,12 @@
 
       #
       # Setup the packages
-      packages = forEachSupportedSystem (
-        { pkgs }:
-        {
-          ovn = import ./pkgs/ovn { inherit pkgs; };
-        }
-      );
+      # packages = forEachSupportedSystem (
+      #   { pkgs }:
+      #   {
+      #     ovn = import ./pkgs/ovn { inherit pkgs; };
+      #   }
+      # );
 
       #
       # Setting up the formatter

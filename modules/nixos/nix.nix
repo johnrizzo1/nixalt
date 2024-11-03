@@ -28,7 +28,7 @@
       trusted-substituters = [ ];
       trusted-users = [ "root" "jrizzo" ];
     };
-    
+
     gc = {
       automatic = false;
       options = "--delete-older-than 7d";
