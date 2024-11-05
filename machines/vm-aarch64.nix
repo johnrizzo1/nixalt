@@ -7,7 +7,6 @@
   imports = [
     ./hardware/vm-aarch64.nix
     ../modules/vmware-guest.nix
-    # ./vm-shared.nix
     ../modules/common/vm-shared.nix
   ];
 

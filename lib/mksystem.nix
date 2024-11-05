@@ -47,6 +47,7 @@ systemFunc rec {
     ../modules/common/nixpkgs.nix
 
     # inputs.vscode-server.nixosModules.default
+    inputs.lanzaboote.nixosModules.lanzaboote
 
     # (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
     # inputs.proxmox-nixos.nixosModules.proxmox-ve

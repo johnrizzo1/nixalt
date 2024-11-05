@@ -5,9 +5,9 @@
     ../common/nixpkgs.nix
     ./networking.nix
     ./nix-ld.nix
+    ./secureboot.nix
     ./virt
-    # ../modules/nixos/secureboot.nix
-    # ../modules/nixos/vscode-server.nix
+    # ../vscode-server.nix
   ];
 }
 

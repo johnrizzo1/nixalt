@@ -109,6 +109,7 @@
       devenv
       direnv
       git
+      gitkraken
       home-manager
       niv
       obsidian
@@ -177,7 +178,7 @@
   # List services that you want to enable:
   services = {
     hardware.bolt.enable = true;
-    # services.secureboot.enable = true;
+    secureboot.enable = true;
     printing.enable = true;
     colord.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
@@ -214,7 +215,7 @@
 
     virt = {
       enable = true;
-      preseed = { };
+      # preseed = { };
     };
   };
 

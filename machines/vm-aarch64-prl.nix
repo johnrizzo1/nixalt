@@ -12,7 +12,6 @@
 
     ./hardware/vm-aarch64-prl.nix
     ../modules/darwin/parallels-guest.nix
-    # ./vm-shared.nix
     ../modules/common/vm-shared.nix
   ];
 

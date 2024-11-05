@@ -28,6 +28,7 @@
           "cuda_sanitizer_api"
           "cuda-merged"
           "discord"
+          "gitkraken"
           "libcublas"
           "libcufft"
           "libcurand"

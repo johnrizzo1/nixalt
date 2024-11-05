@@ -19,7 +19,7 @@
     preseed = lib.mkOption {
       description = "Pre-seed to apply for incus setup";
       type = lib.types.attrs;
-      default = null;
+      default = { };
       example = {
         config = {
           "core.https_address" = ":8443";
