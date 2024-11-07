@@ -1,13 +1,13 @@
-{ inputs
-, config
-, pkgs
-, lib
-, currentSystem
-, currentSystemUser
-, currentSystemName
-, ...
-}:
 {
+  inputs,
+  config,
+  pkgs,
+  lib,
+  currentSystem,
+  currentSystemUser,
+  currentSystemName,
+  ...
+}: {
   imports = [
     ./hardware/irl.nix
     ../modules/nixos
@@ -25,7 +25,7 @@
     hostName = currentSystemName;
 
     firewall.enable = lib.mkForce true;
-    firewall.allowedTCPPorts = [ 22 443 631 3080 8443 ];
+    firewall.allowedTCPPorts = [22 443 631 3080 8443];
 
     interfaces = {
       enp36s0f0.useDHCP = lib.mkDefault true;
@@ -38,7 +38,7 @@
     # Be careful updating this.
     # boot.kernelPackages = pkgs.linuxPackages_latest;
     # Use the systemd-boot EFI boot loader.
-    supportedFilesystems = [ "ntfs" ];
+    supportedFilesystems = ["ntfs"];
     loader = {
       # Use the systemd-boot EFI boot loader.
       systemd-boot.enable = true;
@@ -113,7 +113,7 @@
   services = {
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
-    xserver.videoDrivers = [ "nvidia" ];
+    xserver.videoDrivers = ["nvidia"];
     ollama = {
       enable = false;
       acceleration = "cuda";
@@ -126,7 +126,50 @@
       usageCollection = false;
     };
 
-    tailscale.enable = true;
+    loki = {
+      enable = true;
+      configuration = {
+        "auth_enabled" = false;
+        "server" = {
+          "http_listen_port" = 3100;
+        };
+        "common" = {
+          "ring" = {
+            "instance_addr" = "127.0.0.1";
+            "kvstore" = {
+              "store" = "inmemory";
+            };
+          };
+          "replication_factor" = 1;
+          "path_prefix" = "/tmp/loki";
+        };
+        "schema_config" = {
+          "configs" = [
+            {
+              "from" = "2020-05-15";
+              "store" = "tsdb";
+              "object_store" = "filesystem";
+              "schema" = "v13";
+              "index" = {
+                "prefix" = "index_";
+                "period" = "24h";
+              };
+            }
+          ];
+        };
+        "storage_config" = {
+          "filesystem" = {
+            "directory" = "/tmp/loki/chunks";
+          };
+        };
+      };
+    };
+
+    tailscale = {
+      enable = true;
+      useRoutingFeatures = "server";
+      extraSetFlags = ["--advertise-routes=10.45.209.0/24"];
+    };
 
     openssh = {
       enable = true;
@@ -138,7 +181,7 @@
 
     virt = {
       enable = true;
-      preseed = { };
+      preseed = {};
     };
   };
 
