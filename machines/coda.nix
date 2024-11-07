@@ -104,26 +104,26 @@
   # Host Specific Applications
   environment = {
     systemPackages = with pkgs; [
+      alpaca # ollama GUI
       cachix
       cudatoolkit
       devenv
       direnv
+      element-desktop
       git
       gitkraken
       home-manager
+      jan
+      jetbrains.pycharm-community
+      keybase
+      keybase-gui
+      libreoffice
       niv
-      obsidian
       obs-studio
+      obsidian
       ollama
       tmux
       wget
-      element-desktop
-      keybase
-      keybase-gui
-      jan
-      jetbrains.pycharm-community
-      alpaca # ollama GUI
-      libreoffice
 
       _1password-gui
       chromium
