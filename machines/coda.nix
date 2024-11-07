@@ -132,6 +132,9 @@
       firefox
       freetube
       signal-desktop
+      # smplayer
+      vlc
+      kdenlive
       spotube
       synology-drive-client
       vscodium
