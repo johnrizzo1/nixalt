@@ -14,6 +14,8 @@ name:
 ,
 }:
 let
+  pkgs = import nixpkgs { inherit system; };
+
   # The config files for this system.
   machineConfig = ../machines/${name}.nix;
   userOSConfig = ../users/${user}/${if darwin then "darwin" else "nixos"}.nix;
@@ -32,6 +34,10 @@ let
     if darwin
     then inputs.determinate.darwinModules.default
     else inputs.determinate.nixosModules.default;
+  secureboot =
+    if pkgs.stdenv.isLinux
+    then inputs.lanzaboote.nixosModules.lanzaboote
+    else { };
 in
 systemFunc rec {
   inherit system;
@@ -46,8 +52,7 @@ systemFunc rec {
     ../overlays
     ../modules/common/nixpkgs.nix
 
-    # inputs.vscode-server.nixosModules.default
-    inputs.lanzaboote.nixosModules.lanzaboote
+    secureboot
 
     # (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
     # inputs.proxmox-nixos.nixosModules.proxmox-ve

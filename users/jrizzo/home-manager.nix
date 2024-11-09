@@ -156,9 +156,6 @@ in
         "ignoredups"
         "ignorespace"
       ];
-      initExtra = builtins.readFile ./files/bashrc;
-
-      # shellAliases = { };
     };
 
     direnv = {
@@ -168,11 +165,6 @@ in
       config = {
         load_dotenv = true;
         whitelist = {
-          # prefix= [
-          #   "$HOME/code/go/src/github.com/hashicorp"
-          #   "$HOME/code/go/src/github.com/mitchellh"
-          # ];
-
           exact = [ "$HOME/.envrc" ];
         };
       };
@@ -180,12 +172,6 @@ in
 
     fish = {
       enable = true;
-      interactiveShellInit = lib.strings.concatStrings (
-        lib.strings.intersperse "\n" [
-          (builtins.readFile ./files/config.fish)
-          "set -g SHELL ${pkgs.fish}/bin/fish"
-        ]
-      );
     };
 
     tmux = {
@@ -266,6 +252,7 @@ in
         prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
         root = "rev-parse --show-toplevel";
       };
+
       extraConfig = {
         branch.autosetuprebase = "always";
         color.ui = true;
@@ -365,6 +352,7 @@ in
       enable = true;
       enableZshIntegration = true;
       enableFishIntegration = true;
+      enableBashIntegration = true;
       enableNushellIntegration = true;
     };
 
