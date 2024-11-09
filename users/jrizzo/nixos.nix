@@ -12,7 +12,6 @@
   # environment.systemPackages = with pkgs; [];
   # home.packages = with pkgs; [];
 
-  # Since we're using fish as our shell
   programs.fish.enable = true;
   programs.zsh.enable = true;
 

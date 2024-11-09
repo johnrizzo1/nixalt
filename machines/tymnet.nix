@@ -21,42 +21,42 @@
   #   then "/Users/jrizzo"
   #   else "/home/jrizzo";
 
-  # programs = {
-  # zsh is the default shell on Mac and we want to make sure that we're
-  # configuring the rc correctly with nix-darwin paths.
-  # zsh = {
-  #   enable = true;
-  #   shellInit = ''
-  #     # Nix
-  #     if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-  #       . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-  #     fi
-  #     # End Nix
-  #   '';
-  # };
+  programs = {
+    # zsh is the default shell on Mac and we want to make sure that we're
+    # configuring the rc correctly with nix-darwin paths.
+    zsh = {
+      enable = true;
+      shellInit = ''
+        # Nix
+        if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+          . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+        fi
+        # End Nix
+      '';
+    };
 
-  # bash = {
-  #   enable = true;
-  #   shellInit = ''
-  #     # Nix
-  #     if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-  #       source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-  #     end
-  #     # End Nix
-  #   '';
-  # };
+    bash = {
+      enable = true;
+      interactiveShellInit = ''
+        # Nix
+        if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+          source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+        end
+        # End Nix
+      '';
+    };
 
-  # fish = {
-  #   enable = true;
-  #   shellInit = ''
-  #     # Nix
-  #     if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
-  #       source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
-  #     end
-  #     # End Nix
-  #   '';
-  # };
-  # };
+    fish = {
+      enable = true;
+      shellInit = ''
+        # Nix
+        if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+          source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+        end
+        # End Nix
+      '';
+    };
+  };
 
   environment = {
     shells = with pkgs; [
@@ -107,7 +107,7 @@
       "krita"
       "microsoft-office"
       "nvidia-geforce-now"
-      # "obs"
+      "obs"
       "obsidian"
       "orcaslicer"
       "pycharm-ce"
@@ -123,8 +123,8 @@
       "synology-drive"
       "transmission"
       "vscodium"
-      "whatsapp-for-mac"
       "zoom"
+      # "whatsapp-for-mac"
       # "aircrack-ng" # failed
       # "aldente"
       # "anydesk"

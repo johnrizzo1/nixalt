@@ -55,13 +55,13 @@
     # https://daiderd.com/nix-darwin/manual/index.html
     defaults = {
       NSGlobalDomain = {
-        _HIHideMenuBar = true;
+        _HIHideMenuBar = false;
         AppleKeyboardUIMode = 3;
         ApplePressAndHoldEnabled = false;
         AppleShowAllExtensions = true;
         AppleShowAllFiles = true;
         InitialKeyRepeat = 0;
-        KeyRepeat = 10;
+        KeyRepeat = 0;
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticDashSubstitutionEnabled = false;
         NSAutomaticInlinePredictionEnabled = false;
