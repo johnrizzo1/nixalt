@@ -1,10 +1,10 @@
-{ pkgs
-, lib
-, config
-, inputs
-, ...
-}:
 {
+  pkgs,
+  lib,
+  config,
+  inputs,
+  ...
+}: {
   imports = [
     # ./gns3.nix
   ];
@@ -19,7 +19,7 @@
     preseed = lib.mkOption {
       description = "Pre-seed to apply for incus setup";
       type = lib.types.attrs;
-      default = { };
+      default = {};
       example = {
         config = {
           "core.https_address" = ":8443";
@@ -70,7 +70,7 @@
   };
 
   config = lib.mkIf config.services.virt.enable {
-    users.users.jrizzo.extraGroups = [ "incus-admin" ];
+    users.users.jrizzo.extraGroups = ["incus-admin"];
     environment.systemPackages = with pkgs; [
       docker-compose
       bridge-utils
@@ -93,12 +93,12 @@
       # vswitch.enable = true;
       libvirtd = {
         enable = true;
-        allowedBridges = [ "virbr0" ];
+        allowedBridges = ["virbr0"];
         qemu = {
           package = pkgs.qemu_kvm;
           swtpm.enable = true;
           ovmf.enable = true;
-          ovmf.packages = [ pkgs.OVMFFull.fd ];
+          ovmf.packages = [pkgs.OVMFFull.fd];
         };
       };
       spiceUSBRedirection.enable = true;
@@ -155,8 +155,8 @@
         "incusbr0"
         "virbr0"
         "docker0"
-        "tailscale0"
       ];
+      # "tailscale0"
 
       # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
       # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
