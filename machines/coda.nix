@@ -186,7 +186,7 @@
     colord.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
     ollama = {
-      enable = true;
+      enable = false;
       acceleration = "cuda";
     };
     tabby = {
@@ -217,7 +217,7 @@
     # services.secureboot.enable = true;
 
     virt = {
-      enable = true;
+      enable = false;
       # preseed = { };
     };
   };

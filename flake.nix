@@ -39,16 +39,18 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
       # inputs.flake-utils.follows = "flake-utils";
     };
-
     # SecureBoot
     lanzaboote = {
       # url = "github:nix-community/lanzaboote/v0.4.1";
@@ -183,12 +185,19 @@
 
       #
       # Setup the packages
-      # packages = forEachSupportedSystem (
-      #   { pkgs }:
-      #   {
-      #     ovn = import ./pkgs/ovn { inherit pkgs; };
-      #   }
-      # );
+      packages = forEachSupportedSystem (
+        { pkgs }:
+        rec {
+          monitor = inputs.nixos-generators.nixosGenerate rec {
+            format = "lxc";
+            system = "x86_64-linux";
+            specialArgs = { diskSize = toString (20 * 1024); };
+            modules = [ ./modules/nixos/monitor.nix ];
+          };
+
+          default = monitor;
+        }
+      );
 
       #
       # Setting up the formatter

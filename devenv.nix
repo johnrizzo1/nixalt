@@ -1,11 +1,10 @@
-{
-  pkgs,
-  lib,
-  config,
-  inputs,
-  ...
+{ pkgs
+, lib
+, config
+, inputs
+, ...
 }: {
-  packages = [pkgs.git];
+  packages = [ pkgs.git ];
   enterShell = ''
     git --version
   '';
