@@ -1,6 +1,6 @@
 .DS_Store
-.qcow2
-.iso
+*.qcow2
+*.iso
 
 # Devenv
 .devenv*
@@ -12,6 +12,8 @@ devenv.local.nix
 # pre-commit
 .pre-commit-config.yaml
 
+# Nix generations
 result
 
+# Python
 .venv
