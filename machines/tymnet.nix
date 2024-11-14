@@ -122,7 +122,8 @@
       "sourcetree"
       "synology-drive"
       "transmission"
-      "vscodium"
+      # "vscodium"
+      "visual-studio-code"
       "zoom"
       # "whatsapp-for-mac"
       # "aircrack-ng" # failed

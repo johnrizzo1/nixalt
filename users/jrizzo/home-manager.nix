@@ -58,9 +58,13 @@ in
         jq
         killall
         niv
+        nmap
         nodejs # Node is required for Copilot.vim
+        opentofu
         procs
+        spacevim
         tailscale
+        terragrunt
         tmux
         tree
         vim
@@ -70,10 +74,6 @@ in
         xclip
         xsel
         zenith
-        spacevim
-        opentofu
-        terragrunt
-        nmap
       ]
       ++ (lib.optionals (isLinux && !isWSL) [ ]);
 
