@@ -1,8 +1,8 @@
 { inputs, ... }:
 {
-  imports = [
-    inputs.vscode-server.nixosModules.default
-  ];
+  # imports = [
+    # inputs.vscode-server.nixosModules.default
+  # ];
 
   services.vscode-server.enable = true;
   # Don't forget to run the following to enable the service

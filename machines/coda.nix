@@ -220,6 +220,8 @@
       enable = false;
       # preseed = { };
     };
+
+    vscode-server.enable = true;
   };
 
   # security.apparmor.enable = true;

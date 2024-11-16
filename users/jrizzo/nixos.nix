@@ -14,6 +14,7 @@
 
   programs.fish.enable = true;
   programs.zsh.enable = true;
+  # programs.bash.enable = true; # No longer does anything
 
   users.users.jrizzo = {
     isNormalUser = true;

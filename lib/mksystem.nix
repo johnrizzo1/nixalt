@@ -59,6 +59,10 @@ systemFunc rec {
     # Bring in WSL if this is a WSL build
     (if isWSL then inputs.nixos-wsl.nixosModules.wsl else { })
 
+    # For vscode server
+    # inputs.nix-alien.overlays.default
+    inputs.vscode-server.nixosModules.default
+
     machineConfig
     userOSConfig
     home-manager.home-manager
