@@ -186,7 +186,7 @@
     colord.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
     ollama = {
-      enable = false;
+      enable = true;
       acceleration = "cuda";
     };
     tabby = {
@@ -194,6 +194,25 @@
       acceleration = "cuda";
       usageCollection = false;
     };
+
+    postgresql = {
+      enable = true;
+      ensureDatabases = [ "n8n" "jrizzo" ];
+      ensureUsers = [
+        {
+          name = "jrizzo";
+          ensureDBOwnership = true;
+          ensureClauses = {
+            superuser = true;
+            createrole = true;
+            createdb = true;
+          };
+        }
+      ];
+    };
+
+    n8n.enable = true;
+    n8n.openFirewall = true;
 
     # 
     # X/Wayland Config

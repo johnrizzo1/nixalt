@@ -36,6 +36,7 @@
           "libcusparse"
           "libnpp"
           "libnvjitlink"
+          "n8n"
           "nvidia-x11"
           "nvidia-settings"
           "obsidian"
