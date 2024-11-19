@@ -102,7 +102,7 @@
     devenv
     direnv
     git
-    home-manager
+    # home-manager
     killall
     niv
     nixos-generators # various image generators

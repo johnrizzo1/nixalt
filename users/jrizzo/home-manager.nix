@@ -31,6 +31,7 @@ in
     #---------------------------------------------------------------------
     # Packages
     #---------------------------------------------------------------------
+    # useGlobalPkgs = true;
 
     # Packages I always want installed. Most packages I install using
     # per-project flakes sourced with direnv and nix-shell, so this is
@@ -147,6 +148,9 @@ in
   # Programs
   #---------------------------------------------------------------------
   programs = {
+    home-manager = {
+      enable = true;
+    };
 
     bash = {
       enable = true;

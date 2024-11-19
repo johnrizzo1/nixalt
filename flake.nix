@@ -36,7 +36,8 @@
 
     home-manager = {
       # url = "github:nix-community/home-manager/release-24.05";
-      url = "github:nix-community/home-manager/master";
+      # url = "github:nix-community/home-manager/master"; # This is unstable
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-generators = {
@@ -72,30 +73,30 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
 
     # Non-flakes
-    nvim-conform.url = "github:stevearc/conform.nvim/v7.1.0";
-    nvim-conform.flake = false;
-    nvim-dressing.url = "github:stevearc/dressing.nvim";
-    nvim-dressing.flake = false;
-    nvim-gitsigns.url = "github:lewis6991/gitsigns.nvim/v0.9.0";
-    nvim-gitsigns.flake = false;
-    nvim-lspconfig.url = "github:neovim/nvim-lspconfig";
-    nvim-lspconfig.flake = false;
-    nvim-lualine.url = "github:nvim-lualine/lualine.nvim";
-    nvim-lualine.flake = false;
-    nvim-nui.url = "github:MunifTanjim/nui.nvim";
-    nvim-nui.flake = false;
-    nvim-plenary.url = "github:nvim-lua/plenary.nvim";
-    nvim-plenary.flake = false;
-    nvim-telescope.url = "github:nvim-telescope/telescope.nvim/0.1.8";
-    nvim-telescope.flake = false;
-    nvim-treesitter.url = "github:nvim-treesitter/nvim-treesitter/v0.9.2";
-    nvim-treesitter.flake = false;
-    nvim-web-devicons.url = "github:nvim-tree/nvim-web-devicons";
-    nvim-web-devicons.flake = false;
-    vim-copilot.url = "github:github/copilot.vim/v1.39.0";
-    vim-copilot.flake = false;
-    vim-misc.url = "github:mitchellh/vim-misc";
-    vim-misc.flake = false;
+    # nvim-conform.url = "github:stevearc/conform.nvim/v7.1.0";
+    # nvim-conform.flake = false;
+    # nvim-dressing.url = "github:stevearc/dressing.nvim";
+    # nvim-dressing.flake = false;
+    # nvim-gitsigns.url = "github:lewis6991/gitsigns.nvim/v0.9.0";
+    # nvim-gitsigns.flake = false;
+    # nvim-lspconfig.url = "github:neovim/nvim-lspconfig";
+    # nvim-lspconfig.flake = false;
+    # nvim-lualine.url = "github:nvim-lualine/lualine.nvim";
+    # nvim-lualine.flake = false;
+    # nvim-nui.url = "github:MunifTanjim/nui.nvim";
+    # nvim-nui.flake = false;
+    # nvim-plenary.url = "github:nvim-lua/plenary.nvim";
+    # nvim-plenary.flake = false;
+    # nvim-telescope.url = "github:nvim-telescope/telescope.nvim/0.1.8";
+    # nvim-telescope.flake = false;
+    # nvim-treesitter.url = "github:nvim-treesitter/nvim-treesitter/v0.9.2";
+    # nvim-treesitter.flake = false;
+    # nvim-web-devicons.url = "github:nvim-tree/nvim-web-devicons";
+    # nvim-web-devicons.flake = false;
+    # vim-copilot.url = "github:github/copilot.vim/v1.39.0";
+    # vim-copilot.flake = false;
+    # vim-misc.url = "github:mitchellh/vim-misc";
+    # vim-misc.flake = false;
 
     flake-utils.url = "github:numtide/flake-utils";
   };
@@ -160,10 +161,10 @@
         };
         # Virtual Machines & Containers
         # nixos-rebuild --flake .#vm-intel build-vm
-        vm-intel = mkSystem "vm-intel" {
-          system = "x86_64-linux";
-          user = "jrizzo";
-        };
+        # vm-intel = mkSystem "vm-intel" {
+        #   system = "x86_64-linux";
+        #   user = "jrizzo";
+        # };
         # nixos-rebuild --flake .#vm-aarch64-prl build-vm
         # nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
         #   system = "aarch64-linux";
@@ -185,19 +186,19 @@
 
       #
       # Setup the packages
-      packages = forEachSupportedSystem (
-        { pkgs }:
-        rec {
-          monitor = inputs.nixos-generators.nixosGenerate rec {
-            format = "lxc";
-            system = "x86_64-linux";
-            specialArgs = { diskSize = toString (20 * 1024); };
-            modules = [ ./modules/nixos/monitor.nix ];
-          };
+      # packages = forEachSupportedSystem (
+      #   { pkgs }:
+      #   rec {
+      #     monitor = inputs.nixos-generators.nixosGenerate rec {
+      #       format = "lxc";
+      #       system = "x86_64-linux";
+      #       specialArgs = { diskSize = toString (20 * 1024); };
+      #       modules = [ ./modules/nixos/monitor.nix ];
+      #     };
 
-          default = monitor;
-        }
-      );
+      #     default = monitor;
+      #   }
+      # );
 
       #
       # Setting up the formatter

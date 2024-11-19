@@ -112,7 +112,7 @@
       element-desktop
       git
       gitkraken
-      home-manager
+      # home-manager
       jan
       jetbrains.pycharm-community
       keybase

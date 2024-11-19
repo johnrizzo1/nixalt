@@ -4,7 +4,7 @@
     # chromium
     direnv
     devenv
-    home-manager
+    # home-manager
   ];
 
   homebrew = {
