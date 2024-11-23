@@ -185,16 +185,19 @@
     printing.enable = true;
     colord.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
+
     ollama = {
       enable = true;
       acceleration = "cuda";
     };
+
     tabby = {
       enable = false;
       acceleration = "cuda";
       usageCollection = false;
     };
 
+    # https://www.timescale.com/blog/postgresql-as-a-vector-database-create-store-and-query-openai-embeddings-with-pgvector/
     postgresql = {
       enable = true;
       ensureDatabases = [ "n8n" "jrizzo" ];
@@ -211,8 +214,8 @@
       ];
     };
 
-    n8n.enable = true;
-    n8n.openFirewall = true;
+    # n8n.enable = false;
+    # n8n.openFirewall = true;
 
     # 
     # X/Wayland Config
