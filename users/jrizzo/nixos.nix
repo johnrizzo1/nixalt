@@ -4,7 +4,7 @@
 }:
 {
   # https://github.com/nix-community/home-manager/pull/2408
-  environment.pathsToLink = [ "/share/fish" ];
+  environment.pathsToLink = [ "/share/fish" "/share/zsh" ];
 
   # Add ~/.local/bin to PATH
   environment.localBinInPath = true;

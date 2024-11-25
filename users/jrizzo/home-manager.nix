@@ -49,6 +49,7 @@ in
         comma
         eza
         fd
+        fh
         fzf
         gh
         git
@@ -102,6 +103,11 @@ in
       # AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
       # AWS_CONFIG_FILE = "${configHome}/aws/config";
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
+
+      CUDA_PATH="${pkgs.cudatoolkit}";
+      LD_LIBRARY_PATH="/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
+      EXTRA_LDFLAGS="-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
+      EXTRA_CCFLAGS="-I/usr/include";
     };
 
     shellAliases =
@@ -235,8 +241,15 @@ in
     zsh = {
       enable = true;
       enableCompletion = true;
+      enableVteIntegration = true;
       syntaxHighlighting.enable = true;
       autosuggestion.enable = true;
+
+      initExtra = ''
+        if command -v fh &> /dev/null; then
+          eval "$(fh completion zsh)"
+        fi
+      '';
     };
     dircolors.enableZshIntegration = true;
     eza.enableZshIntegration = true;

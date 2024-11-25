@@ -159,6 +159,13 @@
           user = "jrizzo";
           isHypervisor = true;
         };
+
+        wincoda = mkSystem "wincoda" {
+          system = "x86_64-linux";
+          user = "jrizzo";
+          isWSL = true;
+        };
+
         # Virtual Machines & Containers
         # nixos-rebuild --flake .#vm-intel build-vm
         # vm-intel = mkSystem "vm-intel" {

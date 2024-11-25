@@ -12,6 +12,7 @@
           "1password"
           "1password-cli"
           "1password-gui"
+          "cudnn"
           "cuda_cccl"
           "cuda_cudart"
           "cuda_cuobjdump"

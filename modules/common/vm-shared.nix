@@ -6,59 +6,6 @@
 , ...
 }:
 {
-  # Be careful updating this.
-  boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    # Use the systemd-boot EFI boot loader.
-    loader = {
-      efi.canTouchEfiVariables = true;
-
-      # VMware, Parallels both only support this being 0 otherwise you see
-      # "error switching console mode" on boot.
-      systemd-boot = {
-        enable = true;
-        consoleMode = "0";
-      };
-    };
-  };
-
-  nix = {
-    enable = true;
-    settings = {
-      # keep-derivations = true;
-      # keep-outputs = true;
-      allowed-users = [ "*" ];
-      auto-optimise-store = false;
-      cores = 0;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      extra-sandbox-paths = [ ];
-      max-jobs = "auto";
-      require-sigs = true;
-      sandbox = true;
-      substituters = [ "https://cache.nixos.org/" ];
-      system-features = [
-        "nixos-test"
-        "benchmark"
-        "big-parallel"
-        "kvm"
-      ];
-      trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
-      trusted-substituters = [ ];
-      trusted-users = [
-        "root"
-        "jrizzo"
-      ];
-    };
-  };
-
-  nixpkgs.config.permittedInsecurePackages = [
-    # Needed for k2pdfopt 2.53.
-    "mupdf-1.17.0"
-  ];
-
   networking = {
     # Define your hostname.
     hostName = "dev";
