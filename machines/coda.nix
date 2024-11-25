@@ -185,15 +185,37 @@
     printing.enable = true;
     colord.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
+
     ollama = {
-      enable = false;
+      enable = true;
       acceleration = "cuda";
     };
+
     tabby = {
       enable = false;
       acceleration = "cuda";
       usageCollection = false;
     };
+
+    # https://www.timescale.com/blog/postgresql-as-a-vector-database-create-store-and-query-openai-embeddings-with-pgvector/
+    postgresql = {
+      enable = true;
+      ensureDatabases = [ "n8n" "jrizzo" ];
+      ensureUsers = [
+        {
+          name = "jrizzo";
+          ensureDBOwnership = true;
+          ensureClauses = {
+            superuser = true;
+            createrole = true;
+            createdb = true;
+          };
+        }
+      ];
+    };
+
+    # n8n.enable = false;
+    # n8n.openFirewall = true;
 
     # 
     # X/Wayland Config
