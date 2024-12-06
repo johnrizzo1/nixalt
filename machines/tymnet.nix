@@ -98,6 +98,7 @@
       "calibre"
       "dbeaver-community"
       "discord"
+      "element"
       "figma"
       "gimp"
       "gns3"
@@ -122,10 +123,8 @@
       "sourcetree"
       "synology-drive"
       "transmission"
-      # "vscodium"
       "visual-studio-code"
       "zoom"
-      # "whatsapp-for-mac"
       # "aircrack-ng" # failed
       # "aldente"
       # "anydesk"
@@ -150,6 +149,8 @@
       # "teamviewer"
       # "via"
       # "vlc"
+      # "vscodium"
+      # "whatsapp-for-mac"
       # "whatsapp"
       # "xiv-on-mac"
       # "yacreader"
@@ -164,8 +165,6 @@
       # lm studio
       # mutebar
       # Rhino8
-      # Visual Studio
-      # Visual Studio Code
     ];
   };
 

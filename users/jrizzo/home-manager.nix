@@ -59,6 +59,7 @@ in
         htop
         jq
         killall
+        nixd
         niv
         nmap
         nodejs # Node is required for Copilot.vim
@@ -82,6 +83,10 @@ in
     #---------------------------------------------------------------------
     # Env vars and dotfiles
     #---------------------------------------------------------------------
+
+    # sessionPath = [
+      # "/opt/anaconda3/bin"
+    # ];
 
     sessionVariables = {
       LANG = "en_US.UTF-8";
