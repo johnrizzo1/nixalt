@@ -179,7 +179,7 @@
       enable = true;
       openFirewall = true;
       # allowDHCP = true;
-      mutuableSettings = true;
+      mutableSettings = true;
       settings = {
         http = {
           # You can select any ip and port, just make sure to open firewalls where needed
@@ -251,9 +251,9 @@
       enable = true;
       recommendedProxySettings = true;
       virtualHosts = {
-        ${config.services.grafana.domain} = {
+        ${config.services.grafana.settings.server.domain} = {
           locations."/" = {
-            proxyPass = "http://${toString config.services.grafana.settings.http_addr}:${toString config.services.grafana.settings.http_port}";
+            proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
             proxyWebsockets = true;
             extraConfig =
               # required when target is also TLS server with multiple hosts
