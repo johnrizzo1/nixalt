@@ -67,7 +67,7 @@
 
     #
     # Packages
-    systemPackages = with pkgs; [ ];
+    # systemPackages = with pkgs; [ ];
   };
 
   # nixpkgs.config.android_sdk.accept_license = true;

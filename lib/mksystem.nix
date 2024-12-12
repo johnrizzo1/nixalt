@@ -8,7 +8,6 @@
 name:
 { system
 , user
-, darwin ? false
 , isWSL ? false
 , isHypervisor ? false
 ,
@@ -18,20 +17,20 @@ let
 
   # The config files for this system.
   machineConfig = ../machines/${name}.nix;
-  userOSConfig = ../users/${user}/${if darwin then "darwin" else "nixos"}.nix;
+  userOSConfig = ../users/${user}/${if pkgs.stdenv.isDarwin then "darwin" else "nixos"}.nix;
   userHMConfig = ../users/${user}/home-manager.nix;
 
   # NixOS vs nix-darwin functionst
   systemFunc =
-    if darwin
+    if pkgs.stdenv.isDarwin
     then inputs.nix-darwin.lib.darwinSystem
     else nixpkgs.lib.nixosSystem;
   home-manager =
-    if darwin
+    if pkgs.stdenv.isDarwin
     then inputs.home-manager.darwinModules
     else inputs.home-manager.nixosModules;
   determinate =
-    if darwin
+    if pkgs.stdenv.isDarwin
     then inputs.determinate.darwinModules.default
     else inputs.determinate.nixosModules.default;
   secureboot =

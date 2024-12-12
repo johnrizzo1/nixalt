@@ -40,7 +40,7 @@
   };
 
   services = {
-    activate-system.enable = true;
+    # activate-system.enable = true;
     nix-daemon.enable = true;
   };
 
@@ -61,7 +61,7 @@
         AppleShowAllExtensions = true;
         AppleShowAllFiles = true;
         InitialKeyRepeat = 0;
-        KeyRepeat = 0;
+        KeyRepeat = 10;
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticDashSubstitutionEnabled = false;
         NSAutomaticInlinePredictionEnabled = false;

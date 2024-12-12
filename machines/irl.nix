@@ -219,6 +219,178 @@
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
+
+    unbound = {
+      enable = true;
+      settings = {
+        server = {
+          # When only using Unbound as DNS, make sure to replace 127.0.0.1 with your ip address
+          # When using Unbound in combination with pi-hole or Adguard, leave 127.0.0.1, and point Adguard to 127.0.0.1:PORT
+          interface = [ "127.0.0.1" ];
+          port = 5335;
+          access-control = [ "127.0.0.1 allow" ];
+          # Based on recommended settings in https://docs.pi-hole.net/guides/dns/unbound/#configure-unbound
+          harden-glue = true;
+          harden-dnssec-stripped = true;
+          use-caps-for-id = false;
+          prefetch = true;
+          edns-buffer-size = 1232;
+
+          # Custom settings
+          hide-identity = true;
+          hide-version = true;
+        };
+        forward-zone = [
+          # Example config with quad9
+          {
+            name = ".";
+            forward-addr = [
+              "9.9.9.9#dns.quad9.net"
+              "149.112.112.112#dns.quad9.net"
+            ];
+            forward-tls-upstream = true;  # Protected DNS
+          }
+        ];
+      };
+    };
+
+    adguardhome = {
+      enable = true;
+      mutuableSettings = true;
+      settings = {
+        http = {
+          # You can select any ip and port, just make sure to open firewalls where needed
+          # address = "127.0.0.1:3003";
+          address = "192.168.2.124:3003";
+        };
+        dns = {
+          bind_hosts = [ 
+            "192.168.2.124"
+          ];
+          upstream_dns = [
+            # Example config with quad9
+            # "9.9.9.9#dns.quad9.net"
+            # "149.112.112.112#dns.quad9.net"
+            # Uncomment the following to use a local DNS service (e.g. Unbound)
+            # Additionally replace the address & port as needed
+            "127.0.0.1:5335"
+          ];
+        };
+        filtering = {
+          protection_enabled = true;
+          filtering_enabled = true;
+
+          parental_enabled = true;  # Parental control-based DNS requests filtering.
+          safe_search = {
+            enabled = true;  # Enforcing "Safe search" option for search engines, when possible.
+          };
+        };
+        # The following notation uses map
+        # to not have to manually create {enabled = true; url = "";} for every filter
+        # This is, however, fully optional
+        filters = map(url: { enabled = true; url = url; }) [
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt"  # The Big List of Hacked Malware Web Sites
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt"  # malicious url blocklist
+        ];
+      };
+    };
+
+    # loki/grafana/prometheus setup
+    # https://xeiaso.net/blog/prometheus-grafana-loki-nixos-2020-11-20/
+    # loki = {
+    #   enable = true;
+    #   configFile = ../common/files/loki.yaml;
+    # };
+
+    grafana = {
+      enable = true;
+      settings = {
+        server = {
+          http_addr = "127.0.0.1";
+          http_port = 2342;
+          # enforce_domain = true;
+          enable_gzip = true;
+          domain = "grafana.technobable.com";
+
+          # Alternatively, if you want to server Grafana from a subpath:
+          # domain = "your.domain";
+          # root_url = "https://your.domain/grafana/";
+          # serve_from_sub_path = true;
+        };
+
+        # Prevents Grafana from phoning home     
+        analytics.reporting_enabled = false;
+      };
+    };
+    
+
+    nginx = {
+      enable = true;
+      recommendedProxySettings = true;
+      virtualHosts = {
+        ${config.services.grafana.domain} = {
+          locations."/" = {
+            proxyPass = "http://${toString config.services.grafana.settings.http_addr}:${toString config.services.grafana.settings.http_port}";
+            proxyWebsockets = true;
+            extraConfig =
+              # required when target is also TLS server with multiple hosts
+              # "proxy_ssl_server_name on; " +
+              # required when the server wants to use HTTP Authentication
+              "proxy_pass_header Authorization;";
+          };
+        };
+      };
+    };
+
+    prometheus = {
+      enable = true;
+
+      globalConfig = {
+        scrape_interval = "15s";
+      };
+
+      # For generating the data to scrape
+      exporters = {
+        node = {
+          enable = true;
+          enabledCollectors = [ "systemd" ];
+          port = 9001;
+          extraFlags = [
+            "--collector.ethtool"
+            "--collector.softirqs"
+            "--collector.tcpstat"
+            "--collector.wifi"
+          ];
+        };
+      };
+
+      scrapeConfigs = [
+        {
+          job_name = "irl";
+          static_configs = [
+            {
+              targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ];
+            }
+          ];
+        }
+        {
+          job_name = "incus";
+          metrics_path = "/1.0/metrics";
+          scheme = "http";
+          static_configs = [
+            {
+              targets = [ "irl.technobable.com:8444" ];
+            }
+          ];
+        }
+      ];
+    };
+
+    promtail = {
+      enable = true;
+      configFile = ../modules/common/files/promtail.yaml;
+    };
+
     ollama = {
       enable = false;
       acceleration = "cuda";

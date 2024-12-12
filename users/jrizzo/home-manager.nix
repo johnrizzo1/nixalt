@@ -59,8 +59,8 @@ in
         htop
         jq
         killall
-        nixd
         niv
+        nixd
         nmap
         nodejs # Node is required for Copilot.vim
         opentofu
@@ -72,6 +72,7 @@ in
         tree
         vim
         watch
+        # watchman
         weechat
         wget
         xclip
@@ -85,7 +86,7 @@ in
     #---------------------------------------------------------------------
 
     # sessionPath = [
-      # "/opt/anaconda3/bin"
+    # "/opt/anaconda3/bin"
     # ];
 
     sessionVariables = {
@@ -109,10 +110,10 @@ in
       # AWS_CONFIG_FILE = "${configHome}/aws/config";
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
 
-      CUDA_PATH="${pkgs.cudatoolkit}";
-      LD_LIBRARY_PATH="/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
-      EXTRA_LDFLAGS="-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
-      EXTRA_CCFLAGS="-I/usr/include";
+      CUDA_PATH = "${pkgs.cudatoolkit}";
+      LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
+      EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
+      EXTRA_CCFLAGS = "-I/usr/include";
     };
 
     shellAliases =
