@@ -21,7 +21,6 @@
         extraGroups = [
           "users"
           "wheel"
-
         ];
       };
     };

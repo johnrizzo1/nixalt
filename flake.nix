@@ -193,19 +193,22 @@
 
       #
       # Setup the packages
-      # packages = forEachSupportedSystem (
-      #   { pkgs }:
-      #   rec {
-      #     monitor = inputs.nixos-generators.nixosGenerate rec {
-      #       format = "lxc";
-      #       system = "x86_64-linux";
-      #       specialArgs = { diskSize = toString (20 * 1024); };
-      #       modules = [ ./modules/nixos/monitor.nix ];
-      #     };
+      packages = forEachSupportedSystem (
+        { pkgs }:
+        rec {
+          monitor = inputs.nixos-generators.nixosGenerate rec {
+            format = "lxc";
+            system = "x86_64-linux";
+            specialArgs = { diskSize = toString (20 * 1024); };
+            # modules = [ ./modules/nixos/monitor.nix ];
+            modules = [
+              ({ environment.systemPackages = [ pkgs.man ]; })
+            ];
+          };
 
-      #     default = monitor;
-      #   }
-      # );
+          default = monitor;
+        }
+      );
 
       #
       # Setting up the formatter

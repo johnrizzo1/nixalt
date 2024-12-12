@@ -10,6 +10,7 @@
   imports = [
     ./hardware/irl.nix
     ../modules/nixos
+    # ../modules/nixos/monitor.nix
   ];
 
   users = {
@@ -136,6 +137,85 @@
   #######################################################################
   # List services that you want to enable:
   services = {
+    unbound = {
+      enable = true;
+      settings = {
+        server = {
+          # When only using Unbound as DNS, make sure to replace 127.0.0.1 with your ip address
+          # When using Unbound in combination with pi-hole or Adguard, leave 127.0.0.1, and point Adguard to 127.0.0.1:PORT
+          interface = [ "127.0.0.1" ];
+          port = 5335;
+          access-control = [ "127.0.0.1 allow" ];
+          # Based on recommended settings in https://docs.pi-hole.net/guides/dns/unbound/#configure-unbound
+          harden-glue = true;
+          harden-dnssec-stripped = true;
+          use-caps-for-id = false;
+          prefetch = true;
+          edns-buffer-size = 1232;
+
+          # Custom settings
+          hide-identity = true;
+          hide-version = true;
+        };
+        forward-zone = [
+          # Example config with quad9
+          {
+            name = ".";
+            forward-addr = [
+              "9.9.9.9#dns.quad9.net"
+              "149.112.112.112#dns.quad9.net"
+            ];
+            forward-tls-upstream = true;  # Protected DNS
+          }
+        ];
+      };
+    };
+
+    adguardhome = {
+      enable = true;
+      openFirewall = true;
+      allowDHCP = true;
+      host = "192.168.2.124";
+      mutableSettings = true;
+      settings = {
+        http = {
+          # You can select any ip and port, just make sure to open firewalls where needed
+          address = "127.0.0.1:3003";
+          # address = "192.168.2.124:3003";
+        };
+        dns = {
+          bind_hosts = [ 
+            "127.0.0.1"
+            "192.168.2.124"
+          ];
+          upstream_dns = [
+            # Example config with quad9
+            # "9.9.9.9#dns.quad9.net"
+            # "149.112.112.112#dns.quad9.net"
+            # Uncomment the following to use a local DNS service (e.g. Unbound)
+            # Additionally replace the address & port as needed
+            "127.0.0.1:5335"
+          ];
+        };
+        filtering = {
+          protection_enabled = true;
+          filtering_enabled = true;
+
+          parental_enabled = false;  # Parental control-based DNS requests filtering.
+          safe_search = {
+            enabled = false;  # Enforcing "Safe search" option for search engines, when possible.
+          };
+        };
+        # The following notation uses map
+        # to not have to manually create {enabled = true; url = "";} for every filter
+        # This is, however, fully optional
+        filters = map(url: { enabled = true; url = url; }) [
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt"  # The Big List of Hacked Malware Web Sites
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt"  # malicious url blocklist
+        ];
+      };
+    };
+
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
