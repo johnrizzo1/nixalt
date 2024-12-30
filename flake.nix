@@ -73,6 +73,10 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
 
     flake-utils.url = "github:numtide/flake-utils";
+
+    claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
+    claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
+    claude-desktop.inputs.flake-utils.follows = "flake-utils";
   };
 
   outputs =
@@ -175,7 +179,10 @@
             specialArgs = { diskSize = toString (20 * 1024); };
             # modules = [ ./modules/nixos/monitor.nix ];
             modules = [
-              ({ environment.systemPackages = [ pkgs.man ]; })
+              ({
+                environment.systemPackages = [ pkgs.man ];
+                system.stateVersion = "25.05";
+              })
             ];
           };
 

@@ -78,9 +78,9 @@
 
       # efi.efiSysMountPoint = "/boot"; # not sure about this
     };
-    kernel.sysctl = {
-      "vm.max_map_count" = 262144;
-    };
+    # kernel.sysctl = {
+    #   "vm.max_map_count" = 262144;
+    # };
     plymouth.enable = true;
   };
 
@@ -105,16 +105,18 @@
   environment = {
     systemPackages = with pkgs; [
       alpaca # ollama GUI
+      beeper
       cachix
       cudatoolkit
+      # inputs.claude-desktop.packages.${pkgs.stdenv.system}.claude-desktop
       devenv
       direnv
       element-desktop
+      gimp
       git
       gitkraken
       # home-manager
       jan
-      jetbrains.pycharm-community
       keybase
       keybase-gui
       libreoffice
@@ -239,7 +241,7 @@
     # services.secureboot.enable = true;
 
     virt = {
-      enable = false;
+      enable = true;
       # preseed = { };
     };
 

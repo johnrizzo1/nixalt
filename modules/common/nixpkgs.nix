@@ -12,6 +12,8 @@
           "1password"
           "1password-cli"
           "1password-gui"
+          "beeper"
+          "claude-desktop-0.7.5"
           "cudnn"
           "cuda_cccl"
           "cuda_cudart"

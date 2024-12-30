@@ -15,6 +15,12 @@
       example = true;
       description = "Enable my virtualisation stack";
     };
+    # incus_over_lxd = lib.mkOption {
+    #   type = lib.types.bool;
+    #   default = false;
+    #   example = true;
+    #   description = "Enable incus over lxd";
+    # };
     preseed = lib.mkOption {
       description = "Pre-seed to apply for incus setup";
       type = lib.types.attrs;
@@ -78,7 +84,10 @@
       spice-protocol
       virt-viewer
       virt-manager
-      # gnome-boxes
+      gnome-boxes
+      podman-desktop
+      kubectl
+      kind
       qemu_full
       quickemu
       swtpm
@@ -102,16 +111,31 @@
       };
       spiceUSBRedirection.enable = true;
       # containers.cdi.dynamic.nvidia.enable = true;
-      incus = {
+      # incus = lib.mkIf config.services.virt.incus_over_lxd {
+      #   enable = true;
+      #   package = pkgs.incus;
+      #   ui.enable = true;
+      #   inherit (config.services.virt) preseed;
+      # };
+      # lxd = lib.mkIf (! config.services.virt.incus_over_lxd) {
+      lxd = {
         enable = true;
-        package = pkgs.incus;
+        # package = pkgs.lxd-lts;
         ui.enable = true;
-        inherit (config.services.virt) preseed;
+        recommendedSysctlSettings = true;
+        # inherit (config.services.virt) preseed;
       };
       # docker = {
       #   enable = true;
       #   enableOnBoot = true;
       # };
+      podman = {
+        enable = true;
+        dockerSocket.enable = true;
+        dockerCompat = true;
+        # enableNvidia = true;
+        autoPrune.enable = true;
+      };
     };
 
     # This is to support nvidia cards on docker
