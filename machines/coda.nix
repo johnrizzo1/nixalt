@@ -141,6 +141,9 @@
       synology-drive-client
       vscodium
       kitty
+      tuba # fediverse client
+      zoom-us
+      lmstudio
 
       # For hypervisors that support auto-resizing, this script forces it.
       # I've noticed not everyone listens to the udev events so this is a hack.

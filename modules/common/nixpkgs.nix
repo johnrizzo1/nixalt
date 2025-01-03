@@ -44,6 +44,8 @@
           "nvidia-settings"
           "obsidian"
           "synology-drive-client"
+          "zoom"
+          "lmstudio"
         ];
     };
   };
