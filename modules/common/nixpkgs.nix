@@ -2,7 +2,7 @@
 { pkgs, lib, ... }: {
   nixpkgs = {
     config = {
-      # allowUnfree = true;
+      allowUnfree = true;
       hostPlatform = pkgs.stdenv.system;
       cudaSupport = true;
       android_sdk.accept_license = true;
@@ -13,7 +13,7 @@
           "1password-cli"
           "1password-gui"
           "beeper"
-          "claude-desktop-0.7.5"
+          "claude-desktop"
           "cudnn"
           "cuda_cccl"
           "cuda_cudart"
@@ -39,13 +39,14 @@
           "libcusparse"
           "libnpp"
           "libnvjitlink"
+          "lmstudio"
           "n8n"
           "nvidia-x11"
           "nvidia-settings"
           "obsidian"
           "synology-drive-client"
+	  "vscode"
           "zoom"
-          "lmstudio"
         ];
     };
   };

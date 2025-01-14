@@ -25,10 +25,10 @@
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
 
     # Build a custom WSL installer
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
@@ -37,7 +37,7 @@
     home-manager = {
       # url = "github:nix-community/home-manager/release-24.05";
       # url = "github:nix-community/home-manager/master"; # This is unstable
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-generators = {
