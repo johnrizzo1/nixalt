@@ -85,6 +85,7 @@
       virt-viewer
       virt-manager
       gnome-boxes
+      kubernetes-helm
       podman-desktop
       kubectl
       kind
