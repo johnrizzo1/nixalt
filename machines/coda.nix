@@ -96,6 +96,7 @@
       kdenlive
       keybase
       keybase-gui
+      localstack
       libreoffice
       lmstudio
       niv
@@ -160,9 +161,11 @@
     xserver.videoDrivers = [ "nvidia" ];
 
     ollama = {
-     enable = true;
-     acceleration = "cuda";
+      enable = false;
+      acceleration = "cuda";
     };
+
+    flatpak.enable = true;
 
     ##tabby = {
     ##  enable = false;

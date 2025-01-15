@@ -8,6 +8,7 @@
       fira-code-symbols
       jetbrains-mono
       noto-fonts
+      nerdfonts
     ];
   };
 }
