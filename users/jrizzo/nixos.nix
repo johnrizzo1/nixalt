@@ -14,7 +14,6 @@
 
   programs.fish.enable = true;
   programs.zsh.enable = true;
-  # programs.bash.enable = true; # No longer does anything
 
   users.users.jrizzo = {
     isNormalUser = true;
@@ -34,8 +33,4 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRWDuga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"
     ];
   };
-
-  # nixpkgs.overlays = import ../../lib/overlays.nix ++ [
-  #   (import ./vim.nix { inherit inputs; })
-  # ];
 }

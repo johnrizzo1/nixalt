@@ -2,7 +2,7 @@
 { pkgs, lib, ... }: {
   nixpkgs = {
     config = {
-      allowUnfree = true;
+      # allowUnfree = true;
       hostPlatform = pkgs.stdenv.system;
       cudaSupport = true;
       android_sdk.accept_license = true;

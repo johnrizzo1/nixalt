@@ -2,7 +2,6 @@
 , config
 , pkgs
 , lib
-  # , currentSystem
 , currentSystemUser
 , currentSystemName
 , ...
@@ -10,17 +9,15 @@
 {
   imports = [
     ./hardware/coda.nix
-    ../modules/nixos
-    ../modules/nixos/desktop.nix
   ];
 
-  users = {
-    mutableUsers = false;
-    users.root = {
-      isSystemUser = true;
-      hashedPassword = "$y$j9T$huQi//1srOgV4dSHFgVrh/$mZbJwRhMuqOTAPWssVxlL1d9YCjDxugoQejlN8I4K70";
-    };
-  };
+  # users = {
+  #   mutableUsers = false;
+  #   users.root = {
+  #     isSystemUser = true;
+  #     hashedPassword = "$y$j9T$huQi//1srOgV4dSHFgVrh/$mZbJwRhMuqOTAPWssVxlL1d9YCjDxugoQejlN8I4K70";
+  #   };
+  # };
 
   networking = {
     hostName = currentSystemName;
@@ -220,5 +217,5 @@
   # system.autoUpgrade.enable = true;
   # system.autoUpgrade.allowReboot = false;
   # system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.05";
-  system.stateVersion = "24.05"; # Did you read the comment?
+  # system.stateVersion = "24.05"; # Did you read the comment?
 }

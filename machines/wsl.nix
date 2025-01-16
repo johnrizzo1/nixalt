@@ -3,12 +3,6 @@
 , ...
 }:
 {
-  imports = [
-    # <nixos-wsl/modules>
-    ../modules/nixos
-    ../modules/nixos/vscode-server.nix
-  ];
-
   environment.systemPackages = with pkgs; [
     devenv
     (python3.withPackages (python-pkgs: with python-pkgs; [

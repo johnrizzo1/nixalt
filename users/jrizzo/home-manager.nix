@@ -13,17 +13,6 @@ let
   inherit (pkgs.stdenv) isDarwin isLinux;
 in
 {
-  imports = [
-    ../../modules/common/nixpkgs.nix
-    # ./editor.nix
-    # ./home-manager.nix
-    # ./packages.nix
-    # ./shell.nix
-    # ./xdg.nix
-    # ./obs.nix
-    # ./git.nix
-  ];
-
   home = {
     # Home-manager 22.11 requires this be set. We never set it so we have
     # to use the old state version.
@@ -44,9 +33,10 @@ in
         # ripgrep
         # sentry-cli
         # zigpkgs."0.13.0"
+        # watchman
         asciinema
         bat
-        beeper
+        # beeper
         bottom
         comma
         eza
@@ -74,7 +64,6 @@ in
         tree
         vim
         watch
-        # watchman
         weechat
         wget
         xclip
@@ -87,9 +76,12 @@ in
     # Env vars and dotfiles
     #---------------------------------------------------------------------
 
-    # sessionPath = [
-    # "/opt/anaconda3/bin"
-    # ];
+    sessionPath = [
+      "/usr/local/bin"
+    ] ++ lib.optionals pkgs.stdenv.isDarwin [
+      "/opt/anaconda3/bin"
+      "/opt/homebrew/bin"
+    ];
 
     sessionVariables = {
       LANG = "en_US.UTF-8";

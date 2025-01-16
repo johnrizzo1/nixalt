@@ -7,7 +7,7 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ./hardware/vm-intel.nix
-    ../modules/common/vm-shared.nix
+    # ../modules/common/vm-shared.nix
   ];
 
   virtualisation.vmware.guest.enable = true;

@@ -6,7 +6,6 @@
 
 {
   nix = {
-    # enable = true;
     package = pkgs.nixVersions.stable;
     settings = {
       # keep-derivations = true;

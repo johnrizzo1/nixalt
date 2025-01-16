@@ -11,8 +11,8 @@
     (modulesPath + "/profiles/qemu-guest.nix")
 
     ./hardware/vm-aarch64-prl.nix
-    ../modules/darwin/parallels-guest.nix
-    ../modules/common/vm-shared.nix
+    # ../modules/darwin/parallels-guest.nix
+    # ../modules/common/vm-shared.nix
   ];
 
   # The official parallels guest support does not work currently.

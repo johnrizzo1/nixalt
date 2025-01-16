@@ -1,18 +1,8 @@
 # This function creates a NixOS system based on our VM setup for a
 # particular architecture.
-{ nixpkgs
-, overlays
-, inputs
-,
-}:
+{ nixpkgs, inputs, }:
 name:
-{ system
-, user
-, isWSL ? false
-, isHypervisor ? false
-  # , desktop ? "kde"
-,
-}:
+{ system, user, isWSL ? false, isHypervisor ? false, }:
 let
   pkgs = import nixpkgs { inherit system; };
 
@@ -26,7 +16,7 @@ let
     if pkgs.stdenv.isDarwin
     then inputs.nix-darwin.lib.darwinSystem
     else nixpkgs.lib.nixosSystem;
-  home-manager =
+  hmModules =
     if pkgs.stdenv.isDarwin
     then inputs.home-manager.darwinModules
     else inputs.home-manager.nixosModules;
@@ -34,43 +24,41 @@ let
     if pkgs.stdenv.isDarwin
     then inputs.determinate.darwinModules.default
     else inputs.determinate.nixosModules.default;
-  secureboot =
+  securebootModules =
     if pkgs.stdenv.isLinux
     then inputs.lanzaboote.nixosModules.lanzaboote
     else { };
+  commonConfig =
+    if pkgs.stdenv.isLinux
+    then ../machines/common/nixos.nix
+    else ../machines/common/darwin.nix;
+
 in
 systemFunc rec {
   inherit system;
 
   modules = [
-    # determinate
+    ../machines/common/nix.nix
+    ../machines/common/nixpkgs.nix
+    ../machines/common
+    ../modules
 
-    # Apply our overlays. Overlays are keyed by system type so we have
-    # to go through and apply our system type. We do this first so
-    # the overlays are available globally.
-    # { nixpkgs.overlays = overlays; }
-    # ../overlays
-    ../modules/common/nix.nix
-    ../modules/common/nixpkgs.nix
+    securebootModules
 
-    secureboot
-
-    # (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
-    # inputs.proxmox-nixos.nixosModules.proxmox-ve
-    # Bring in WSL if this is a WSL build
     (if isWSL then inputs.nixos-wsl.nixosModules.wsl else { })
 
     # For vscode server
     # inputs.nix-alien.overlays.default
     inputs.vscode-server.nixosModules.default
 
+    commonConfig
     machineConfig
     userOSConfig
-    home-manager.home-manager
+    hmModules.home-manager
     {
       home-manager = {
         useGlobalPkgs = true;
-        useUserPackages = true;
+        useUserPackages = false;
         backupFileExtension = "backup";
         users.${user} = import userHMConfig {
           inherit isWSL isHypervisor inputs;
@@ -83,8 +71,6 @@ systemFunc rec {
     {
       config._module.args = {
         inherit isWSL isHypervisor inputs;
-
-        # currentSystem = system;
         currentSystemName = name;
         currentSystemUser = user;
       };

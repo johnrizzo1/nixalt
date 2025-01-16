@@ -2,6 +2,13 @@
 {
   # environment.systemPackages = [ ];
   # home.packages = with pkgs; [ ];
+  users.users = {
+    jrizzo = {
+      name = "jrizzo";
+      home = "/Users/jrizzo";
+      shell = pkgs.zsh;
+    };
+  };
 
   homebrew = {
     enable = true;
@@ -10,33 +17,16 @@
     ];
     casks = [
       "1password"
-      "blender"
-      "cleanshot"
       "discord"
-      "figma"
       "freetube"
       "gimp"
-      "gns3"
       "google-chrome"
-      "hammerspoon"
       "imageoptim"
       "inkscape"
       "istat-menus"
       "iterm2"
-      "krita"
-      "monodraw"
-      "raycast"
-      "rectangle"
-      "screenflow"
-      "sketch"
       "slack"
-      "spotify"
     ];
-  };
-
-  users.users.jrizzo = {
-    home = "/Users/jrizzo";
-    shell = pkgs.zsh;
   };
 
   services = {
@@ -60,7 +50,7 @@
         ApplePressAndHoldEnabled = false;
         AppleShowAllExtensions = true;
         AppleShowAllFiles = true;
-        InitialKeyRepeat = 0;
+        InitialKeyRepeat = 10;
         KeyRepeat = 10;
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticDashSubstitutionEnabled = false;

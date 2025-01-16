@@ -1,9 +1,7 @@
 { lib, ... }:
 {
   imports = [
-    # ../common/nix.nix
-    # ../common/nixpkgs.nix
-    ./networking.nix
+    ./desktop.nix
     ./nix-ld.nix
     ./secureboot.nix
     ./virt

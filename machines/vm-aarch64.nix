@@ -6,8 +6,8 @@
 {
   imports = [
     ./hardware/vm-aarch64.nix
-    ../modules/vmware-guest.nix
-    ../modules/common/vm-shared.nix
+    # ../modules/vmware-guest.nix
+    # ../modules/common/vm-shared.nix
   ];
 
   # Setup qemu so we can run x86_64 binaries

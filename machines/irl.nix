@@ -2,24 +2,13 @@
 , config
 , pkgs
 , lib
-  # , currentSystem
 , currentSystemUser
 , currentSystemName
 , ...
 }: {
   imports = [
     ./hardware/irl.nix
-    ../modules/nixos
-    # ../modules/nixos/monitor.nix
   ];
-
-  users = {
-    mutableUsers = false;
-    users.root = {
-      isSystemUser = true;
-      initialHashedPassword = "$y$j9T$nF3bvV8Ta/mmPCELOr5hB/$jRPG1EZ0rPuCuzKdPgn0VsAsfTyZMiEkrVneqOr7ci0";
-    };
-  };
 
   networking = {
     hostName = currentSystemName;
@@ -356,5 +345,5 @@
   # system.autoUpgrade.enable = true;
   # system.autoUpgrade.allowReboot = false;
   # system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.05";
-  system.stateVersion = "24.05"; # Did you read the comment?
+  # system.stateVersion = "24.05"; # Did you read the comment?
 }
