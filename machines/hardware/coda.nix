@@ -29,19 +29,20 @@
   };
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/b13dc6c5-97ae-400a-b273-d464dda9c3fb";
+    {
+      device = "/dev/disk/by-uuid/b13dc6c5-97ae-400a-b273-d464dda9c3fb";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/F3F3-AEC4";
+    {
+      device = "/dev/disk/by-uuid/F3F3-AEC4";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/3076a975-0e7f-41ad-be10-7b0a0a79227a"; }
-    ];
+    [{ device = "/dev/disk/by-uuid/3076a975-0e7f-41ad-be10-7b0a0a79227a"; }];
 
   # swapDevices = [
   #  {

@@ -45,7 +45,7 @@
           "nvidia-settings"
           "obsidian"
           "synology-drive-client"
-	  "vscode"
+          "vscode"
           "zoom"
         ];
     };

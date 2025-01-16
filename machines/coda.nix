@@ -2,7 +2,7 @@
 , config
 , pkgs
 , lib
-, currentSystem
+  # , currentSystem
 , currentSystemUser
 , currentSystemName
 , ...
@@ -220,5 +220,5 @@
   # system.autoUpgrade.enable = true;
   # system.autoUpgrade.allowReboot = false;
   # system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.05";
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 }

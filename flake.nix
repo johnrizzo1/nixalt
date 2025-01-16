@@ -44,7 +44,7 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.url = "github:LnL7/nix-darwin/nix-darwin-24.11";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     pre-commit-hooks = {
@@ -126,23 +126,23 @@
         #
         # Linux
         # sudo nixos-rebuild --flake .#coda switch
-        coda = mkSystem "coda" {
-          system = "x86_64-linux";
-          user = "jrizzo";
-        };
+        # coda = mkSystem "coda" {
+        #   system = "x86_64-linux";
+        #   user = "jrizzo";
+        # };
 
         # sudo nixos-rebuild --flake .#irl switch
-        irl = mkSystem "irl" {
-          system = "x86_64-linux";
-          user = "jrizzo";
-          isHypervisor = true;
-        };
+        # irl = mkSystem "irl" {
+        #   system = "x86_64-linux";
+        #   user = "jrizzo";
+        #   isHypervisor = true;
+        # };
 
-        wincoda = mkSystem "wincoda" {
-          system = "x86_64-linux";
-          user = "jrizzo";
-          isWSL = true;
-        };
+        # wsl = mkSystem "wsl" {
+        #   system = "x86_64-linux";
+        #   user = "jrizzo";
+        #   isWSL = true;
+        # };
 
         # Virtual Machines & Containers
         # nixos-rebuild --flake .#vm-intel build-vm
@@ -161,34 +161,34 @@
       # MacOS
       # nix run nix-darwin -- switch --flake .#tymnet
       # darwin-rebuild --flake .#tymnet
-      darwinConfigurations = {
-        tymnet = mkSystem "tymnet" {
-          system = "aarch64-darwin";
-          user = "jrizzo";
-        };
-      };
+      # darwinConfigurations = {
+      #   tymnet = mkSystem "tymnet" {
+      #     system = "aarch64-darwin";
+      #     user = "jrizzo";
+      #   };
+      # };
 
       #
       # Setup the packages
-      packages = forEachSupportedSystem (
-        { pkgs }:
-        rec {
-          monitor = inputs.nixos-generators.nixosGenerate rec {
-            format = "lxc";
-            system = "x86_64-linux";
-            specialArgs = { diskSize = toString (20 * 1024); };
-            # modules = [ ./modules/nixos/monitor.nix ];
-            modules = [
-              ({
-                environment.systemPackages = [ pkgs.man ];
-                system.stateVersion = "25.05";
-              })
-            ];
-          };
+      # packages = forEachSupportedSystem (
+      #   { pkgs }:
+      #   rec {
+      #     monitor = inputs.nixos-generators.nixosGenerate rec {
+      #       format = "lxc";
+      #       system = "x86_64-linux";
+      #       specialArgs = { diskSize = toString (20 * 1024); };
+      #       # modules = [ ./modules/nixos/monitor.nix ];
+      #       modules = [
+      #         ({
+      #           environment.systemPackages = [ pkgs.man ];
+      #           system.stateVersion = "24.05";
+      #         })
+      #       ];
+      #     };
 
-          default = monitor;
-        }
-      );
+      #     default = monitor;
+      #   }
+      # );
 
       #
       # Setting up the formatter

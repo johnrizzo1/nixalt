@@ -10,7 +10,7 @@ name:
 , user
 , isWSL ? false
 , isHypervisor ? false
-, desktop ? "kde"
+  # , desktop ? "kde"
 ,
 }:
 let
@@ -49,7 +49,7 @@ systemFunc rec {
     # to go through and apply our system type. We do this first so
     # the overlays are available globally.
     # { nixpkgs.overlays = overlays; }
-    ../overlays
+    # ../overlays
     ../modules/common/nix.nix
     ../modules/common/nixpkgs.nix
 
@@ -82,9 +82,9 @@ systemFunc rec {
     # better based on these values.
     {
       config._module.args = {
-        inherit isWSL isHypervisor desktop inputs;
+        inherit isWSL isHypervisor inputs;
 
-        currentSystem = system;
+        # currentSystem = system;
         currentSystemName = name;
         currentSystemUser = user;
       };

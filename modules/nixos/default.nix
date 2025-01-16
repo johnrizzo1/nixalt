@@ -1,8 +1,8 @@
 { lib, ... }:
 {
   imports = [
-    ../common/nix.nix
-    ../common/nixpkgs.nix
+    # ../common/nix.nix
+    # ../common/nixpkgs.nix
     ./networking.nix
     ./nix-ld.nix
     ./secureboot.nix
