@@ -73,9 +73,9 @@
   # Host Specific Applications
   environment = {
     systemPackages = with pkgs; [
-
       _1password-gui
       # home-manager
+      # inputs.claude-desktop.packages.${pkgs.stdenv.system}.claude-desktop
       # kitty
       # smplayer
       # vscodium
@@ -95,13 +95,12 @@
       gimp
       git
       gitkraken
-      # inputs.claude-desktop.packages.${pkgs.stdenv.system}.claude-desktop
       kdenlive
       keybase
       keybase-gui
-      localstack
       libreoffice
       lmstudio
+      localstack
       niv
       obs-studio
       obsidian

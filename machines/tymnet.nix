@@ -7,7 +7,10 @@
 , ...
 }:
 {
-  imports = [ ./common/darwin.nix ];
+  imports = [ 
+    ./common/darwin.nix
+    # ../modules/virt-client.nix
+  ];
 
   networking = {
     hostName = currentSystemName;
@@ -73,6 +76,10 @@
     onActivation.cleanup = "zap";
   };
 
+  environment.systemPackages = with pkgs; [
+    podman
+  ];
+
   programs = {
     # zsh is the default shell on Mac and we want to make sure that we're
     # configuring the rc correctly with nix-darwin paths.
@@ -125,5 +132,6 @@
   services = {
     tailscale.enable = true;
     nix-daemon.enable = true;
+    # virt.enable = true;
   };
 }

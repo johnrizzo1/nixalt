@@ -9,7 +9,7 @@
   #   ./gns3.nix
   # ];
 
-  options.services.virt = {
+  options.services.hypervisor = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -75,38 +75,7 @@
     };
   };
 
-  config = lib.mkIf config.services.virt.enable {
-    users.users.${currentSystemUser}.extraGroups = [
-      "docker"
-      "gns3"
-      "incus-admin"
-      "libvirtd"
-      "lxd"
-    ];
-
-    environment.systemPackages = with pkgs; [
-      # swtpm-tpm2
-      bridge-utils
-      docker-compose
-      gnome-boxes
-      kind
-      kubectl
-      kubernetes-helm
-      opentofu
-      OVMFFull
-      ovn
-      podman-desktop
-      qemu_full
-      quickemu
-      spice
-      spice-gtk
-      spice-protocol
-      swtpm
-      terragrunt
-      virt-manager
-      virt-viewer
-    ];
-
+  config = lib.mkIf config.services.hypervisor.enable {
     virtualisation = {
       # vswitch.enable = true;
       libvirtd = {

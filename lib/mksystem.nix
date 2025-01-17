@@ -28,7 +28,7 @@ let
   securebootModules =
     if pkgs.stdenv.isLinux
     then inputs.lanzaboote.nixosModules.lanzaboote
-    else { };
+    else {};
 in
 systemFunc rec {
   inherit system;
@@ -36,11 +36,13 @@ systemFunc rec {
   modules = [
     securebootModules
 
-    (if isWSL then inputs.nixos-wsl.nixosModules.wsl else { })
+    (if isWSL then inputs.nixos-wsl.nixosModules.wsl else {})
 
     # For vscode server
     # inputs.nix-alien.overlays.default
     # inputs.vscode-server.nixosModules.default
+
+    (if pkgs.stdenv.isLinux then ../modules else {})
 
     commonConfig
     machineConfig

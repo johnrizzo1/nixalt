@@ -1,9 +1,12 @@
 { lib, pkgs, ... }:
 {
-  # imports = [ ] ++ lib.optional pkgs.stdenv.isLinux [
-  #   ./desktop.nix
-  #   ./nix-ld.nix
-  #   ./virt
-  #   ./secureboot.nix
-  # ];
+  imports = [ 
+    ./virt-client.nix
+  ] ++ lib.optionals pkgs.stdenv.isLinux [ 
+    ./desktop.nix
+    ./nix-ld.nix
+    ./hypervisor.nix
+    ./gns3.nix
+    ./secureboot.nix
+  ];
 }
