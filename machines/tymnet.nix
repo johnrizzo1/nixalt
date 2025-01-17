@@ -7,6 +7,8 @@
 , ...
 }:
 {
+  imports = [ ./common/darwin.nix ];
+
   networking = {
     hostName = currentSystemName;
     computerName = currentSystemName;
@@ -17,6 +19,7 @@
     enable = true;
     brews = [
       "incus"
+      "mas"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
@@ -40,10 +43,14 @@
       "bambu-studio"
       "beeper"
       "calibre"
+      "discord"
       "freetube"
       "gimp"
       "gns3"
       "google-chrome"
+      "imageoptim"
+      "inkscape"
+      "istat-menus"
       "iterm2"
       "jan"
       "jetbrains-toolbox"
@@ -56,6 +63,7 @@
       "parallels"
       "podman-desktop"
       "raspberry-pi-imager"
+      "slack"
       "sonos"
       "sourcetree"
       "synology-drive"
@@ -118,10 +126,4 @@
     tailscale.enable = true;
     nix-daemon.enable = true;
   };
-
-  security.pam.enableSudoTouchIdAuth = true;
-
-  # Set Git commit hash for darwin-version.
-  # system.configurationRevision = self.rev or self.dirtyRev or null;
-  system.stateVersion = 5;
 }

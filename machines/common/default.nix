@@ -1,4 +1,5 @@
 { pkgs, inputs, config, lib, ... }: {
+  imports = [ ./nix.nix ./nixpkgs.nix ];
   users.users = {
     root =
       if pkgs.stdenv.isLinux then {
@@ -13,22 +14,6 @@
     shells = [ pkgs.zsh ];
     pathsToLink = [ "/share/zsh" ];
     # systemPackages = with pkgs; [ ];
-  };
-
-  programs = {
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      silent = true;
-    };
-    zsh = {
-      enable = true;
-      enableCompletion = true;
-      enableBashCompletion = true;
-    };
-    tmux = {
-      enable = true;
-    };
   };
 
   time.timeZone = "America/New_York";

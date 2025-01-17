@@ -8,6 +8,7 @@
 }: {
   imports = [
     ./hardware/irl.nix
+    ./common/nixos.nix
   ];
 
   networking = {
@@ -92,7 +93,7 @@
     devenv
     direnv
     git
-    # home-manager
+    home-manager
     killall
     niv
     nixos-generators # various image generators
@@ -236,7 +237,6 @@
       };
     };
 
-
     nginx = {
       enable = true;
       recommendedProxySettings = true;
@@ -301,7 +301,7 @@
 
     promtail = {
       enable = true;
-      configFile = ../modules/common/files/promtail.yaml;
+      configFile = ./files/irl/promtail.yaml;
     };
 
     ollama = {
@@ -330,10 +330,7 @@
       };
     };
 
-    virt = {
-      enable = true;
-      preseed = { };
-    };
+    # virt.enable = true;
   };
 
   #######################################################################

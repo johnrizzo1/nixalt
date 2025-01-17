@@ -10,8 +10,9 @@ let
   machineConfig = ../machines/${name}.nix;
   userOSConfig = ../users/${user}/${if pkgs.stdenv.isDarwin then "darwin" else "nixos"}.nix;
   userHMConfig = ../users/${user}/home-manager.nix;
+  commonConfig = ../machines/common;
 
-  # NixOS vs nix-darwin functionst
+  # NixOS vs nix-darwin functions
   systemFunc =
     if pkgs.stdenv.isDarwin
     then inputs.nix-darwin.lib.darwinSystem
@@ -28,28 +29,18 @@ let
     if pkgs.stdenv.isLinux
     then inputs.lanzaboote.nixosModules.lanzaboote
     else { };
-  commonConfig =
-    if pkgs.stdenv.isLinux
-    then ../machines/common/nixos.nix
-    else ../machines/common/darwin.nix;
-
 in
 systemFunc rec {
   inherit system;
 
   modules = [
-    ../machines/common/nix.nix
-    ../machines/common/nixpkgs.nix
-    ../machines/common
-    ../modules
-
     securebootModules
 
     (if isWSL then inputs.nixos-wsl.nixosModules.wsl else { })
 
     # For vscode server
     # inputs.nix-alien.overlays.default
-    inputs.vscode-server.nixosModules.default
+    # inputs.vscode-server.nixosModules.default
 
     commonConfig
     machineConfig
@@ -61,7 +52,7 @@ systemFunc rec {
         useUserPackages = false;
         backupFileExtension = "backup";
         users.${user} = import userHMConfig {
-          inherit isWSL isHypervisor inputs;
+          inherit isWSL inputs;
         };
       };
     }
@@ -70,7 +61,7 @@ systemFunc rec {
     # better based on these values.
     {
       config._module.args = {
-        inherit isWSL isHypervisor inputs;
+        inherit isWSL inputs;
         currentSystemName = name;
         currentSystemUser = user;
       };

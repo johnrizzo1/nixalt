@@ -12,25 +12,50 @@
   # environment.systemPackages = with pkgs; [];
   # home.packages = with pkgs; [];
 
-  programs.fish.enable = true;
-  programs.zsh.enable = true;
-
-  users.users.jrizzo = {
-    isNormalUser = true;
-    home = "/home/jrizzo";
-    extraGroups = [
-      "docker"
-      "gns3"
-      "incus-admin"
-      "libvirtd"
-      "lxd"
-      "networkmanager"
-      "wheel"
-    ];
-    shell = pkgs.zsh;
-    hashedPassword = "$y$j9T$b5Q1pCL/pua.UUsOV3TKi/$8nkwFkKrHjUu5cr8b4TQnFgSpcYbVuFW63w88UppUF1";
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRWDuga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"
-    ];
+  users = {
+    mutableUsers = false;
+    users.jrizzo = {
+      isNormalUser = true;
+      home = "/home/jrizzo";
+      extraGroups = [
+        "networkmanager"
+        "wheel"
+      ];
+      shell = pkgs.zsh;
+      hashedPassword = "$y$j9T$b5Q1pCL/pua.UUsOV3TKi/$8nkwFkKrHjUu5cr8b4TQnFgSpcYbVuFW63w88UppUF1";
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRWDuga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"
+      ];
+    };
   };
+
+  programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      silent = true;
+    };
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      enableBashCompletion = true;
+      syntaxHighlighting.enable = true;
+    };
+    tmux = {
+      enable = true;
+    };
+    obs-studio = {
+      enable = true;
+      plugins = with pkgs.obs-studio-plugins; [
+        input-overlay
+        obs-backgroundremoval
+        obs-composite-blur
+        obs-freeze-filter
+        obs-mute-filter
+        obs-vkcapture
+        wlrobs
+      ];
+    };
+  };
+
 }

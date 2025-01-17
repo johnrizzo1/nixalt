@@ -9,20 +9,26 @@
 {
   imports = [
     ./hardware/coda.nix
+    ./common/nixos.nix
   ];
-
-  # users = {
-  #   mutableUsers = false;
-  #   users.root = {
-  #     isSystemUser = true;
-  #     hashedPassword = "$y$j9T$huQi//1srOgV4dSHFgVrh/$mZbJwRhMuqOTAPWssVxlL1d9YCjDxugoQejlN8I4K70";
-  #   };
-  # };
 
   networking = {
     hostName = currentSystemName;
 
     networkmanager.enable = true;
+    networkmanager.unmanaged = [
+      "incusbr0"
+      "virbr0"
+      "docker0"
+      "tailscale0"
+    ];
+    firewall.trustedInterfaces = [
+      "incusbr0"
+      "virbr0"
+      "docker0"
+    ];
+    # Required for incus
+    nftables.enable = true;
 
     firewall.enable = lib.mkForce true;
     firewall.allowedTCPPorts = [
@@ -135,6 +141,10 @@
       # nvidiaPersistenced = true;
       # package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
+    # This is to support nvidia cards on docker
+    # enable this after you create an option for cuda/rocm
+    # --device=nvidia.com/gpu=all
+    nvidia-container-toolkit.enable = true;
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -150,7 +160,7 @@
   #######################################################################
   # List services that you want to enable:
   services = {
-    desktop.enable = true;
+    # desktop.enable = true;
     hardware.bolt.enable = true;
     # secureboot.enable = true;
     printing.enable = true;
@@ -162,7 +172,7 @@
       acceleration = "cuda";
     };
 
-    flatpak.enable = true;
+    # flatpak.enable = true;
 
     ##tabby = {
     ##  enable = false;
@@ -208,8 +218,8 @@
         PermitRootLogin = "no";
       };
     };
-    virt.enable = true;
-    vscode-server.enable = true;
+    # virt.enable = true;
+    # vscode-server.enable = true;
   };
 
   # security.apparmor.enable = true;

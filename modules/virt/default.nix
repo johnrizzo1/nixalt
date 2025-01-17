@@ -2,11 +2,12 @@
 , lib
 , config
 , inputs
+, currentSystemUser
 , ...
 }: {
-  imports = [
-    # ./gns3.nix
-  ];
+  # imports = [
+  #   ./gns3.nix
+  # ];
 
   options.services.virt = {
     enable = lib.mkOption {
@@ -75,27 +76,35 @@
   };
 
   config = lib.mkIf config.services.virt.enable {
-    users.users.jrizzo.extraGroups = [ "incus-admin" ];
+    users.users.${currentSystemUser}.extraGroups = [
+      "docker"
+      "gns3"
+      "incus-admin"
+      "libvirtd"
+      "lxd"
+    ];
+
     environment.systemPackages = with pkgs; [
-      docker-compose
+      # swtpm-tpm2
       bridge-utils
+      docker-compose
+      gnome-boxes
+      kind
+      kubectl
+      kubernetes-helm
+      opentofu
+      OVMFFull
+      ovn
+      podman-desktop
+      qemu_full
+      quickemu
       spice
       spice-gtk
       spice-protocol
-      virt-viewer
-      virt-manager
-      gnome-boxes
-      kubernetes-helm
-      podman-desktop
-      kubectl
-      kind
-      qemu_full
-      quickemu
       swtpm
-      # swtpm-tpm2
-      OVMFFull
-      opentofu
-      ovn
+      terragrunt
+      virt-manager
+      virt-viewer
     ];
 
     virtualisation = {
@@ -142,48 +151,48 @@
     # This is to support nvidia cards on docker
     # enable this after you create an option for cuda/rocm
     # --device=nvidia.com/gpu=all
-    hardware.nvidia-container-toolkit.enable = true;
+    # hardware.nvidia-container-toolkit.enable = true;
 
-    programs.virt-manager.enable = true;
+    # programs.virt-manager.enable = true;
 
-    networking = {
-      # Required for incus
-      nftables.enable = true;
+    # networking = {
+    #   # Required for incus
+    #   nftables.enable = true;
 
-      # project: default
-      # name: incusbr0
-      # description: ''
-      # type: bridge
-      # config:
-      #   bridge.driver: openvswitch
-      #   dns.domain: technobable.com
-      #   dns.search: tail577f.ts.net, technobable.com
-      #   ipv4.address: 10.159.34.1/24
-      #   ipv4.nat: 'true'
-      #   ipv6.address: none
+    #   # project: default
+    #   # name: incusbr0
+    #   # description: ''
+    #   # type: bridge
+    #   # config:
+    #   #   bridge.driver: openvswitch
+    #   #   dns.domain: technobable.com
+    #   #   dns.search: tail577f.ts.net, technobable.com
+    #   #   ipv4.address: 10.159.34.1/24
+    #   #   ipv4.nat: 'true'
+    #   #   ipv6.address: none
 
-      # networking.vswitches = {
-      #   "ovsbr0" = {
-      #     interfaces = { }
-      #   }
-      # };
+    #   # networking.vswitches = {
+    #   #   "ovsbr0" = {
+    #   #     interfaces = { }
+    #   #   }
+    #   # };
 
-      # networking.firewall.enable = true;
-      networkmanager.unmanaged = [
-        "incusbr0"
-        "virbr0"
-        "docker0"
-        "tailscale0"
-      ];
-      firewall.trustedInterfaces = [
-        "incusbr0"
-        "virbr0"
-        "docker0"
-      ];
-      # "tailscale0"
+    #   # networking.firewall.enable = true;
+    #   networkmanager.unmanaged = [
+    #     "incusbr0"
+    #     "virbr0"
+    #     "docker0"
+    #     "tailscale0"
+    #   ];
+    #   firewall.trustedInterfaces = [
+    #     "incusbr0"
+    #     "virbr0"
+    #     "docker0"
+    #   ];
+    #   # "tailscale0"
 
-      # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
-      # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
-    };
+    #   # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
+    #   # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
+    # };
   };
 }

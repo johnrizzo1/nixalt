@@ -14,10 +14,6 @@ let
 in
 {
   home = {
-    # Home-manager 22.11 requires this be set. We never set it so we have
-    # to use the old state version.
-    stateVersion = "24.05";
-
     #---------------------------------------------------------------------
     # Packages
     #---------------------------------------------------------------------
@@ -55,11 +51,9 @@ in
         nixd
         nmap
         nodejs # Node is required for Copilot.vim
-        opentofu
         procs
         spacevim
         tailscale
-        terragrunt
         tmux
         tree
         vim
@@ -69,8 +63,7 @@ in
         xclip
         xsel
         zenith
-      ]
-      ++ (lib.optionals (isLinux && !isWSL) [ ]);
+      ];
 
     #---------------------------------------------------------------------
     # Env vars and dotfiles
@@ -146,6 +139,10 @@ in
         else
           { }
       );
+
+    # Home-manager 22.11 requires this be set. We never set it so we have
+    # to use the old state version.
+    stateVersion = "24.05";
   };
 
   #---------------------------------------------------------------------

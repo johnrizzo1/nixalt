@@ -1,11 +1,9 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
-  imports = [
-    ./desktop.nix
-    ./nix-ld.nix
-    ./secureboot.nix
-    ./virt
-    # ../vscode-server.nix
-  ];
+  # imports = [ ] ++ lib.optional pkgs.stdenv.isLinux [
+  #   ./desktop.nix
+  #   ./nix-ld.nix
+  #   ./virt
+  #   ./secureboot.nix
+  # ];
 }
-
