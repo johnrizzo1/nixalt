@@ -26,15 +26,13 @@ in
       with pkgs;
       [
         _1password-cli
-        # ripgrep
-        # sentry-cli
-        # zigpkgs."0.13.0"
-        # watchman
         asciinema
         bat
-        # beeper
         bottom
+        cachix
         comma
+        devenv
+        direnv
         eza
         fd
         fh
@@ -44,6 +42,7 @@ in
         git-lfs
         gnumake
         gopls
+        home-manager
         htop
         jq
         killall

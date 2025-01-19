@@ -88,19 +88,9 @@
 
   # Host Specific Applications
   environment.systemPackages = with pkgs; [
-    cachix
     clinfo
-    devenv
-    direnv
-    git
-    home-manager
-    killall
-    niv
     nixos-generators # various image generators
     ollama
-    tmux
-    vim
-    wget
   ];
 
   #######################################################################

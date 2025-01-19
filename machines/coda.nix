@@ -83,17 +83,13 @@
       ##jan
       alpaca # ollama GUI
       beeper
-      cachix
       calibre
       chromium
-      devenv
-      direnv
       discord
       element-desktop
       firefox
       freetube
       gimp
-      git
       gitkraken
       kdenlive
       keybase
@@ -108,11 +104,9 @@
       signal-desktop
       spotube
       synology-drive-client
-      tmux
       tuba # fediverse client
       vlc
       vscode
-      wget
       zoom-us
 
       # For hypervisors that support auto-resizing, this script forces it.

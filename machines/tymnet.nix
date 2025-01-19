@@ -78,6 +78,13 @@
 
   environment.systemPackages = with pkgs; [
     podman
+    kind
+    kubectl
+    kubernetes-helm
+    docker-compose
+    opentofu
+    terragrunt
+    virt-manager
   ];
 
   programs = {
