@@ -102,7 +102,7 @@
       lmstudio
       localstack
       niv
-      obs-studio
+      # obs-studio
       obsidian
       ollama
       signal-desktop
@@ -159,7 +159,7 @@
   #######################################################################
   # List services that you want to enable:
   services = {
-    # desktop.enable = true;
+    desktop.enable = true;
     hardware.bolt.enable = true;
     # secureboot.enable = true;
     printing.enable = true;
@@ -217,7 +217,7 @@
         PermitRootLogin = "no";
       };
     };
-    # virt.enable = true;
+    virt-client.enable = true;
     # vscode-server.enable = true;
   };
 

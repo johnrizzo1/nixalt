@@ -28,6 +28,7 @@
       bridge-utils
       docker-compose
       gnome-boxes
+      incus
       kind
       kubectl
       kubernetes-helm
@@ -43,6 +44,7 @@
       spice-gtk
       spice-protocol
       swtpm
+      terraform-providers.incus
       terragrunt
       virt-manager
       virt-viewer

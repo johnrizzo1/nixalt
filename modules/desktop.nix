@@ -4,11 +4,6 @@
 , ...
 }:
 {
-  # imports = [
-  #   ./fonts.nix
-  #   # ./kde.nix
-  # ];
-
   options.services.desktop = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -106,8 +101,8 @@
     };
 
     # Enable sound with pipewire.
-    # hardware.pulseaudio.enable = false;
-    services.pulseaudio.enable = false;
+    hardware.pulseaudio.enable = false;
+    # services.pulseaudio.enable = false;
 
     security.rtkit.enable = true;
   };

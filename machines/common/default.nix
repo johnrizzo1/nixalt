@@ -21,7 +21,8 @@
   fonts = {
     packages = with pkgs; [
       cascadia-code
-      nerd-fonts.caskaydia-mono
+      # nerd-fonts.caskaydia-mono
+      nerdfonts
     ];
   };
 }

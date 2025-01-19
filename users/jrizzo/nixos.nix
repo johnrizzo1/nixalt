@@ -44,18 +44,18 @@
     tmux = {
       enable = true;
     };
-    obs-studio = {
-      enable = true;
-      plugins = with pkgs.obs-studio-plugins; [
-        input-overlay
-        obs-backgroundremoval
-        obs-composite-blur
-        obs-freeze-filter
-        obs-mute-filter
-        obs-vkcapture
-        wlrobs
-      ];
-    };
+    # obs-studio = {
+    #   enable = true;
+    #   plugins = with pkgs.obs-studio-plugins; [
+    #     input-overlay
+    #     obs-backgroundremoval
+    #     obs-composite-blur
+    #     obs-freeze-filter
+    #     obs-mute-filter
+    #     obs-vkcapture
+    #     wlrobs
+    #   ];
+    # };
   };
 
 }

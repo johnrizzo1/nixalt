@@ -15,7 +15,7 @@
       };
     };
 
-  config = lib.mkIf config.services.virt.enable {
+  config = lib.mkIf config.services.gns3.enable {
     environment.systemPackages = with pkgs; [
       gns3-gui
       gns3-server
