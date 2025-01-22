@@ -1,7 +1,7 @@
 { lib, pkgs, inputs, ... }:
 {
   imports = [
-    ../common/nix.nix
+    # ../common/nix.nix
     # ../common/nixpkgs.nix
     ./fonts.nix
     ./packages.nix

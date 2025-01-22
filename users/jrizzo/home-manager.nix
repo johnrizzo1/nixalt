@@ -14,6 +14,7 @@ let
 in
 {
   imports = [
+    ../../modules/common/nixpkgs.nix
     # ./editor.nix
     # ./home-manager.nix
     # ./packages.nix
@@ -45,6 +46,7 @@ in
         # zigpkgs."0.13.0"
         asciinema
         bat
+        beeper
         bottom
         comma
         eza
@@ -104,16 +106,19 @@ in
       KDEHOME = "${configHome}/kde"; # $HOME/.kde4
       # GTK2_RC_FILES = "${configHome}/gtk-2.0/gtkrc"; # $HOME/.gtkrc-2.0
       GNUPGHOME = "${dataHome}/gnupg"; # $HOME/.gnupg
-      CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
       INPUTRC = "${configHome}/readline/inputrc"; # $HOME/.inputrc
       # AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
       # AWS_CONFIG_FILE = "${configHome}/aws/config";
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
 
-      CUDA_PATH = "${pkgs.cudatoolkit}";
-      LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
-      EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
-      EXTRA_CCFLAGS = "-I/usr/include";
+      NIXOS_OZONE_WL = 1;
+
+      # Make these conditional on if wsl
+      # CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
+      # CUDA_PATH = "${pkgs.cudatoolkit}";
+      # LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
+      # EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
+      # EXTRA_CCFLAGS = "-I/usr/include";
     };
 
     shellAliases =

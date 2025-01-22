@@ -28,38 +28,28 @@
     extraModulePackages = [ ];
   };
 
-  fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-uuid/1645f15c-b262-4280-9015-af9c3c8459ba";
+  fileSystems."/" =
+    {
+      device = "/dev/disk/by-uuid/b13dc6c5-97ae-400a-b273-d464dda9c3fb";
       fsType = "ext4";
     };
 
-    "/boot" = {
-      device = "/dev/disk/by-uuid/3886-65E3";
-      fsType = "vfat";
-      options = [
-        "fmask=0022"
-        "dmask=0022"
-      ];
-    };
-
-    "/mnt/windows" = {
-      device = "/dev/disk/by-label/Windows";
-      fsType = "ntfs";
-      options = [
-        "rw"
-        "uid=1000"
-      ];
-    };
-  };
-
-  # swapDevices = [ ];
-  swapDevices = [
+  fileSystems."/boot" =
     {
-      device = "/var/lib/swapfile";
-      size = 64 * 1024;
-    }
-  ];
+      device = "/dev/disk/by-uuid/F3F3-AEC4";
+      fsType = "vfat";
+      options = [ "fmask=0077" "dmask=0077" ];
+    };
+
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/3076a975-0e7f-41ad-be10-7b0a0a79227a"; }];
+
+  # swapDevices = [
+  #  {
+  #     device = "/var/lib/swapfile";
+  #     size = 64 * 1024;
+  #   }
+  # ];
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction

@@ -25,10 +25,10 @@
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
 
     # Build a custom WSL installer
     nixos-wsl.url = "github:nix-community/NixOS-WSL";
@@ -37,14 +37,14 @@
     home-manager = {
       # url = "github:nix-community/home-manager/release-24.05";
       # url = "github:nix-community/home-manager/master"; # This is unstable
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.url = "github:LnL7/nix-darwin/nix-darwin-24.11";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     pre-commit-hooks = {
@@ -73,6 +73,10 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
 
     flake-utils.url = "github:numtide/flake-utils";
+
+    claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
+    claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
+    claude-desktop.inputs.flake-utils.follows = "flake-utils";
   };
 
   outputs =
@@ -122,23 +126,23 @@
         #
         # Linux
         # sudo nixos-rebuild --flake .#coda switch
-        coda = mkSystem "coda" {
-          system = "x86_64-linux";
-          user = "jrizzo";
-        };
+        # coda = mkSystem "coda" {
+        #   system = "x86_64-linux";
+        #   user = "jrizzo";
+        # };
 
         # sudo nixos-rebuild --flake .#irl switch
-        irl = mkSystem "irl" {
-          system = "x86_64-linux";
-          user = "jrizzo";
-          isHypervisor = true;
-        };
+        # irl = mkSystem "irl" {
+        #   system = "x86_64-linux";
+        #   user = "jrizzo";
+        #   isHypervisor = true;
+        # };
 
-        wincoda = mkSystem "wincoda" {
-          system = "x86_64-linux";
-          user = "jrizzo";
-          isWSL = true;
-        };
+        # wsl = mkSystem "wsl" {
+        #   system = "x86_64-linux";
+        #   user = "jrizzo";
+        #   isWSL = true;
+        # };
 
         # Virtual Machines & Containers
         # nixos-rebuild --flake .#vm-intel build-vm
@@ -157,31 +161,34 @@
       # MacOS
       # nix run nix-darwin -- switch --flake .#tymnet
       # darwin-rebuild --flake .#tymnet
-      darwinConfigurations = {
-        tymnet = mkSystem "tymnet" {
-          system = "aarch64-darwin";
-          user = "jrizzo";
-        };
-      };
+      # darwinConfigurations = {
+      #   tymnet = mkSystem "tymnet" {
+      #     system = "aarch64-darwin";
+      #     user = "jrizzo";
+      #   };
+      # };
 
       #
       # Setup the packages
-      packages = forEachSupportedSystem (
-        { pkgs }:
-        rec {
-          monitor = inputs.nixos-generators.nixosGenerate rec {
-            format = "lxc";
-            system = "x86_64-linux";
-            specialArgs = { diskSize = toString (20 * 1024); };
-            # modules = [ ./modules/nixos/monitor.nix ];
-            modules = [
-              ({ environment.systemPackages = [ pkgs.man ]; })
-            ];
-          };
+      # packages = forEachSupportedSystem (
+      #   { pkgs }:
+      #   rec {
+      #     monitor = inputs.nixos-generators.nixosGenerate rec {
+      #       format = "lxc";
+      #       system = "x86_64-linux";
+      #       specialArgs = { diskSize = toString (20 * 1024); };
+      #       # modules = [ ./modules/nixos/monitor.nix ];
+      #       modules = [
+      #         ({
+      #           environment.systemPackages = [ pkgs.man ];
+      #           system.stateVersion = "24.05";
+      #         })
+      #       ];
+      #     };
 
-          default = monitor;
-        }
-      );
+      #     default = monitor;
+      #   }
+      # );
 
       #
       # Setting up the formatter

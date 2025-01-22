@@ -2,7 +2,7 @@
 , config
 , pkgs
 , lib
-, currentSystem
+  # , currentSystem
 , currentSystemUser
 , currentSystemName
 , ...
@@ -74,9 +74,9 @@
       # "error switching console mode" on boot.
       systemd-boot.consoleMode = "0";
     };
-    kernel.sysctl = {
-      "vm.max_map_count" = 262144;
-    };
+    # kernel.sysctl = {
+    #   "vm.max_map_count" = 262144;
+    # };
   };
 
   time.timeZone = "America/New_York";
@@ -169,7 +169,7 @@
               "9.9.9.9#dns.quad9.net"
               "149.112.112.112#dns.quad9.net"
             ];
-            forward-tls-upstream = true;  # Protected DNS
+            forward-tls-upstream = true; # Protected DNS
           }
         ];
       };
@@ -187,7 +187,7 @@
           address = "192.168.2.124:3003";
         };
         dns = {
-          bind_hosts = [ 
+          bind_hosts = [
             "127.0.0.1"
             "192.168.2.124"
           ];
@@ -204,17 +204,17 @@
           protection_enabled = true;
           filtering_enabled = true;
 
-          parental_enabled = true;  # Parental control-based DNS requests filtering.
+          parental_enabled = true; # Parental control-based DNS requests filtering.
           safe_search = {
-            enabled = true;  # Enforcing "Safe search" option for search engines, when possible.
+            enabled = true; # Enforcing "Safe search" option for search engines, when possible.
           };
         };
         # The following notation uses map
         # to not have to manually create {enabled = true; url = "";} for every filter
         # This is, however, fully optional
-        filters = map(url: { enabled = true; url = url; }) [
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt"  # The Big List of Hacked Malware Web Sites
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt"  # malicious url blocklist
+        filters = map (url: { enabled = true; url = url; }) [
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
+          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # malicious url blocklist
         ];
       };
     };
@@ -246,7 +246,7 @@
         analytics.reporting_enabled = false;
       };
     };
-    
+
 
     nginx = {
       enable = true;

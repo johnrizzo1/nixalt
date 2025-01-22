@@ -2,7 +2,7 @@
 , config
 , pkgs
 , lib
-, currentSystem
+  # , currentSystem
 , currentSystemUser
 , currentSystemName
 , ...
