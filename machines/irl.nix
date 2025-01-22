@@ -221,10 +221,10 @@
 
     # loki/grafana/prometheus setup
     # https://xeiaso.net/blog/prometheus-grafana-loki-nixos-2020-11-20/
-    # loki = {
-    #   enable = true;
-    #   configFile = ../common/files/loki.yaml;
-    # };
+    loki = {
+      enable = true;
+      configFile = ../modules/common/files/loki.yaml;
+    };
 
     grafana = {
       enable = true;
