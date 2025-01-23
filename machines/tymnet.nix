@@ -56,7 +56,6 @@
       "iterm2"
       "jan"
       "jetbrains-toolbox"
-      "mactex-no-gui"
       "microsoft-office"
       "nvidia-geforce-now"
       "obs"
@@ -87,6 +86,9 @@
     terragrunt
     virt-manager
     dotnet-sdk
+    # needed to add this to darwin-rebuild.. --option extra-sandbox-paths /nix/store
+    # https://github.com/NixOS/nix/issues/4119
+    texlive.combined.scheme-full
   ];
 
   programs = {
