@@ -303,10 +303,13 @@ in
       compression = true;
 
       extraConfig =
-        if pkgs.stdenv.isDarwin then
-          "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
-        else
-          "IdentityAgent \"~/.1password/agent.sock\"";
+        if pkgs.stdenv.isDarwin then ''
+          Host *
+            IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+        '' else ''
+          Host *
+            IdentityAgent "~/.1password/agent.sock";
+        '';
     };
 
     alacritty = {

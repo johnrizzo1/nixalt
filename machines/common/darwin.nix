@@ -20,7 +20,7 @@
         ApplePressAndHoldEnabled = false;
         AppleShowAllExtensions = true;
         AppleShowAllFiles = true;
-        InitialKeyRepeat = 0;
+        InitialKeyRepeat = 10;
         KeyRepeat = 10;
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticDashSubstitutionEnabled = false;

@@ -9,7 +9,6 @@
 {
   imports = [ 
     ./common/darwin.nix
-    # ../modules/virt-client.nix
   ];
 
   networking = {
@@ -57,6 +56,7 @@
       "iterm2"
       "jan"
       "jetbrains-toolbox"
+      "mactex-no-gui"
       "microsoft-office"
       "nvidia-geforce-now"
       "obs"
@@ -71,6 +71,7 @@
       "sourcetree"
       "synology-drive"
       "tailscale"
+      "visual-studio-code"
       "yubico-yubikey-manager"
     ];
     onActivation.cleanup = "zap";
@@ -85,6 +86,7 @@
     opentofu
     terragrunt
     virt-manager
+    dotnet-sdk
   ];
 
   programs = {
@@ -139,6 +141,5 @@
   services = {
     tailscale.enable = true;
     nix-daemon.enable = true;
-    # virt.enable = true;
   };
 }
