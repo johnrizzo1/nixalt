@@ -42,6 +42,7 @@
       # allowedUDPPorts = [ ... ];
       # Or disable the firewall altogether.
       enable = true;
+      allowPing = true;
     };
   };
 

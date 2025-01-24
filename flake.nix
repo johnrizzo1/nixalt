@@ -28,6 +28,7 @@
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+    nixified-ai.url = "github:nixified-ai/flake/comfyui-unwrapped";
   };
 
   outputs =
@@ -110,7 +111,7 @@
         # };
       };
 
-      # inherit (inputs.flake-schemas) schemas;
+      inherit (inputs.flake-schemas) schemas;
 
       # Setup the packages
       packages = forEachSupportedSystem ({ pkgs }:

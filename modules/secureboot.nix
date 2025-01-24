@@ -20,6 +20,7 @@
   };
 
   # https://nixos.wiki/wiki/Secure_Boot
+  # https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md
   # Setup
   # * bootctl status should be using systemd, firmware=uefi, tpm2 support=yes
   # * sudo sbctl create-keys

@@ -40,7 +40,7 @@ systemFunc rec {
 
     # For vscode server
     # inputs.nix-alien.overlays.default
-    # inputs.vscode-server.nixosModules.default
+    inputs.vscode-server.nixosModules.default
 
     (if pkgs.stdenv.isLinux then ../modules/desktop.nix else {})
     (if pkgs.stdenv.isLinux then ../modules/gns3.nix else {})
@@ -48,6 +48,7 @@ systemFunc rec {
     (if pkgs.stdenv.isLinux then ../modules/nix-ld.nix else {})
     (if pkgs.stdenv.isLinux then ../modules/secureboot.nix else {})
     (if pkgs.stdenv.isLinux then ../modules/virt-client.nix else {})
+    (if pkgs.stdenv.isLinux then inputs.nixified-ai.nixosModules.comfyui else {})
 
     commonConfig
     machineConfig

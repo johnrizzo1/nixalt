@@ -47,10 +47,12 @@
   };
 
   boot = {
+    initrd.systemd.enable = true;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
+    plymouth.enable = true;
   };
 
   time.timeZone = "America/New_York";
@@ -91,16 +93,21 @@
       freetube
       gimp
       gitkraken
+      jetbrains-toolbox
       kdenlive
       keybase
       keybase-gui
       libreoffice
       lmstudio
       localstack
+      mosh
       niv
       # obs-studio
       obsidian
       ollama
+      R
+      rstudio
+      dotnet-sdk
       signal-desktop
       spotube
       synology-drive-client
@@ -155,7 +162,7 @@
   services = {
     desktop.enable = true;
     hardware.bolt.enable = true;
-    # secureboot.enable = true;
+    secureboot.enable = true;
     printing.enable = true;
     colord.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
@@ -211,8 +218,65 @@
         PermitRootLogin = "no";
       };
     };
+    hypervisor.enable = true;
     virt-client.enable = true;
-    # vscode-server.enable = true;
+    vscode-server.enable = true;
+    # comfyui = {
+      # enable = true;
+      # package = pkgs.comfyui-nvidia;
+      # host = "0.0.0.0";
+      # models = builtins.attrValues pkgs.nixified-ai.models;
+      # customNodes = with inputs.comfyui.pkgs; [
+      #   comfyui-gguf
+      #   comfyui-impact-pack
+      # ];
+      # openFirewall = true;
+    # };
+
+    samba = {
+      enable = false;
+      openFirewall = true;
+      settings = {
+        global = {
+          "workgroup" = "WORKGROUP";
+          "server string" = "tymnet";
+          "netbios name" = "tymnet";
+          "security" = "user";
+          #"use sendfile" = "yes";
+          #"max protocol" = "smb2";
+          # note: localhost is the ipv6 localhost ::1
+          "hosts allow" = "192.168.0. 127.0.0.1 localhost";
+          "hosts deny" = "0.0.0.0/0";
+          "guest account" = "nobody";
+          "map to guest" = "bad user";
+        };
+        # "public" = {
+        #   "path" = "/home/jrizzo";
+        #   "browseable" = "yes";
+        #   "read only" = "no";
+        #   "guest ok" = "yes";
+        #   "create mask" = "0644";
+        #   "directory mask" = "0755";
+        #   "force user" = "jrizzo";
+        #   "force group" = "jrizzo";
+        # };
+        # "private" = {
+        #   "path" = "/mnt/Shares/Private";
+        #   "browseable" = "yes";
+        #   "read only" = "no";
+        #   "guest ok" = "no";
+        #   "create mask" = "0644";
+        #   "directory mask" = "0755";
+        #   "force user" = "username";
+        #   "force group" = "groupname";
+        # };
+      };
+    };
+
+    samba-wsdd = {
+      enable = false;
+      openFirewall = true;
+    };
   };
 
   # security.apparmor.enable = true;
