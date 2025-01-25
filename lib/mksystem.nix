@@ -40,8 +40,7 @@ systemFunc rec {
 
     # For vscode server
     # inputs.nix-alien.overlays.default
-    inputs.vscode-server.nixosModules.default
-
+    (if pkgs.stdenv.isLinux then inputs.vscode-server.nixosModules.default else {})
     (if pkgs.stdenv.isLinux then ../modules/desktop.nix else {})
     (if pkgs.stdenv.isLinux then ../modules/gns3.nix else {})
     (if pkgs.stdenv.isLinux then ../modules/hypervisor.nix else {})

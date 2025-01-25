@@ -100,7 +100,6 @@
       libreoffice
       lmstudio
       localstack
-      mosh
       niv
       # obs-studio
       obsidian

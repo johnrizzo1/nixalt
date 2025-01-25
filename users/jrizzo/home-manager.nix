@@ -50,6 +50,7 @@ in
         nixd
         nmap
         nodejs # Node is required for Copilot.vim
+        mosh
         procs
         spacevim
         tailscale
@@ -94,15 +95,7 @@ in
       # AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
       # AWS_CONFIG_FILE = "${configHome}/aws/config";
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
-
       NIXOS_OZONE_WL = 1;
-
-      # Make these conditional on if wsl
-      # CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
-      # CUDA_PATH = "${pkgs.cudatoolkit}";
-      # LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
-      # EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
-      # EXTRA_CCFLAGS = "-I/usr/include";
     };
 
     shellAliases =
@@ -121,6 +114,7 @@ in
         gs = "git status";
         gt = "git tag";
         ls = "eza";
+        ll = "ls -l";
         tg = "terragrunt";
         top = "btm";
         tree = "erd --layout inverted --icons --human";
@@ -154,9 +148,7 @@ in
   # Programs
   #---------------------------------------------------------------------
   programs = {
-    home-manager = {
-      enable = true;
-    };
+    home-manager.enable = true;
 
     bash = {
       enable = true;
@@ -168,10 +160,20 @@ in
       ];
     };
 
+    dircolors = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+      enableFishIntegration = true;
+    };
+
     direnv = {
       enable = true;
+      enableBashIntegration = true;
       enableZshIntegration = true;
       # enableFishIntegration = true;
+      nix-direnv.enable = true;
+      silent = true;
       config = {
         load_dotenv = true;
         whitelist = {
@@ -180,25 +182,27 @@ in
       };
     };
 
-    fish = {
-      enable = true;
-    };
+    fish.enable = true;
 
     tmux = {
       enable = true;
       aggressiveResize = true;
-      mouse = false;
-      keyMode = "vi";
-      prefix = "C-a";
-      package = pkgs.tmux;
       baseIndex = 1;
       escapeTime = 0;
+      keyMode = "vi";
+      mouse = false;
+      package = pkgs.tmux;
+      prefix = "C-a";
+      sensibleOnTop = true;
+      shell = "${pkgs.zsh}/bin/zsh";
+      terminal = "screen-256color";
 
       # These customize the sensible plugin
       extraConfig = ''
         set-option -g status-position top
         bind -n C-l send-keys "clear"\; send-keys "Enter"
         bind r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
+        set -g default-command ${pkgs.zsh}/bin/zsh
       '';
 
       plugins = [
@@ -251,10 +255,11 @@ in
         fi
       '';
     };
-    dircolors.enableZshIntegration = true;
     eza.enableZshIntegration = true;
     fzf.enable = true;
     fzf.enableZshIntegration = true;
+    fzf.enableBashIntegration = true;
+    fzf.enableFishIntegration = true;
 
     git = {
       enable = true;

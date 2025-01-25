@@ -22,6 +22,7 @@
     brews = [
       "incus"
       "mas"
+      "texlive"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
@@ -76,20 +77,28 @@
     onActivation.cleanup = "zap";
   };
 
-  environment.systemPackages = with pkgs; [
-    podman
-    kind
-    kubectl
-    kubernetes-helm
-    docker-compose
-    opentofu
-    terragrunt
-    virt-manager
-    dotnet-sdk
-    # needed to add this to darwin-rebuild.. --option extra-sandbox-paths /nix/store
-    # https://github.com/NixOS/nix/issues/4119
-    texlive.combined.scheme-full
-  ];
+  environment = {
+    shells = with pkgs; [
+      bashInteractive
+      zsh
+      fish
+    ];
+
+    systemPackages = with pkgs; [
+      podman
+      kind
+      kubectl
+      kubernetes-helm
+      docker-compose
+      opentofu
+      terragrunt
+      virt-manager
+      dotnet-sdk
+      # needed to add this to darwin-rebuild.. --option extra-sandbox-paths /nix/store
+      # https://github.com/NixOS/nix/issues/4119
+      # texlive.combined.scheme-full
+    ];
+  };
 
   programs = {
     # zsh is the default shell on Mac and we want to make sure that we're
@@ -109,9 +118,9 @@
       enable = true;
       interactiveShellInit = ''
         # Nix
-        if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+        if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
           source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-        end
+        fi
         # End Nix
       '';
     };
@@ -126,18 +135,6 @@
         # End Nix
       '';
     };
-  };
-
-  environment = {
-    shells = with pkgs; [
-      bashInteractive
-      zsh
-      fish
-    ];
-
-    #
-    # Packages
-    # systemPackages = with pkgs; [ ];
   };
 
   services = {
