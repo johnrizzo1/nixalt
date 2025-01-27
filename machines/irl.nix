@@ -321,7 +321,10 @@
       };
     };
 
-    # virt.enable = true;
+    hypervisor.enable = true;
+    virt-client.enable = true;
+
+
   };
 
   #######################################################################
