@@ -120,7 +120,7 @@ in
         tree = "erd --layout inverted --icons --human";
         wget = "wget - -hsts-file=${dataHome}/wget-hsts"; # $HOME/wget-hsts
         yarn = "yarn --use-yarnrc ${configHome}/yarn/config"; # $HOME/.yarnrc
-        docker = "podman";
+        # docker = "podman";
       }
       // (
         if isLinux then

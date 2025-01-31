@@ -76,6 +76,31 @@
   };
 
   config = lib.mkIf config.services.hypervisor.enable {
+    # networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
+    networking.extraHosts = "192.168.2.132 coda coda.technobable.com";
+
+    environment.systemPackages = with pkgs; [
+      kubernetes
+    ];
+
+    # services.kubernetes = {
+    #   roles = ["master" "node"];
+    #   masterAddress = "coda.technobable.com";
+    #   apiserverAddress = "https://192.168.2.132:6443";
+    #   easyCerts = true;
+    #   apiserver = {
+    #     enable = true;
+    #     securePort = 6443;
+    #     advertiseAddress = "192.168.2.132";
+    #   };
+
+    #   # use coredns
+    #   addons.dns.enable = true;
+
+    #   # needed if you use swap
+    #   kubelet.extraOpts = "--fail-swap-on=false";
+    # };
+
     virtualisation = {
       # vswitch.enable = true;
       libvirtd = {
@@ -104,64 +129,21 @@
         recommendedSysctlSettings = true;
         # inherit (config.services.virt) preseed;
       };
-      # docker = {
-      #   enable = true;
-      #   enableOnBoot = true;
-      # };
-      podman = {
+      docker = {
         enable = true;
-        dockerSocket.enable = true;
-        dockerCompat = true;
-        # enableNvidia = true;
-        autoPrune.enable = true;
+        enableOnBoot = true;
       };
+      # podman = {
+      #   enable = true;
+      #   dockerSocket.enable = true;
+      #   dockerCompat = true;
+      #   # enableNvidia = true;
+      #   autoPrune.enable = true;
+      # };
     };
 
     # This is to support nvidia cards on docker
     # enable this after you create an option for cuda/rocm
-    # --device=nvidia.com/gpu=all
-    # hardware.nvidia-container-toolkit.enable = true;
-
-    # programs.virt-manager.enable = true;
-
-    # networking = {
-    #   # Required for incus
-    #   nftables.enable = true;
-
-    #   # project: default
-    #   # name: incusbr0
-    #   # description: ''
-    #   # type: bridge
-    #   # config:
-    #   #   bridge.driver: openvswitch
-    #   #   dns.domain: technobable.com
-    #   #   dns.search: tail577f.ts.net, technobable.com
-    #   #   ipv4.address: 10.159.34.1/24
-    #   #   ipv4.nat: 'true'
-    #   #   ipv6.address: none
-
-    #   # networking.vswitches = {
-    #   #   "ovsbr0" = {
-    #   #     interfaces = { }
-    #   #   }
-    #   # };
-
-    #   # networking.firewall.enable = true;
-    #   networkmanager.unmanaged = [
-    #     "incusbr0"
-    #     "virbr0"
-    #     "docker0"
-    #     "tailscale0"
-    #   ];
-    #   firewall.trustedInterfaces = [
-    #     "incusbr0"
-    #     "virbr0"
-    #     "docker0"
-    #   ];
-    #   # "tailscale0"
-
-    #   # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
-    #   # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
-    # };
+    hardware.nvidia-container-toolkit.enable = true;
   };
 }

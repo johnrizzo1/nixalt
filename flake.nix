@@ -29,6 +29,8 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nixified-ai.url = "github:nixified-ai/flake/comfyui-unwrapped";
+
+    dream2nix.url = "github:nix-community/dream2nix";
   };
 
   outputs =
