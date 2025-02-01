@@ -101,7 +101,7 @@
       lmstudio
       localstack
       niv
-      # obs-studio
+      obs-studio
       obsidian
       ollama
       R
@@ -110,6 +110,7 @@
       signal-desktop
       spotube
       synology-drive-client
+      texliveFull
       tuba # fediverse client
       vlc
       vscode
@@ -167,8 +168,12 @@
     xserver.videoDrivers = [ "nvidia" ];
 
     ollama = {
-      enable = false;
+      enable = true;
       acceleration = "cuda";
+    };
+
+    open-webui = {
+      enable = false;
     };
 
     # flatpak.enable = true;
@@ -180,21 +185,21 @@
     ##};
 
     # https://www.timescale.com/blog/postgresql-as-a-vector-database-create-store-and-query-openai-embeddings-with-pgvector/
-    ##postgresql = {
-    ##  enable = true;
-    ##  ensureDatabases = [ "n8n" "jrizzo" ];
-    ##  ensureUsers = [
-    ##    {
-    ##      name = "jrizzo";
-    ##      ensureDBOwnership = true;
-    ##      ensureClauses = {
-    ##        superuser = true;
-    ##        createrole = true;
-    ##        createdb = true;
-    ##      };
-    ##    }
-    ##  ];
-    ##};
+    postgresql = {
+      enable = false;
+      ensureDatabases = [ "n8n" "jrizzo" ];
+      ensureUsers = [
+        {
+          name = "jrizzo";
+          ensureDBOwnership = true;
+          ensureClauses = {
+            superuser = true;
+            createrole = true;
+            createdb = true;
+          };
+        }
+      ];
+    };
 
     # n8n.enable = false;
     # n8n.openFirewall = true;

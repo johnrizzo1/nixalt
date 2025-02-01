@@ -1,4 +1,7 @@
+# MacOS
 .DS_Store
+
+# Large Files
 *.qcow2
 *.iso
 
@@ -15,5 +18,26 @@ devenv.local.nix
 # Nix generations
 result
 
-# Python
+# Environments
+.env
 .venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+.idea/
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
