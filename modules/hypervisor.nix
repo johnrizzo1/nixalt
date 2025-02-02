@@ -114,21 +114,22 @@
         };
       };
       spiceUSBRedirection.enable = true;
-      # containers.cdi.dynamic.nvidia.enable = true;
+      containers.cdi.dynamic.nvidia.enable = true;
       # incus = lib.mkIf config.services.virt.incus_over_lxd {
-      #   enable = true;
-      #   package = pkgs.incus;
-      #   ui.enable = true;
-      #   inherit (config.services.virt) preseed;
-      # };
-      # lxd = lib.mkIf (! config.services.virt.incus_over_lxd) {
-      lxd = {
+      incus = {
         enable = true;
-        # package = pkgs.lxd-lts;
+        package = pkgs.incus;
         ui.enable = true;
-        recommendedSysctlSettings = true;
-        # inherit (config.services.virt) preseed;
+        inherit (config.services.hypervisor) preseed;
       };
+      # lxd = lib.mkIf (! config.services.virt.incus_over_lxd) {
+      # lxd = {
+        # enable = true;
+        # package = pkgs.lxd-lts;
+        # ui.enable = true;
+        # recommendedSysctlSettings = true;
+        # inherit (config.services.virt) preseed;
+      # };
       docker = {
         enable = true;
         enableOnBoot = true;
@@ -145,5 +146,6 @@
     # This is to support nvidia cards on docker
     # enable this after you create an option for cuda/rocm
     hardware.nvidia-container-toolkit.enable = true;
+    # --device=nvidia.com/gpu=all
   };
 }

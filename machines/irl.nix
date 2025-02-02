@@ -14,30 +14,35 @@
   networking = {
     hostName = currentSystemName;
     domain = "technobable.com";
+    search = ["technobable.com" "warthog-trout.ts.net"];
     # dhcpcd.enable = false;
-    networkmanager.enable = true;
+    networkmanager.enable = lib.mkForce false;
 
     firewall = {
       enable = lib.mkForce false;
-      allowedTCPPorts = [ 22 53 80 443 631 3000 3100 3080 5380 8443 9001 9090 9095 ];
+      allowedTCPPorts = [ 22 53 80 443 631 3000 3100 3080 4000 4001 5380 8443 9001 9090 9095 ];
       allowedUDPPorts = [ 53 67 ];
+    };
+
+    nat = {
+      enable = true;
+      internalInterfaces = ["ve-+"];
+      externalInterface = "ens36s0f1";
+      # Lazy IPv6 connectivity for the container
+      enableIPv6 = true;
     };
 
     interfaces = {
       enp36s0f0.useDHCP = lib.mkDefault true;
       enp36s0f1 = {
         # useDHCP = lib.mkDefault false;
-        ipv4.addresses = [
-          {
-            address = "192.168.2.124";
-            prefixLength = 24;
-          }
+        ipv4.addresses = [ { address = "192.168.2.124"; prefixLength = 24; }
         ];
       };
       wlp38s0.useDHCP = lib.mkDefault true;
     };
     defaultGateway = "192.168.2.1";
-    nameservers = [ "192.168.2.124" ];
+    nameservers = [ "192.168.2.1" ];
   };
 
   # systemd.network.networks.enp36s0f1 = {
@@ -107,6 +112,8 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
+    nvidia-container-toolkit.enable = true;
+
     nvidia-container-toolkit.enable = true;
 
     graphics = {
@@ -184,7 +191,6 @@
         filtering = {
           protection_enabled = true;
           filtering_enabled = true;
-
           parental_enabled = true; # Parental control-based DNS requests filtering.
           safe_search = {
             enabled = true; # Enforcing "Safe search" option for search engines, when possible.
@@ -208,7 +214,7 @@
     # };
 
     grafana = {
-      enable = true;
+      enable = false;
       settings = {
         server = {
           http_addr = "127.0.0.1";
@@ -218,9 +224,8 @@
           domain = "grafana.technobable.com";
 
           # Alternatively, if you want to server Grafana from a subpath:
-          # domain = "your.domain";
-          # root_url = "https://your.domain/grafana/";
-          # serve_from_sub_path = true;
+          root_url = "https://grafana.technobable.com/grafana/";
+          serve_from_sub_path = true;
         };
 
         # Prevents Grafana from phoning home     
@@ -229,16 +234,16 @@
     };
 
     nginx = {
-      enable = true;
+      enable = false;
       recommendedProxySettings = true;
       virtualHosts = {
         ${config.services.grafana.settings.server.domain} = {
-          locations."/" = {
+          locations."/grafana" = {
             proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
             proxyWebsockets = true;
             extraConfig =
               # required when target is also TLS server with multiple hosts
-              # "proxy_ssl_server_name on; " +
+              "proxy_ssl_server_name on; " +
               # required when the server wants to use HTTP Authentication
               "proxy_pass_header Authorization;";
           };
@@ -247,7 +252,7 @@
     };
 
     prometheus = {
-      enable = true;
+      enable = false;
 
       globalConfig = {
         scrape_interval = "15s";
@@ -277,27 +282,34 @@
             }
           ];
         }
-        {
-          job_name = "incus";
-          metrics_path = "/1.0/metrics";
-          scheme = "http";
-          static_configs = [
-            {
-              targets = [ "irl.technobable.com:8444" ];
-            }
-          ];
-        }
+        # {
+          # job_name = "incus";
+          # metrics_path = "/1.0/metrics";
+          # scheme = "http";
+          # static_configs = [
+            # {
+              # targets = [ "irl.technobable.com:8444" ];
+            # }
+          # ];
+        # }
       ];
     };
 
     promtail = {
-      enable = true;
+      enable = false;
       configFile = ./files/irl/promtail.yaml;
     };
 
     ollama = {
-      enable = false;
+      enable = true;
       acceleration = "cuda";
+      host = "0.0.0.0";
+    };
+
+    open-webui = {
+      enable = false;
+      openFirewall = true;
+      host = "0.0.0.0";
     };
 
     tabby = {
@@ -323,9 +335,33 @@
 
     hypervisor.enable = true;
     virt-client.enable = true;
-
-
+    vscode-server.enable = true;
   };
+
+  # containers.webserver = {
+    # autoStart = true;
+    # privateNetwork = true;
+    # hostAddress = "192.168.130.10";
+    # localAddress = "192.168.130.11";
+    # hostAddress6 = "fc00::1";
+    # localAddress6 = "fc00::2";
+    # config = { config, pkgs, lib, ... }: {
+      # services.httpd = {
+        # enable = true;
+        # adminAddr = "admin@example.org";
+      # };
+      # networking = {
+        # firewall.allowedTCPPorts = [ 80 ];
+
+        # Use systemd-resolved inside the container
+        # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+        # useHostResolvConf = lib.mkForce false;
+      # };
+      # services.resolved.enable = true;
+      # system.stateVersion = "24.11";
+    # };
+  # };
+
 
   #######################################################################
   # Security Configuration
