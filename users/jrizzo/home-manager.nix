@@ -32,6 +32,7 @@ in
         cachix
         comma
         devenv
+        distrobuilder
         direnv
         eza
         fd
