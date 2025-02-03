@@ -114,8 +114,6 @@
     };
     nvidia-container-toolkit.enable = true;
 
-    nvidia-container-toolkit.enable = true;
-
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -126,7 +124,7 @@
   # List services that you want to enable:
   services = {
     hardware.bolt.enable = true;
-    # services.secureboot.enable = true;
+    services.secureboot.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
 
     unbound = {
@@ -208,10 +206,10 @@
 
     # loki/grafana/prometheus setup
     # https://xeiaso.net/blog/prometheus-grafana-loki-nixos-2020-11-20/
-    # loki = {
-    #   enable = true;
-    #   configFile = ../common/files/loki.yaml;
-    # };
+    loki = {
+      enable = false;
+      configFile = ../common/files/loki.yaml;
+    };
 
     grafana = {
       enable = false;

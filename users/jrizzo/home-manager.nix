@@ -201,7 +201,7 @@ in
       # These customize the sensible plugin
       extraConfig = ''
         set-option -g status-position top
-        bind -n C-l send-keys "clear"\; send-keys "Enter"
+        # bind -n C-l send-keys "clear"\; send-keys "Enter"
         bind r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
         set -g default-command ${pkgs.zsh}/bin/zsh
       '';

@@ -78,6 +78,7 @@
   config = lib.mkIf config.services.hypervisor.enable {
     # networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
     networking.extraHosts = "192.168.2.132 coda coda.technobable.com";
+    networking.firewall.trustedInterfaces = [ "incusbr0" ];
 
     environment.systemPackages = with pkgs; [
       kubernetes
