@@ -14,13 +14,12 @@
   networking = {
     hostName = currentSystemName;
     domain = "technobable.com";
-    search = ["technobable.com" "warthog-trout.ts.net"];
+    search = [ "technobable.com" "warthog-trout.ts.net" ];
     # dhcpcd.enable = false;
-    networkmanager.enable = lib.mkForce false;
+    # networkmanager.enable = lib.mkForce false;
 
     firewall = {
-      enable = lib.mkForce false;
-      allowedTCPPorts = [ 22 53 80 443 631 3000 3100 3080 4000 4001 5380 8443 9001 9090 9095 ];
+      allowedTCPPorts = [ 53 80 443 631 3000 3100 3080 4000 4001 5380 8443 9001 9090 9095 ];
       allowedUDPPorts = [ 53 67 ];
     };
 
@@ -29,32 +28,20 @@
       internalInterfaces = ["ve-+"];
       externalInterface = "ens36s0f1";
       # Lazy IPv6 connectivity for the container
-      enableIPv6 = true;
+      # enableIPv6 = true;
     };
 
     interfaces = {
-      enp36s0f0.useDHCP = lib.mkDefault true;
+      # enp36s0f0.useDHCP = lib.mkDefault true;
       enp36s0f1 = {
-        # useDHCP = lib.mkDefault false;
-        ipv4.addresses = [ { address = "192.168.2.124"; prefixLength = 24; }
-        ];
+        useDHCP = lib.mkDefault false;
+        ipv4.addresses = [{ address = "192.168.2.124"; prefixLength = 24; }];
       };
-      wlp38s0.useDHCP = lib.mkDefault true;
+      # wlp38s0.useDHCP = lib.mkDefault true;
     };
     defaultGateway = "192.168.2.1";
     nameservers = [ "192.168.2.1" ];
   };
-
-  # systemd.network.networks.enp36s0f1 = {
-  #   name = "enp36s0f1";
-  #   enable = true;
-  #   dns = [ "127.0.0.1" ];
-  #   address = [ "192.168.2.124" ];
-  #   routes = [ { routeConfig = { Gateway = "192.168.2.1"; }; } ];
-  #   networkConfig = {
-  #   	Ipv6AcceptRA = "no";
-  #   };
-  # };
 
   boot = {
     # Be careful updating this.
@@ -95,7 +82,7 @@
   environment.systemPackages = with pkgs; [
     clinfo
     nixos-generators # various image generators
-    ollama
+    # ollama
   ];
 
   #######################################################################
@@ -112,7 +99,7 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    nvidia-container-toolkit.enable = true;
+    # nvidia-container-toolkit.enable = true;
 
     graphics = {
       enable = true;
@@ -124,7 +111,7 @@
   # List services that you want to enable:
   services = {
     hardware.bolt.enable = true;
-    services.secureboot.enable = true;
+    secureboot.enable = true;
     xserver.videoDrivers = [ "nvidia" ];
 
     unbound = {
@@ -281,14 +268,14 @@
           ];
         }
         # {
-          # job_name = "incus";
-          # metrics_path = "/1.0/metrics";
-          # scheme = "http";
-          # static_configs = [
-            # {
-              # targets = [ "irl.technobable.com:8444" ];
-            # }
-          # ];
+        # job_name = "incus";
+        # metrics_path = "/1.0/metrics";
+        # scheme = "http";
+        # static_configs = [
+        # {
+        # targets = [ "irl.technobable.com:8444" ];
+        # }
+        # ];
         # }
       ];
     };
@@ -337,33 +324,29 @@
   };
 
   # containers.webserver = {
-    # autoStart = true;
-    # privateNetwork = true;
-    # hostAddress = "192.168.130.10";
-    # localAddress = "192.168.130.11";
-    # hostAddress6 = "fc00::1";
-    # localAddress6 = "fc00::2";
-    # config = { config, pkgs, lib, ... }: {
-      # services.httpd = {
-        # enable = true;
-        # adminAddr = "admin@example.org";
-      # };
-      # networking = {
-        # firewall.allowedTCPPorts = [ 80 ];
+  # autoStart = true;
+  # privateNetwork = true;
+  # hostAddress = "192.168.130.10";
+  # localAddress = "192.168.130.11";
+  # hostAddress6 = "fc00::1";
+  # localAddress6 = "fc00::2";
+  # config = { config, pkgs, lib, ... }: {
+  # services.httpd = {
+  # enable = true;
+  # adminAddr = "admin@example.org";
+  # };
+  # networking = {
+  # firewall.allowedTCPPorts = [ 80 ];
 
-        # Use systemd-resolved inside the container
-        # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-        # useHostResolvConf = lib.mkForce false;
-      # };
-      # services.resolved.enable = true;
-      # system.stateVersion = "24.11";
-    # };
+  # Use systemd-resolved inside the container
+  # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
+  # useHostResolvConf = lib.mkForce false;
+  # };
+  # services.resolved.enable = true;
+  # system.stateVersion = "24.11";
+  # };
   # };
 
-
-  #######################################################################
-  # Security Configuration
-  # security.apparmor.enable = true;
 
   #######################################################################
   # System Configuration

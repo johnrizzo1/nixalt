@@ -28,7 +28,7 @@ let
   securebootModules =
     if pkgs.stdenv.isLinux
     then inputs.lanzaboote.nixosModules.lanzaboote
-    else {};
+    else { };
 in
 systemFunc rec {
   inherit system;
@@ -36,18 +36,18 @@ systemFunc rec {
   modules = [
     securebootModules
 
-    (if isWSL then inputs.nixos-wsl.nixosModules.wsl else {})
+    (if isWSL then inputs.nixos-wsl.nixosModules.wsl else { })
 
     # For vscode server
     # inputs.nix-alien.overlays.default
-    (if pkgs.stdenv.isLinux then inputs.vscode-server.nixosModules.default else {})
-    (if pkgs.stdenv.isLinux then ../modules/desktop.nix else {})
-    (if pkgs.stdenv.isLinux then ../modules/gns3.nix else {})
-    (if pkgs.stdenv.isLinux then ../modules/hypervisor.nix else {})
-    (if pkgs.stdenv.isLinux then ../modules/nix-ld.nix else {})
-    (if pkgs.stdenv.isLinux then ../modules/secureboot.nix else {})
-    (if pkgs.stdenv.isLinux then ../modules/virt-client.nix else {})
-    (if pkgs.stdenv.isLinux then inputs.nixified-ai.nixosModules.comfyui else {})
+    (if pkgs.stdenv.isLinux then inputs.vscode-server.nixosModules.default else { })
+    (if pkgs.stdenv.isLinux then ../modules/desktop.nix else { })
+    (if pkgs.stdenv.isLinux then ../modules/gns3.nix else { })
+    (if pkgs.stdenv.isLinux then ../modules/hypervisor.nix else { })
+    (if pkgs.stdenv.isLinux then ../modules/nix-ld.nix else { })
+    (if pkgs.stdenv.isLinux then ../modules/secureboot.nix else { })
+    (if pkgs.stdenv.isLinux then ../modules/virt-client.nix else { })
+    (if pkgs.stdenv.isLinux then inputs.nixified-ai.nixosModules.comfyui else { })
 
     commonConfig
     machineConfig

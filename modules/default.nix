@@ -1,8 +1,8 @@
 { lib, pkgs, ... }:
 {
-  imports = [ 
+  imports = [
     ./virt-client.nix
-  ] ++ lib.optionals pkgs.stdenv.isLinux [ 
+  ] ++ lib.optionals pkgs.stdenv.isLinux [
     ./desktop.nix
     ./nix-ld.nix
     ./hypervisor.nix

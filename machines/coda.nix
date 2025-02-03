@@ -31,15 +31,7 @@
     nftables.enable = true;
 
     firewall.enable = lib.mkForce true;
-    firewall.allowedTCPPorts = [
-      22
-      443
-      631
-      3080
-      3389
-      8080
-      8443
-    ];
+    firewall.allowedTCPPorts = [ 22 ];
 
     # interfaces = {
     #   enp3s0.useDHCP = lib.mkDefault true;
@@ -141,10 +133,6 @@
       # nvidiaPersistenced = true;
       # package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    # This is to support nvidia cards on docker
-    # enable this after you create an option for cuda/rocm
-    # --device=nvidia.com/gpu=all
-    nvidia-container-toolkit.enable = true;
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -176,34 +164,6 @@
       enable = false;
     };
 
-    # flatpak.enable = true;
-
-    ##tabby = {
-    ##  enable = false;
-    ##  acceleration = "cuda";
-    ##  usageCollection = false;
-    ##};
-
-    # https://www.timescale.com/blog/postgresql-as-a-vector-database-create-store-and-query-openai-embeddings-with-pgvector/
-    postgresql = {
-      enable = false;
-      ensureDatabases = [ "n8n" "jrizzo" ];
-      ensureUsers = [
-        {
-          name = "jrizzo";
-          ensureDBOwnership = true;
-          ensureClauses = {
-            superuser = true;
-            createrole = true;
-            createdb = true;
-          };
-        }
-      ];
-    };
-
-    # n8n.enable = false;
-    # n8n.openFirewall = true;
-
     # 
     # X/Wayland Config
     #- yubikey-agent.enable = true;
@@ -214,7 +174,6 @@
     # "sudo tailscale up". If you don't use tailscale, you should comment
     # out or delete all of this.
     tailscale.enable = true;
-    ##keybase.enable = true;
     openssh = {
       enable = true;
       settings = {
@@ -225,65 +184,7 @@
     hypervisor.enable = true;
     virt-client.enable = true;
     vscode-server.enable = true;
-    # comfyui = {
-      # enable = true;
-      # package = pkgs.comfyui-nvidia;
-      # host = "0.0.0.0";
-      # models = builtins.attrValues pkgs.nixified-ai.models;
-      # customNodes = with inputs.comfyui.pkgs; [
-      #   comfyui-gguf
-      #   comfyui-impact-pack
-      # ];
-      # openFirewall = true;
-    # };
-
-    samba = {
-      enable = false;
-      openFirewall = true;
-      settings = {
-        global = {
-          "workgroup" = "WORKGROUP";
-          "server string" = "tymnet";
-          "netbios name" = "tymnet";
-          "security" = "user";
-          #"use sendfile" = "yes";
-          #"max protocol" = "smb2";
-          # note: localhost is the ipv6 localhost ::1
-          "hosts allow" = "192.168.0. 127.0.0.1 localhost";
-          "hosts deny" = "0.0.0.0/0";
-          "guest account" = "nobody";
-          "map to guest" = "bad user";
-        };
-        # "public" = {
-        #   "path" = "/home/jrizzo";
-        #   "browseable" = "yes";
-        #   "read only" = "no";
-        #   "guest ok" = "yes";
-        #   "create mask" = "0644";
-        #   "directory mask" = "0755";
-        #   "force user" = "jrizzo";
-        #   "force group" = "jrizzo";
-        # };
-        # "private" = {
-        #   "path" = "/mnt/Shares/Private";
-        #   "browseable" = "yes";
-        #   "read only" = "no";
-        #   "guest ok" = "no";
-        #   "create mask" = "0644";
-        #   "directory mask" = "0755";
-        #   "force user" = "username";
-        #   "force group" = "groupname";
-        # };
-      };
-    };
-
-    samba-wsdd = {
-      enable = false;
-      openFirewall = true;
-    };
   };
-
-  # security.apparmor.enable = true;
 
   # system.autoUpgrade.enable = true;
   # system.autoUpgrade.allowReboot = false;

@@ -26,7 +26,7 @@
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
     # Enable networking
-    networkmanager.enable = true;
+    networkmanager.enable = false;
 
     # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
     # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -62,6 +62,8 @@
       enable = true;
     };
   };
+
+  services.xserver.xkb.options = "ctrl:swapcaps";
 
   system.stateVersion = "24.11";
 }
