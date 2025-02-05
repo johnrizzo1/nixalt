@@ -19,7 +19,7 @@
     # networkmanager.enable = lib.mkForce false;
 
     firewall = {
-      allowedTCPPorts = [ 53 80 443 631 3000 3100 3080 4000 4001 5380 8443 9001 9090 9095 ];
+      allowedTCPPorts = [ 53 80 443 631 3000 3100 3101 3202 3080 4000 4001 5380 8443 9001 9090 9095 ];
       allowedUDPPorts = [ 53 67 ];
     };
 
@@ -40,7 +40,8 @@
       # wlp38s0.useDHCP = lib.mkDefault true;
     };
     defaultGateway = "192.168.2.1";
-    nameservers = [ "192.168.2.1" ];
+    # nameservers = [ "192.168.2.1" ];
+    nameservers = [ "4.4.4.4" "8.8.8.8" ];
   };
 
   boot = {
@@ -115,7 +116,7 @@
     xserver.videoDrivers = [ "nvidia" ];
 
     unbound = {
-      enable = true;
+      enable = false;
       settings = {
         server = {
           # When only using Unbound as DNS, make sure to replace 127.0.0.1 with your ip address
@@ -149,10 +150,11 @@
     };
 
     adguardhome = {
-      enable = true;
+      enable = false;
       openFirewall = true;
       # allowDHCP = true;
       mutableSettings = true;
+      port = 3200;
       settings = {
         http = {
           # You can select any ip and port, just make sure to open firewalls where needed
@@ -322,31 +324,6 @@
     virt-client.enable = true;
     vscode-server.enable = true;
   };
-
-  # containers.webserver = {
-  # autoStart = true;
-  # privateNetwork = true;
-  # hostAddress = "192.168.130.10";
-  # localAddress = "192.168.130.11";
-  # hostAddress6 = "fc00::1";
-  # localAddress6 = "fc00::2";
-  # config = { config, pkgs, lib, ... }: {
-  # services.httpd = {
-  # enable = true;
-  # adminAddr = "admin@example.org";
-  # };
-  # networking = {
-  # firewall.allowedTCPPorts = [ 80 ];
-
-  # Use systemd-resolved inside the container
-  # Workaround for bug https://github.com/NixOS/nixpkgs/issues/162686
-  # useHostResolvConf = lib.mkForce false;
-  # };
-  # services.resolved.enable = true;
-  # system.stateVersion = "24.11";
-  # };
-  # };
-
 
   #######################################################################
   # System Configuration
