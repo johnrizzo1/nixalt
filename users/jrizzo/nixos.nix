@@ -48,6 +48,11 @@
     tmux = {
       enable = true;
     };
+    _1password.enable = true;
+    _1password-gui = {
+      enable = true;
+      polkitPolicyOwners = [ "jrizzo" ];
+    };
     # obs-studio = {
     #   enable = true;
     #   plugins = with pkgs.obs-studio-plugins; [
