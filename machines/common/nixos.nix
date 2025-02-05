@@ -87,7 +87,7 @@
     xserver.xkb.options = "ctrl:swapcaps";
     promtail = {
       enable = true;
-      configFile = ./files/promtail.yaml;
+      configFile = ../files/promtail.yaml;
     };
   };
 
