@@ -46,6 +46,7 @@
       kdenlive
       keybase
       keybase-gui
+      ktailctl
       libreoffice
       lmstudio
       localstack
