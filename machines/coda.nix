@@ -12,32 +12,6 @@
     ./common/nixos.nix
   ];
 
-  networking = {
-    hostName = currentSystemName;
-
-    networkmanager.enable = true;
-    networkmanager.unmanaged = [
-      "incusbr0"
-      "virbr0"
-      "docker0"
-      "tailscale0"
-    ];
-    firewall.trustedInterfaces = [
-      "incusbr0"
-      "virbr0"
-      "docker0"
-    ];
-    # Required for incus
-    nftables.enable = true;
-
-    firewall.enable = lib.mkForce true;
-    firewall.allowedTCPPorts = [ 22 ];
-
-    # interfaces = {
-    #   enp3s0.useDHCP = lib.mkDefault true;
-    # };
-  };
-
   boot = {
     initrd.systemd.enable = true;
     loader = {
@@ -45,23 +19,6 @@
       efi.canTouchEfiVariables = true;
     };
     plymouth.enable = true;
-  };
-
-  time.timeZone = "America/New_York";
-
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-    extraLocaleSettings = {
-      LC_ADDRESS = "en_US.UTF-8";
-      LC_IDENTIFICATION = "en_US.UTF-8";
-      LC_MEASUREMENT = "en_US.UTF-8";
-      LC_MONETARY = "en_US.UTF-8";
-      LC_NAME = "en_US.UTF-8";
-      LC_NUMERIC = "en_US.UTF-8";
-      LC_PAPER = "en_US.UTF-8";
-      LC_TELEPHONE = "en_US.UTF-8";
-      LC_TIME = "en_US.UTF-8";
-    };
   };
 
   # Host Specific Applications
@@ -123,7 +80,6 @@
   hardware = {
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
-
     nvidia = {
       modesetting.enable = true;
       powerManagement.enable = true;
@@ -162,18 +118,21 @@
 
     open-webui = {
       enable = false;
+      openFirewall = true;
+      host = "0.0.0.0";
     };
-
+    
     # 
     # X/Wayland Config
     #- yubikey-agent.enable = true;
     displayManager.autoLogin.enable = true;
     displayManager.autoLogin.user = currentSystemUser;
 
-    # Enable tailscale. We manually authenticate when we want with
-    # "sudo tailscale up". If you don't use tailscale, you should comment
-    # out or delete all of this.
-    tailscale.enable = true;
+    tailscale = {
+      enable = true;
+      useRoutingFeatures = "client";
+    };
+
     openssh = {
       enable = true;
       settings = {

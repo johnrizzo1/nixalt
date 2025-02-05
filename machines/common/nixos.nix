@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }: {
+{ pkgs, config, lib, currentSystemName, ... }: {
   i18n = {
     defaultLocale = "en_US.UTF-8";
     extraLocaleSettings = {
@@ -14,11 +14,16 @@
     };
   };
 
+  time.timeZone = "America/New_York";
+
   users = {
     mutableUsers = false;
   };
 
   networking = {
+    hostName = currentSystemName;
+    domain = "technobable.com";
+    search = [ "technobable.com" "warthog-trout.ts.net" ];
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
     # Configure network proxy if necessary
@@ -26,7 +31,21 @@
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
     # Enable networking
-    networkmanager.enable = false;
+    networkmanager.enable = true;
+    networkmanager.unmanaged = [
+      "incusbr0"
+      "virbr0"
+      "docker0"
+      "tailscale0"
+    ];
+    firewall.trustedInterfaces = [
+      "incusbr0"
+      "virbr0"
+      "docker0"
+      "tailscale0"
+    ];
+    # Required for incus
+    nftables.enable = true;
 
     # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
     # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -46,6 +65,7 @@
     };
   };
 
+
   programs = {
     direnv = {
       enable = true;
@@ -63,7 +83,13 @@
     };
   };
 
-  services.xserver.xkb.options = "ctrl:swapcaps";
+  services = {
+    xserver.xkb.options = "ctrl:swapcaps";
+    promtail = {
+      enable = true;
+      configFile = ./files/promtail.yaml;
+    };
+  };
 
   system.stateVersion = "24.11";
 }

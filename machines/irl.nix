@@ -12,12 +12,6 @@
   ];
 
   networking = {
-    hostName = currentSystemName;
-    domain = "technobable.com";
-    search = [ "technobable.com" "warthog-trout.ts.net" ];
-    # dhcpcd.enable = false;
-    # networkmanager.enable = lib.mkForce false;
-
     firewall = {
       allowedTCPPorts = [ 53 80 443 631 3000 3100 3101 3202 3080 4000 4001 5380 8443 9001 9090 9095 ];
       allowedUDPPorts = [ 53 67 ];
@@ -40,8 +34,7 @@
       # wlp38s0.useDHCP = lib.mkDefault true;
     };
     defaultGateway = "192.168.2.1";
-    # nameservers = [ "192.168.2.1" ];
-    nameservers = [ "4.4.4.4" "8.8.8.8" ];
+    nameservers = [ "192.168.2.1" ];
   };
 
   boot = {
@@ -62,28 +55,10 @@
     # };
   };
 
-  time.timeZone = "America/New_York";
-
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-    extraLocaleSettings = {
-      LC_ADDRESS = "en_US.UTF-8";
-      LC_IDENTIFICATION = "en_US.UTF-8";
-      LC_MEASUREMENT = "en_US.UTF-8";
-      LC_MONETARY = "en_US.UTF-8";
-      LC_NAME = "en_US.UTF-8";
-      LC_NUMERIC = "en_US.UTF-8";
-      LC_PAPER = "en_US.UTF-8";
-      LC_TELEPHONE = "en_US.UTF-8";
-      LC_TIME = "en_US.UTF-8";
-    };
-  };
-
   # Host Specific Applications
   environment.systemPackages = with pkgs; [
     clinfo
     nixos-generators # various image generators
-    # ollama
   ];
 
   #######################################################################
@@ -91,7 +66,6 @@
   hardware = {
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
-
     nvidia = {
       modesetting.enable = true;
       powerManagement.enable = true;
@@ -100,8 +74,6 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    # nvidia-container-toolkit.enable = true;
-
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -283,8 +255,8 @@
     };
 
     promtail = {
-      enable = false;
-      configFile = ./files/irl/promtail.yaml;
+      enable = true;
+      configFile = ./files/promtail.yaml;
     };
 
     ollama = {
@@ -308,8 +280,8 @@
 
     tailscale = {
       enable = true;
-      # useRoutingFeatures = "server";
-      # extraSetFlags = [ "--advertise-routes=10.45.209.0/24" ];
+      useRoutingFeatures = "server";
+      extraSetFlags = [ "--advertise-routes=10.61.175.0/24" ];
     };
 
     openssh = {
