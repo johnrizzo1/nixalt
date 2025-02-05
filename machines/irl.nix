@@ -34,7 +34,7 @@
       # wlp38s0.useDHCP = lib.mkDefault true;
     };
     defaultGateway = "192.168.2.1";
-    nameservers = [ "192.168.2.1" ];
+    nameservers = [ "8.8.8.8" "1.1.1.1" ];
   };
 
   boot = {
@@ -281,7 +281,11 @@
     tailscale = {
       enable = true;
       useRoutingFeatures = "server";
-      extraSetFlags = [ "--advertise-routes=10.61.175.0/24,192.168.2.0/24,192.168.3.0/24" ];
+      extraSetFlags = [
+	"--advertise-routes=10.61.175.0/24,192.168.2.0/24,192.168.3.0/24,192.168.5.0/24" 
+	"--exit-node-allow-lan-access"
+	"--advertise-exit-node"
+      ];
     };
 
     openssh = {
