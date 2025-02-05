@@ -131,7 +131,7 @@
 
     tailscale = {
       enable = true;
-      useRoutingFeatures = "client";
+      # useRoutingFeatures = "client";
     };
 
     openssh = {

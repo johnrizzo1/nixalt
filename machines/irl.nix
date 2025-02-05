@@ -280,12 +280,12 @@
 
     tailscale = {
       enable = true;
-      useRoutingFeatures = "server";
-      extraSetFlags = [
-	"--advertise-routes=10.61.175.0/24,192.168.2.0/24,192.168.3.0/24,192.168.5.0/24" 
-	"--exit-node-allow-lan-access"
-	"--advertise-exit-node"
-      ];
+      # useRoutingFeatures = "server";
+      # extraSetFlags = [
+	# "--advertise-routes=10.61.175.0/24,192.168.2.0/24,192.168.3.0/24,192.168.5.0/24" 
+	# "--exit-node-allow-lan-access"
+	# "--advertise-exit-node"
+      # ];
     };
 
     openssh = {
