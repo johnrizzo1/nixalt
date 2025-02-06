@@ -136,7 +136,8 @@
       );
 
       # Setting up the formatter
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
+      formatter = forAllSystems (system:
+        nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
       # nix flake check
       checks = forEachSupportedSystem (
@@ -146,7 +147,7 @@
             src = ./.;
             hooks = {
               nixpkgs-fmt.enable = true;
-              statix.enable = false;
+              statix.enable = true;
             };
           };
         }

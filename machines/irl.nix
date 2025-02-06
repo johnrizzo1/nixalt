@@ -19,7 +19,7 @@
 
     nat = {
       enable = true;
-      internalInterfaces = ["ve-+"];
+      internalInterfaces = [ "ve-+" ];
       externalInterface = "ens36s0f1";
       # Lazy IPv6 connectivity for the container
       # enableIPv6 = true;
@@ -282,9 +282,9 @@
       enable = true;
       # useRoutingFeatures = "server";
       # extraSetFlags = [
-	# "--advertise-routes=10.61.175.0/24,192.168.2.0/24,192.168.3.0/24,192.168.5.0/24" 
-	# "--exit-node-allow-lan-access"
-	# "--advertise-exit-node"
+      # "--advertise-routes=10.61.175.0/24,192.168.2.0/24,192.168.3.0/24,192.168.5.0/24" 
+      # "--exit-node-allow-lan-access"
+      # "--advertise-exit-node"
       # ];
     };
 

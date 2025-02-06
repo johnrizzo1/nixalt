@@ -20,7 +20,7 @@
         ApplePressAndHoldEnabled = false;
         AppleShowAllExtensions = true;
         AppleShowAllFiles = true;
-        InitialKeyRepeat = 10;
+        InitialKeyRepeat = 0;
         KeyRepeat = 10;
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticDashSubstitutionEnabled = false;
@@ -62,6 +62,8 @@
       };
     };
 
+    # Set Git commit hash for darwin-version.
+    # configurationRevision = self.rev or self.dirtyRev or null;
     stateVersion = 5;
   };
 }

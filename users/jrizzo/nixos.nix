@@ -9,8 +9,9 @@
   # Add ~/.local/bin to PATH
   environment.localBinInPath = true;
 
-  # environment.systemPackages = with pkgs; [];
-  # home.packages = with pkgs; [];
+  environment.systemPackages = with pkgs; [
+    distrobuilder
+  ];
 
   users = {
     mutableUsers = false;

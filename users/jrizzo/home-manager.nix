@@ -17,7 +17,7 @@ in
     #---------------------------------------------------------------------
     # Packages
     #---------------------------------------------------------------------
-    # useGlobalPkgs = true;
+    # useGlobalPkgs = true; # already set in mksystem.nix
 
     # Packages I always want installed. Most packages I install using
     # per-project flakes sourced with direnv and nix-shell, so this is
@@ -32,7 +32,6 @@ in
         cachix
         comma
         devenv
-        distrobuilder
         direnv
         eza
         fd
@@ -47,17 +46,22 @@ in
         htop
         jq
         killall
+        kind
+        kubectl
+        kubernetes-helm
+        lmstudio
+        mosh
         niv
         nixd
         nmap
         nodejs # Node is required for Copilot.vim
-        mosh
         procs
         spacevim
         tailscale
         tmux
         tree
         vim
+        vistafonts
         watch
         weechat
         wget
@@ -187,8 +191,10 @@ in
 
     tmux = {
       enable = true;
+
       aggressiveResize = true;
       baseIndex = 1;
+      clock24 = true;
       escapeTime = 0;
       keyMode = "vi";
       mouse = false;
@@ -249,6 +255,8 @@ in
       enableVteIntegration = true;
       syntaxHighlighting.enable = true;
       autosuggestion.enable = true;
+      defaultKeymap = "vicmd"; # emacs viins
+      dotDir = ".config/zsh";
 
       initExtra = ''
         if command -v fh &> /dev/null; then
@@ -257,10 +265,12 @@ in
       '';
     };
     eza.enableZshIntegration = true;
-    fzf.enable = true;
-    fzf.enableZshIntegration = true;
-    fzf.enableBashIntegration = true;
-    fzf.enableFishIntegration = true;
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+      enableBashIntegration = true;
+      enableFishIntegration = true;
+    };
 
     git = {
       enable = true;

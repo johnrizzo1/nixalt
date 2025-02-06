@@ -122,7 +122,7 @@
       openFirewall = true;
       host = "0.0.0.0";
     };
-    
+
     # 
     # X/Wayland Config
     #- yubikey-agent.enable = true;
