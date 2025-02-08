@@ -263,6 +263,16 @@ in
           eval "$(fh completion zsh)"
         fi
       '';
+
+      plugins = [
+	{ 
+          # type commands that will output json
+          # press alt-j
+          name = "jq-zsh-plugin";
+          src = pkgs.jq-zsh-plugin;
+          file = "share/jq-zsh-plugin/jq.plugin.zsh";
+        }
+      ];
     };
     eza.enableZshIntegration = true;
     fzf = {

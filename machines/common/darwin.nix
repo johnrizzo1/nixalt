@@ -38,11 +38,12 @@
         orientation = "bottom";
         showhidden = true;
         persistent-apps = [
-          "/Applications/VSCodium.app"
+          "/Applications/Visual Studio Code.app"
           "/Applications/Obsidian.app"
         ];
         persistent-others = [
           "~/Downloads"
+          "/Applications"
         ];
       };
 
