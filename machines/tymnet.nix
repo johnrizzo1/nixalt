@@ -99,6 +99,8 @@
       virt-manager
       dotnet-sdk
       dbeaver-bin
+      postgresql
+      element-desktop
       # needed to add this to darwin-rebuild.. --option extra-sandbox-paths /nix/store
       # https://github.com/NixOS/nix/issues/4119
       # texlive.combined.scheme-full
