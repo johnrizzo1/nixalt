@@ -47,6 +47,7 @@
           "obsidian"
           "openjdk"
           "synology-drive-client"
+	  "timescaledb"
 	  "vista-fonts"
           "vscode"
           "zoom"

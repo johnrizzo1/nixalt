@@ -165,30 +165,46 @@
       };
     };
 
-    config.services.postgresql = {
+    postgresql = {
       enable = true;
 
       ensureUsers = [
-        {
+	{
           name = "jrizzo";
-          ensureDbOwnership = true;
-          ensurePermissions = {
-            "jrizzo" = "ALL";
-          };
+          ensureDBOwnership = true;
+	  ensureClauses = {
+	    superuser = true;
+	    createrole = true;
+	    createdb = true;
+   	  };
         }
       ];
-      ensureDatabases = [ "mydatabase" ];
+      ensureDatabases = [ "jrizzo" "somedb" ];
+
       enableTCPIP = true;
       extensions = (ps: with ps; [
         postgis
         pgvector
         timescaledb
-      ])
+      ]);
 
       authentication = pkgs.lib.mkOverride 10 ''
-        #type database  DBuser  auth-method
-        local all       all     trust
+        #type	database  DBuser  	source		auth-method
+        local	all	all				trust
+	host	all	all		127.0.0.1/32	trust
+	host	all	all		::1/128		trust
+	host	all	jrizzo		0.0.0.0/0	md5
+	host	all	super		0.0.0.0/0	reject
       '';
+
+      initialScript = pkgs.writeText "backend-initScript" ''
+	CREATE EXTENSION IF NOT EXISTS vector;
+	CREATE EXTENSION IF NOT EXISTS timescaledb;
+      '';
+
+      settings.shared_preload_libraries = [
+	"timescaledb"
+      ];
     };
 
     # loki/grafana/prometheus setup
