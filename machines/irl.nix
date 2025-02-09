@@ -165,6 +165,32 @@
       };
     };
 
+    config.services.postgresql = {
+      enable = true;
+
+      ensureUsers = [
+        {
+          name = "jrizzo";
+          ensureDbOwnership = true;
+          ensurePermissions = {
+            "jrizzo" = "ALL";
+          };
+        }
+      ];
+      ensureDatabases = [ "mydatabase" ];
+      enableTCPIP = true;
+      extensions = (ps: with ps; [
+        postgis
+        pgvector
+        timescaledb
+      ])
+
+      authentication = pkgs.lib.mkOverride 10 ''
+        #type database  DBuser  auth-method
+        local all       all     trust
+      '';
+    };
+
     # loki/grafana/prometheus setup
     # https://xeiaso.net/blog/prometheus-grafana-loki-nixos-2020-11-20/
     loki = {
