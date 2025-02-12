@@ -29,8 +29,8 @@
     nix-alien.url = "github:thiagokokada/nix-alien";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     nixified-ai.url = "github:nixified-ai/flake/comfyui-unwrapped";
-
     dream2nix.url = "github:nix-community/dream2nix";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
   outputs =
@@ -94,11 +94,11 @@
           user = currentSystemUser;
         };
 
-        # wsl = mkSystem "wsl" {
-        #   system = "x86_64-linux";
-        #   user = "jrizzo";
-        #   # isWSL = true;
-        # };
+        winnie = mkSystem "winnie" {
+          system = "x86_64-linux";
+          user = currentSystemUser;
+          isWSL = true;
+        };
 
         # Virtual Machines & Containers
         # nixos-rebuild --flake .#vm-intel build-vm
