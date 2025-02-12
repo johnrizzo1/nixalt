@@ -4,16 +4,11 @@
 }:
 {
   imports = [
-    ./common/nixos.nix
+    ./common/wsl.nix
   ];
 
   environment.systemPackages = with pkgs; [
     devenv
-    (python3.withPackages (python-pkgs: with python-pkgs; [
-      torch
-      torchaudio
-      torchvision
-    ]))
   ];
 
   wsl = {
@@ -31,6 +26,9 @@
       enable32Bit = true;
     };
   };
+
+  programs.nix-ld.enable = true;
+  services.vscode-server.enable = true;
 
   # system.stateVersion = "24.05";
 }

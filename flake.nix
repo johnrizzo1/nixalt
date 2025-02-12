@@ -31,6 +31,8 @@
     nixified-ai.url = "github:nixified-ai/flake/comfyui-unwrapped";
     dream2nix.url = "github:nix-community/dream2nix";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    # nix-ld.url = "github:Mic92/nix-ld";
+    # nix-ld.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
