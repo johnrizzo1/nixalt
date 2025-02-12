@@ -50,13 +50,16 @@
       libreoffice
       lmstudio
       localstack
+      nfs-utils
       niv
       obs-studio
       obsidian
       ollama
+      postgresql
       R
       rstudio
       dotnet-sdk
+      samba
       signal-desktop
       spotube
       synology-drive-client
