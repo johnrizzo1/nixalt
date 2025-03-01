@@ -17,7 +17,9 @@
         "nix-command"
         "flakes"
       ];
-      extra-sandbox-paths = [ ];
+      # Due to issue 4119
+      # https://github.com/NixOS/nix/issues/4119
+      extra-sandbox-paths = [ "/nix/store" ];
       max-jobs = "auto";
       require-sigs = true;
       sandbox = true;

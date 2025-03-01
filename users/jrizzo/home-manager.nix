@@ -68,6 +68,7 @@ in
         xclip
         xsel
         zenith
+        zola
       ];
 
     #---------------------------------------------------------------------
@@ -265,7 +266,7 @@ in
       '';
 
       plugins = [
-	{ 
+        { 
           # type commands that will output json
           # press alt-j
           name = "jq-zsh-plugin";

@@ -19,10 +19,13 @@
 
   homebrew = {
     enable = true;
+    # taps = {
+    #   "andrewinci/tap"
+    # };
     brews = [
       "incus"
       "mas"
-      "texlive"
+      # "texlive"
     ];
     masApps = {
       "1Password for Safari" = 1569813296;
@@ -103,9 +106,15 @@
       dbeaver-bin
       postgresql
       element-desktop
+      (python3.withPackages (ps: with ps; [ 
+        latexminted
+        latexrestricted
+        latex2pydata
+        pygments
+      ]))
       # needed to add this to darwin-rebuild.. --option extra-sandbox-paths /nix/store
       # https://github.com/NixOS/nix/issues/4119
-      # texlive.combined.scheme-full
+      texlive.combined.scheme-full
     ];
   };
 
