@@ -169,14 +169,14 @@
       enable = true;
 
       ensureUsers = [
-	{
+        {
           name = "jrizzo";
           ensureDBOwnership = true;
-	  ensureClauses = {
-	    superuser = true;
-	    createrole = true;
-	    createdb = true;
-   	  };
+          ensureClauses = {
+            superuser = true;
+            createrole = true;
+            createdb = true;
+          };
         }
       ];
       ensureDatabases = [ "jrizzo" "somedb" ];
@@ -189,22 +189,31 @@
       ]);
 
       authentication = pkgs.lib.mkOverride 10 ''
-        #type	database  DBuser  	source		auth-method
-        local	all	all				trust
-	host	all	all		127.0.0.1/32	trust
-	host	all	all		::1/128		trust
-	host	all	jrizzo		0.0.0.0/0	md5
-	host	all	super		0.0.0.0/0	reject
+        #type	database  DBuser  	source		    auth-method
+        local	all	      all				trust
+        host	all	      all		    127.0.0.1/32	trust
+        host	all	      all		    ::1/128		    trust
+        host  all	      jrizzo		0.0.0.0/0	    md5
+        host	all	      super		  0.0.0.0/0	    reject
       '';
 
       initialScript = pkgs.writeText "backend-initScript" ''
-	CREATE EXTENSION IF NOT EXISTS vector;
-	CREATE EXTENSION IF NOT EXISTS timescaledb;
+        CREATE EXTENSION IF NOT EXISTS vector;
+        CREATE EXTENSION IF NOT EXISTS timescaledb;
       '';
 
       settings.shared_preload_libraries = [
-	"timescaledb"
+        "timescaledb"
       ];
+    };
+
+    neo4j = {
+      enable = true;
+      defaultListenAddress = "0.0.0.0";
+      https.enable = false;
+      bolt.enable = true;
+      bolt.tlsLevel = "DISABLED";
+      # bolt.listenAddress = "0.0.0.0";
     };
 
     # loki/grafana/prometheus setup
@@ -308,7 +317,7 @@
     };
 
     open-webui = {
-      enable = false;
+      enable = true;
       openFirewall = true;
       host = "0.0.0.0";
     };
