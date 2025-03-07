@@ -32,7 +32,7 @@ in
         cachix
         comma
         devenv
-        direnv
+        # direnv
         eza
         fd
         fh

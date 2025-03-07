@@ -49,6 +49,7 @@
       "bambu-studio"
       "beeper"
       "calibre"
+      "claude"
       "cyberduck"
       "diffusionbee"
       "discord"
