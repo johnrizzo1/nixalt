@@ -256,7 +256,8 @@ in
       enableVteIntegration = true;
       syntaxHighlighting.enable = true;
       autosuggestion.enable = true;
-      defaultKeymap = "vicmd"; # emacs viins
+      # defaultKeymap = "vicmd"; # vicmd emacs viins
+      defaultKeymap = "viins"; # emacs viins
       dotDir = ".config/zsh";
 
       initExtra = ''
