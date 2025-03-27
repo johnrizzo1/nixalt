@@ -8,6 +8,7 @@
       android_sdk.accept_license = true;
       allowUnfreePredicate =
         pkg: builtins.elem (lib.getName pkg) [
+	        "lmstudio"
           "_1password-cli"
           "1password"
           "1password-cli"

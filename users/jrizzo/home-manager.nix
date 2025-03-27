@@ -49,7 +49,6 @@ in
         kind
         kubectl
         kubernetes-helm
-        lmstudio
         mosh
         niv
         nixd
