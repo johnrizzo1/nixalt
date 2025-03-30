@@ -59,6 +59,7 @@
   environment.systemPackages = with pkgs; [
     clinfo
     nixos-generators # various image generators
+    exo
   ];
 
   #######################################################################
@@ -68,9 +69,9 @@
     bluetooth.powerOnBoot = true;
     nvidia = {
       modesetting.enable = true;
-      powerManagement.enable = true;
+      powerManagement.enable = false;
       powerManagement.finegrained = false;
-      open = false;
+      open = true;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
@@ -325,7 +326,7 @@
     tabby = {
       # Another AI Interface
       enable = false;
-      acceleration = "cuda";
+      # acceleration = "cuda";
       usageCollection = false;
     };
 

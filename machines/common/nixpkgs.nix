@@ -2,9 +2,8 @@
 { pkgs, lib, ... }: {
   nixpkgs = {
     config = {
-      # allowUnfree = true;
       hostPlatform = pkgs.stdenv.system;
-      cudaSupport = true;
+      # cudaSupport = true;
       android_sdk.accept_license = true;
       allowUnfreePredicate =
         pkg: builtins.elem (lib.getName pkg) [
@@ -48,8 +47,8 @@
           "obsidian"
           "openjdk"
           "synology-drive-client"
-	  "timescaledb"
-	  "vista-fonts"
+          "timescaledb"
+          "vista-fonts"
           "vscode"
           "zoom"
         ];

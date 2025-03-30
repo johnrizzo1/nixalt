@@ -86,31 +86,31 @@
         inherit (config.services.hypervisor) preseed;
       };
 
-      # podman = {
-      #   enable = true;
-      #   dockerSocket.enable = true;
-      #   dockerCompat = true;
-      #   # enableNvidia = true;
-      #   autoPrune.enable = true;
-      #   defaultNetwork.settings.dns_enabled = true;
-      # };
-
-      docker = {
+      podman = {
         enable = true;
-        enableOnBoot = true;
-        # autoPrune = true;
+        dockerSocket.enable = true;
+        dockerCompat = true;
+        autoPrune.enable = true;
+        defaultNetwork.settings.dns_enabled = true;
       };
 
+      # docker = {
+      #   enable = true;
+      #   enableOnBoot = true;
+      #   # autoPrune = true;
+      # };
+
       oci-containers = {
-        backend = "docker";
+        # backend = "docker";
+        backend = "podman";
         # docker volume create portainer_data
         # docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:2.21.5
         containers = {
-          # portainer = {
-          #   hostname = "portainer";
-          #   autoStart = true; 
-          #   image = "portainer:latest";
-          # };
+          portainer = {
+            hostname = "portainer";
+            autoStart = true; 
+            image = "portainer:latest";
+          };
         };
       };
     };
@@ -122,6 +122,8 @@
     '';
 
     hardware.nvidia-container-toolkit.enable = true;
+
+    # nixpkgs.config.cudaSupport = true;
 
     security.apparmor.enable = true;
   };
