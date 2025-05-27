@@ -8,18 +8,11 @@
 , ...
 }:
 {
-  imports = [ ../modules/darwin ];
-
   networking = {
     hostName = currentSystemName;
     computerName = currentSystemName;
     localHostName = currentSystemName;
   };
-
-  # users.users.jrizzo.home =
-  #   if pkgs.stdenv.isDarwin
-  #   then "/Users/jrizzo"
-  #   else "/home/jrizzo";
 
   programs = {
     # zsh is the default shell on Mac and we want to make sure that we're
@@ -67,105 +60,98 @@
 
     #
     # Packages
-    # systemPackages = with pkgs; [ ];
+    systemPackages = with pkgs; [ 
+      unstable.direnv
+      unstable.devenv
+    ];
   };
 
   # nixpkgs.config.android_sdk.accept_license = true;
 
   homebrew = {
-    masApps = {
-      "Save to Reader" = 1640236961;
-      "Remote Desktop" = 409907375;
-      OmniGraffle = 1142578753;
-      GarageBand = 682658836;
-      "DS Manager" = 1435876433;
-      "Actions for Obsidian" = 1659667937;
-      Canva = 897446215;
-      TestFlight = 899247664;
-      Kindle = 302584613;
-      Xcode = 497799835;
-    };
+    enable = true;
+
+    taps = [
+      "hashicorp/tap"
+    ];
 
     brews = [
+      "hashicorp/tap/packer"
+      "mas"
       "incus"
     ];
 
+    masApps = {
+      "1Password for Safari" = 1569813296;
+      "Actions for Obsidian" = 1659667937;
+      "Apple Configurator" = 1037126344;
+      "DS Manager" = 1435876433;
+      "Microsoft Remote Desktop" = 1295203466;
+      "Remote Desktop" = 409907375;
+      "Save to Reader" = 1640236961;
+      Canva = 897446215;
+      GarageBand = 682658836;
+      Kindle = 302584613;
+      OmniGraffle = 1142578753;
+      TestFlight = 899247664;
+      Xcode = 497799835;
+    };
+
     casks = [
+      "1password-cli"
+      "1password"
       "android-studio"
       "balenaetcher"
       "bambu-studio"
       "blender"
       "calibre"
+      "cleanshot"
       "dbeaver-community"
       "discord"
+      "docker"
       "element"
       "figma"
+      "freetube"
       "gimp"
       "gns3"
+      "google-chrome"
       "google-drive"
+      "hammerspoon"
+      "imageoptim"
       "inkscape"
+      "istat-menus"
+      "iterm2"
       "jan" # Offline AI Tool like LMStudio
       "krita"
       "microsoft-office"
+      "monodraw"
       "nvidia-geforce-now"
       "obs"
       "obsidian"
       "orcaslicer"
+      "parallels-virtualization-sdk"
+      "parallels"
       "pycharm-ce"
       "raspberry-pi-imager"
       "raycast"
       "rectangle"
       "rustdesk"
+      "screenflow"
       "signal"
       "sketch"
       "slack"
       "sonos"
       "sourcetree"
+      "spotify"
       "synology-drive"
+      "tailscale"
       "transmission"
+      "vagrant"
       "visual-studio-code"
+      "yubico-yubikey-manager"
       "zoom"
-      # "aircrack-ng" # failed
-      # "aldente"
-      # "anydesk"
-      # "arc"
-      # "chatterino"
-      # "docker" # Failed to install
-      # "keycastr"
-      # "linearmouse"
-      # "logitech-g-hub"
-      # "maccy"
-      # "microsoft-teams"`
-      # "prismlauncher"
-      # "protonmail-bridge"
-      # "protonvpn"
-      # "quicken" # Failed to install
-      # "reader" #failed
-      # "royal-tsx"
-      # "rwts-pdfwriter"
-      # "soundsource"
-      # "spotify"
-      # "steam"
-      # "teamviewer"
-      # "via"
-      # "vlc"
-      # "vscodium"
-      # "whatsapp-for-mac"
-      # "whatsapp"
-      # "xiv-on-mac"
-      # "yacreader"
-      # creality scan
-      # ds manager
-      # ea app
-      # ez receipts
-      # gardyn
-      # Google Docs/Sheets/Drive/Slides
-      # GroupSpot
-      # Hopper Dissassembler
-      # lm studio
-      # mutebar
-      # Rhino8
     ];
+    onActivation.cleanup = "zap";
   };
 
   services = {

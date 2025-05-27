@@ -13,17 +13,6 @@ let
   inherit (pkgs.stdenv) isDarwin isLinux;
 in
 {
-  imports = [
-    ../../modules/common/nixpkgs.nix
-    # ./editor.nix
-    # ./home-manager.nix
-    # ./packages.nix
-    # ./shell.nix
-    # ./xdg.nix
-    # ./obs.nix
-    # ./git.nix
-  ];
-
   home = {
     # Home-manager 22.11 requires this be set. We never set it so we have
     # to use the old state version.
@@ -37,59 +26,54 @@ in
     # Packages I always want installed. Most packages I install using
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
-    packages =
-      with pkgs;
-      [
-        _1password-cli
-        # ripgrep
-        # sentry-cli
-        # zigpkgs."0.13.0"
-        asciinema
-        bat
-        beeper
-        bottom
-        comma
-        eza
-        fd
-        fh
-        fzf
-        gh
-        git
-        git-lfs
-        gnumake
-        gopls
-        htop
-        jq
-        killall
-        niv
-        nixd
-        nmap
-        nodejs # Node is required for Copilot.vim
-        opentofu
-        procs
-        spacevim
-        tailscale
-        terragrunt
-        tmux
-        tree
-        vim
-        watch
-        # watchman
-        weechat
-        wget
-        xclip
-        xsel
-        zenith
-      ]
-      ++ (lib.optionals (isLinux && !isWSL) [ ]);
+    packages = with pkgs; [
+      ansible
+      asciinema
+      bat
+      bottom
+      comma
+      eza
+      fd
+      fh
+      fzf
+      gh
+      git
+      git-lfs
+      gnumake
+      gopls
+      htop
+      jq
+      killall
+      niv
+      nixd
+      nmap
+      # nodejs # Node is required for Copilot.vim
+      opentofu
+      postman
+      procs
+      spacevim
+      tailscale
+      terragrunt
+      tmux
+      tree
+      vim
+      watch
+      weechat
+      wget
+      xclip
+      xsel
+      zenith
+    ] ++ (lib.optionals (isLinux && !isWSL) [ ]);
 
     #---------------------------------------------------------------------
     # Env vars and dotfiles
     #---------------------------------------------------------------------
 
-    # sessionPath = [
-    # "/opt/anaconda3/bin"
-    # ];
+    sessionPath = [
+      "/opt/homebrew/bin"
+      "/opt/homebrew/sbin"
+      # "/opt/anaconda3/bin"
+    ];
 
     sessionVariables = {
       LANG = "en_US.UTF-8";

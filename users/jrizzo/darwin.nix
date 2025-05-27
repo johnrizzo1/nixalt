@@ -1,42 +1,15 @@
 { inputs, pkgs, ... }:
 {
-  # environment.systemPackages = [ ];
-  # home.packages = with pkgs; [ ];
-
-  homebrew = {
-    enable = true;
-    brews = [
-      "mas"
-    ];
-    casks = [
-      "1password"
-      "blender"
-      "cleanshot"
-      "discord"
-      "figma"
-      "freetube"
-      "gimp"
-      "gns3"
-      "google-chrome"
-      "hammerspoon"
-      "imageoptim"
-      "inkscape"
-      "istat-menus"
-      "iterm2"
-      "krita"
-      "monodraw"
-      "raycast"
-      "rectangle"
-      "screenflow"
-      "sketch"
-      "slack"
-      "spotify"
-    ];
-  };
-
   users.users.jrizzo = {
     home = "/Users/jrizzo";
     shell = pkgs.zsh;
+  };
+
+  fonts = {
+    packages = with pkgs; [
+      cascadia-code
+      (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+    ];
   };
 
   services = {

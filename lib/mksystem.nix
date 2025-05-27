@@ -10,7 +10,6 @@ name:
 , user
 , isWSL ? false
 , isHypervisor ? false
-  # , desktop ? "kde"
 ,
 }:
 let
@@ -30,10 +29,6 @@ let
     if pkgs.stdenv.isDarwin
     then inputs.home-manager.darwinModules
     else inputs.home-manager.nixosModules;
-  determinate =
-    if pkgs.stdenv.isDarwin
-    then inputs.determinate.darwinModules.default
-    else inputs.determinate.nixosModules.default;
   secureboot =
     if pkgs.stdenv.isLinux
     then inputs.lanzaboote.nixosModules.lanzaboote
@@ -43,26 +38,21 @@ systemFunc rec {
   inherit system;
 
   modules = [
-    # determinate
-
     # Apply our overlays. Overlays are keyed by system type so we have
     # to go through and apply our system type. We do this first so
     # the overlays are available globally.
-    # { nixpkgs.overlays = overlays; }
-    # ../overlays
+    { nixpkgs.overlays = overlays; }
     ../modules/common/nix.nix
     ../modules/common/nixpkgs.nix
 
     secureboot
 
-    # (if isHypervisor then inputs.proxmox-nixos.nixosModules.proxmox-ve else {})
-    # inputs.proxmox-nixos.nixosModules.proxmox-ve
     # Bring in WSL if this is a WSL build
     (if isWSL then inputs.nixos-wsl.nixosModules.wsl else { })
 
     # For vscode server
     # inputs.nix-alien.overlays.default
-    inputs.vscode-server.nixosModules.default
+    (if isWSL then inputs.vscode-server.nixosModules.wsl else { })
 
     machineConfig
     userOSConfig

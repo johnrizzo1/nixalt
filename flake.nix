@@ -16,16 +16,13 @@
 
   inputs = {
     # Nix
-    # nix.url = "github:nixos/nix/2.24.7";
     flake-schemas.url = "https://flakehub.com/f/DeterminateSystems/flake-schemas/*.tar.gz";
-    # determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
-    # nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.2405.0";
 
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
@@ -40,13 +37,12 @@
       url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nixos-generators = {
+    #   url = "github:nix-community/nixos-generators";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     nix-darwin.url = "github:LnL7/nix-darwin/nix-darwin-24.11";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/0.1";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -74,9 +70,9 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
-    claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
-    claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
-    claude-desktop.inputs.flake-utils.follows = "flake-utils";
+    # claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
+    # claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
+    # claude-desktop.inputs.flake-utils.follows = "flake-utils";
   };
 
   outputs =
@@ -132,11 +128,11 @@
         # };
 
         # sudo nixos-rebuild --flake .#irl switch
-        # irl = mkSystem "irl" {
-        #   system = "x86_64-linux";
-        #   user = "jrizzo";
-        #   isHypervisor = true;
-        # };
+        irl = mkSystem "irl" {
+          system = "x86_64-linux";
+          user = "jrizzo";
+          isHypervisor = true;
+        };
 
         # wsl = mkSystem "wsl" {
         #   system = "x86_64-linux";
@@ -151,7 +147,7 @@
         #   user = "jrizzo";
         # };
         # nixos-rebuild --flake .#vm-aarch64-prl build-vm
-        # nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
+        # vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
         #   system = "aarch64-linux";
         #   user = "jrizzo";
         # };
@@ -161,12 +157,12 @@
       # MacOS
       # nix run nix-darwin -- switch --flake .#tymnet
       # darwin-rebuild --flake .#tymnet
-      # darwinConfigurations = {
-      #   tymnet = mkSystem "tymnet" {
-      #     system = "aarch64-darwin";
-      #     user = "jrizzo";
-      #   };
-      # };
+      darwinConfigurations = {
+        tymnet = mkSystem "tymnet" {
+          system = "aarch64-darwin";
+          user = "jrizzo";
+        };
+      };
 
       #
       # Setup the packages
