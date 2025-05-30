@@ -111,10 +111,11 @@
         };
       };
       spiceUSBRedirection.enable = true;
-      # containers.cdi.dynamic.nvidia.enable = true;
+
       # incus = lib.mkIf config.services.virt.incus_over_lxd {
+      # incus = {
       #   enable = true;
-      #   package = pkgs.incus;
+      #   package = pkgs.unstable.incus;
       #   ui.enable = true;
       #   inherit (config.services.virt) preseed;
       # };
@@ -126,6 +127,7 @@
         recommendedSysctlSettings = true;
         # inherit (config.services.virt) preseed;
       };
+
       # docker = {
       #   enable = true;
       #   enableOnBoot = true;
@@ -142,7 +144,7 @@
     # This is to support nvidia cards on docker
     # enable this after you create an option for cuda/rocm
     # --device=nvidia.com/gpu=all
-    hardware.nvidia-container-toolkit.enable = true;
+    # hardware.nvidia-container-toolkit.enable = true;
 
     programs.virt-manager.enable = true;
 
@@ -169,17 +171,17 @@
       # };
 
       # networking.firewall.enable = true;
-      networkmanager.unmanaged = [
-        "incusbr0"
-        "virbr0"
-        "docker0"
-        "tailscale0"
-      ];
-      firewall.trustedInterfaces = [
-        "incusbr0"
-        "virbr0"
-        "docker0"
-      ];
+      # networkmanager.unmanaged = [
+      #   "incusbr0"
+      #   "virbr0"
+      #   "docker0"
+      #   "tailscale0"
+      # ];
+      # firewall.trustedInterfaces = [
+      #   "incusbr0"
+      #   "virbr0"
+      #   "docker0"
+      # ];
       # "tailscale0"
 
       # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];

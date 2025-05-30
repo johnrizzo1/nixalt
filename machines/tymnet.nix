@@ -60,7 +60,7 @@
 
     #
     # Packages
-    systemPackages = with pkgs; [ 
+    systemPackages = with pkgs; [
       unstable.direnv
       unstable.devenv
     ];

@@ -70,7 +70,6 @@
   # Host Specific Applications
   environment = {
     systemPackages = with pkgs; [
-
       _1password-gui
       # home-manager
       # kitty

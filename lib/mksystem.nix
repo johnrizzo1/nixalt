@@ -54,6 +54,8 @@ systemFunc rec {
     # inputs.nix-alien.overlays.default
     (if isWSL then inputs.vscode-server.nixosModules.wsl else { })
 
+    (if pkgs.stdenv.isLinux then inputs.vscode-server.nixosModules.default else { })
+
     machineConfig
     userOSConfig
     home-manager.home-manager

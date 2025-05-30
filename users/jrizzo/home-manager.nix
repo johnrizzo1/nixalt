@@ -240,7 +240,7 @@ in
       syntaxHighlighting.enable = true;
       autosuggestion.enable = true;
 
-      initExtra = ''
+      initContent = ''
         if command -v fh &> /dev/null; then
           eval "$(fh completion zsh)"
         fi

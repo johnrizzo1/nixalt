@@ -18,7 +18,8 @@ let
       config.allowUnfree = true;
     };
   };
-in [
+in
+[
   additions
   unstable-packages
   stable-packages

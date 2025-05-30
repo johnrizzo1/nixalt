@@ -7,7 +7,7 @@
     ./nix-ld.nix
     ./secureboot.nix
     ./virt
-    # ../vscode-server.nix
+    # ./vscode-server.nix
   ];
 }
 

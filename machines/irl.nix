@@ -9,7 +9,7 @@
 }: {
   imports = [
     ./hardware/irl.nix
-    ../modules/nixos
+    ../modules/nixos/default.nix
     # ../modules/nixos/monitor.nix
   ];
 
@@ -27,27 +27,27 @@
     # dhcpcd.enable = false;
     networkmanager.enable = true;
 
-    firewall = {
-      enable = lib.mkForce false;
-      allowedTCPPorts = [ 22 53 80 443 631 3000 3100 3080 5380 8443 9001 9090 9095 ];
-      allowedUDPPorts = [ 53 67 ];
-    };
+    # firewall = {
+    # enable = lib.mkForce false;
+    # allowedTCPPorts = [ 22 53 80 443 631 3000 3100 3080 5380 8443 9001 9090 9095 ];
+    # allowedUDPPorts = [ 53 67 ];
+    # };
 
-    interfaces = {
-      enp36s0f0.useDHCP = lib.mkDefault true;
-      enp36s0f1 = {
-        # useDHCP = lib.mkDefault false;
-        ipv4.addresses = [
-          {
-            address = "192.168.2.124";
-            prefixLength = 24;
-          }
-        ];
-      };
-      wlp38s0.useDHCP = lib.mkDefault true;
-    };
-    defaultGateway = "192.168.2.1";
-    nameservers = [ "192.168.2.124" ];
+    # interfaces = {
+    #   enp36s0f0.useDHCP = lib.mkDefault true;
+    #   enp36s0f1 = {
+    #     # useDHCP = lib.mkDefault false;
+    #     ipv4.addresses = [
+    #       {
+    #         address = "192.168.2.124";
+    #         prefixLength = 24;
+    #       }
+    #     ];
+    #   };
+    #   wlp38s0.useDHCP = lib.mkDefault true;
+    # };
+    # defaultGateway = "192.168.2.1";
+    # nameservers = [ "192.168.2.124" ];
   };
 
   # systemd.network.networks.enp36s0f1 = {
@@ -63,7 +63,6 @@
 
   boot = {
     # Be careful updating this.
-    # boot.kernelPackages = pkgs.linuxPackages_latest;
     # Use the systemd-boot EFI boot loader.
     supportedFilesystems = [ "ntfs" ];
     loader = {
@@ -77,6 +76,7 @@
     # kernel.sysctl = {
     #   "vm.max_map_count" = 262144;
     # };
+    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   time.timeZone = "America/New_York";
@@ -97,21 +97,39 @@
   };
 
   # Host Specific Applications
-  environment.systemPackages = with pkgs; [
-    cachix
-    clinfo
-    devenv
-    direnv
-    git
-    # home-manager
-    killall
-    niv
-    nixos-generators # various image generators
-    ollama
-    tmux
-    vim
-    wget
-  ];
+  environment.systemPackages =
+    with pkgs; [
+      _1password-cli
+      _1password-gui
+      # home-manager
+      cachix
+      clinfo
+      unstable.devenv
+      unstable.direnv
+      dotnet-aspnetcore
+      dotnet-sdk
+      git
+      google-chrome
+      killall
+      nil
+      niv
+      nixos-generators # various image generators
+      ollama
+      poetry
+      python312
+      python312Packages.pip
+      rubyPackages.prettier
+      signal-desktop
+      tmux
+      uv
+      vim
+      unstable.vscode
+      wget
+    ];
+
+  environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Enable Ozone Wayland
+  environment.sessionVariables.NIXOS_WAYLAND = "1";
+  environment.sessionVariables.PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
 
   #######################################################################
   # Hardware configuration
@@ -119,19 +137,26 @@
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
 
-    nvidia = {
-      modesetting.enable = true;
-      powerManagement.enable = true;
-      powerManagement.finegrained = false;
-      open = false;
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-    };
+    # nvidia = {
+    # modesetting.enable = true;
+    # powerManagement.enable = false;
+    # powerManagement.finegrained = false;
+    # open = true;
+    # nvidiaSettings = true;
+    # package = config.boot.kernelPackages.nvidiaPackages.production;
+    # };
 
     graphics = {
       enable = true;
       enable32Bit = true;
     };
+
+    logitech.wireless = {
+      enable = true;
+      enableGraphical = true;
+    };
+    hackrf.enable = true;
+    flipperzero.enable = true;
   };
 
   #######################################################################
@@ -139,193 +164,220 @@
   services = {
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
-    xserver.videoDrivers = [ "nvidia" ];
+    # xserver.videoDrivers = [ "nvidia" ];
 
-    unbound = {
-      enable = true;
-      settings = {
-        server = {
-          # When only using Unbound as DNS, make sure to replace 127.0.0.1 with your ip address
-          # When using Unbound in combination with pi-hole or Adguard, leave 127.0.0.1, and point Adguard to 127.0.0.1:PORT
-          interface = [ "127.0.0.1" ];
-          port = 5335;
-          access-control = [ "127.0.0.1 allow" ];
-          # Based on recommended settings in https://docs.pi-hole.net/guides/dns/unbound/#configure-unbound
-          harden-glue = true;
-          harden-dnssec-stripped = true;
-          use-caps-for-id = false;
-          prefetch = true;
-          edns-buffer-size = 1232;
-
-          # Custom settings
-          hide-identity = true;
-          hide-version = true;
-        };
-        forward-zone = [
-          # Example config with quad9
-          {
-            name = ".";
-            forward-addr = [
-              "9.9.9.9#dns.quad9.net"
-              "149.112.112.112#dns.quad9.net"
-            ];
-            forward-tls-upstream = true; # Protected DNS
-          }
-        ];
-      };
+    # Configure keymap in X11
+    xserver.xkb = {
+      layout = "us";
+      variant = "";
     };
 
-    adguardhome = {
-      enable = true;
-      openFirewall = true;
-      # allowDHCP = true;
-      mutableSettings = true;
-      settings = {
-        http = {
-          # You can select any ip and port, just make sure to open firewalls where needed
-          # address = "127.0.0.1:3003";
-          address = "192.168.2.124:3003";
-        };
-        dns = {
-          bind_hosts = [
-            "127.0.0.1"
-            "192.168.2.124"
-          ];
-          upstream_dns = [
-            # Example config with quad9
-            # "9.9.9.9#dns.quad9.net"
-            # "149.112.112.112#dns.quad9.net"
-            # Uncomment the following to use a local DNS service (e.g. Unbound)
-            # Additionally replace the address & port as needed
-            "127.0.0.1:5335"
-          ];
-        };
-        filtering = {
-          protection_enabled = true;
-          filtering_enabled = true;
+    displayManager.sddm.enable = true;
+    desktopManager.plasma6.enable = true;
 
-          parental_enabled = true; # Parental control-based DNS requests filtering.
-          safe_search = {
-            enabled = true; # Enforcing "Safe search" option for search engines, when possible.
-          };
-        };
-        # The following notation uses map
-        # to not have to manually create {enabled = true; url = "";} for every filter
-        # This is, however, fully optional
-        filters = map (url: { enabled = true; url = url; }) [
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
-          "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # malicious url blocklist
-        ];
-      };
+    # Enable CUPS to print documents.
+    printing.enable = true;
+
+    # Enable sound with pipewire.
+    # pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      # If you want to use JACK applications, uncomment this
+      #jack.enable = true;
+
+      # use the example session manager (no others are packaged yet so this is enabled by default,
+      # no need to redefine it in your config for now)
+      #media-session.enable = true;
     };
+
+    # Enable touchpad support (enabled default in most desktopManager).
+    libinput.enable = true;
+
+    vscode-server.enable = true;
+
+    virt.enable = true;
+
+    #unbound = {
+    #  enable = true;
+    #  settings = {
+    #    server = {
+    #      # When only using Unbound as DNS, make sure to replace 127.0.0.1 with your ip address
+    #      # When using Unbound in combination with pi-hole or Adguard, leave 127.0.0.1, and point Adguard to 127.0.0.1:PORT
+    #      interface = [ "127.0.0.1" ];
+    #      port = 5335;
+    #      access-control = [ "127.0.0.1 allow" ];
+    #      # Based on recommended settings in https://docs.pi-hole.net/guides/dns/unbound/#configure-unbound
+    #      harden-glue = true;
+    #      harden-dnssec-stripped = true;
+    #      use-caps-for-id = false;
+    #      prefetch = true;
+    #      edns-buffer-size = 1232;
+    #      # Custom settings
+    #      hide-identity = true;
+    #      hide-version = true;
+    #    };
+    #    forward-zone = [
+    #      # Example config with quad9
+    #      {
+    #        name = ".";
+    #        forward-addr = [
+    #          "9.9.9.9#dns.quad9.net"
+    #          "149.112.112.112#dns.quad9.net"
+    #        ];
+    #        forward-tls-upstream = true; # Protected DNS
+    #      }
+    #    ];
+    #  };
+    #};
+
+    #adguardhome = {
+    #  enable = true;
+    #  openFirewall = true;
+    #  # allowDHCP = true;
+    #  mutableSettings = true;
+    #  settings = {
+    #    http = {
+    #      # You can select any ip and port, just make sure to open firewalls where needed
+    #      # address = "127.0.0.1:3003";
+    #      address = "192.168.2.124:3003";
+    #    };
+    #    dns = {
+    #      bind_hosts = [
+    #        "127.0.0.1"
+    #        "192.168.2.124"
+    #      ];
+    #      upstream_dns = [
+    #        # Example config with quad9
+    #        # "9.9.9.9#dns.quad9.net"
+    #        # "149.112.112.112#dns.quad9.net"
+    #        # Uncomment the following to use a local DNS service (e.g. Unbound)
+    #        # Additionally replace the address & port as needed
+    #        "127.0.0.1:5335"
+    #      ];
+    #    };
+    #    filtering = {
+    #      protection_enabled = true;
+    #      filtering_enabled = true;
+    #      parental_enabled = true; # Parental control-based DNS requests filtering.
+    #      safe_search = {
+    #        enabled = true; # Enforcing "Safe search" option for search engines, when possible.
+    #      };
+    #    };
+    #    # The following notation uses map
+    #    # to not have to manually create {enabled = true; url = "";} for every filter
+    #    # This is, however, fully optional
+    #    filters = map (url: { enabled = true; url = url; }) [
+    #      "https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt" # The Big List of Hacked Malware Web Sites
+    #      "https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt" # malicious url blocklist
+    #    ];
+    #  };
+    #};
 
     # loki/grafana/prometheus setup
     # https://xeiaso.net/blog/prometheus-grafana-loki-nixos-2020-11-20/
-    loki = {
-      enable = true;
-      configFile = ../modules/common/files/loki.yaml;
-    };
+    # loki = {
+    #   enable = true;
+    #   configFile = ../modules/common/files/loki.yaml;
+    # };
 
-    grafana = {
-      enable = true;
-      settings = {
-        server = {
-          http_addr = "127.0.0.1";
-          http_port = 2342;
-          # enforce_domain = true;
-          enable_gzip = true;
-          domain = "grafana.technobable.com";
-
-          # Alternatively, if you want to server Grafana from a subpath:
-          # domain = "your.domain";
-          # root_url = "https://your.domain/grafana/";
-          # serve_from_sub_path = true;
-        };
-
-        # Prevents Grafana from phoning home     
-        analytics.reporting_enabled = false;
-      };
-    };
+    # grafana = {
+    #   enable = true;
+    #   settings = {
+    #     server = {
+    #       http_addr = "127.0.0.1";
+    #       http_port = 2342;
+    #       # enforce_domain = true;
+    #       enable_gzip = true;
+    #       domain = "grafana.technobable.com";
+    #       # Alternatively, if you want to server Grafana from a subpath:
+    #       # domain = "your.domain";
+    #       # root_url = "https://your.domain/grafana/";
+    #       # serve_from_sub_path = true;
+    #     };
+    #     # Prevents Grafana from phoning home     
+    #     analytics.reporting_enabled = false;
+    #   };
+    # };
 
 
-    nginx = {
-      enable = true;
-      recommendedProxySettings = true;
-      virtualHosts = {
-        ${config.services.grafana.settings.server.domain} = {
-          locations."/" = {
-            proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
-            proxyWebsockets = true;
-            extraConfig =
-              # required when target is also TLS server with multiple hosts
-              # "proxy_ssl_server_name on; " +
-              # required when the server wants to use HTTP Authentication
-              "proxy_pass_header Authorization;";
-          };
-        };
-      };
-    };
+    # nginx = {
+    #   enable = true;
+    #   recommendedProxySettings = true;
+    #   virtualHosts = {
+    #     ${config.services.grafana.settings.server.domain} = {
+    #       locations."/" = {
+    #         proxyPass = "http://${toString config.services.grafana.settings.server.http_addr}:${toString config.services.grafana.settings.server.http_port}";
+    #         proxyWebsockets = true;
+    #         extraConfig =
+    #           # required when target is also TLS server with multiple hosts
+    #           # "proxy_ssl_server_name on; " +
+    #           # required when the server wants to use HTTP Authentication
+    #           "proxy_pass_header Authorization;";
+    #       };
+    #     };
+    #   };
+    # };
 
-    prometheus = {
-      enable = true;
+    # prometheus = {
+    #   enable = true;
+    #   globalConfig = {
+    #     scrape_interval = "15s";
+    #   };
+    #   # For generating the data to scrape
+    #   exporters = {
+    #     node = {
+    #       enable = true;
+    #       enabledCollectors = [ "systemd" ];
+    #       port = 9001;
+    #       extraFlags = [
+    #         "--collector.ethtool"
+    #         "--collector.softirqs"
+    #         "--collector.tcpstat"
+    #         "--collector.wifi"
+    #       ];
+    #     };
+    #   };
+    #   scrapeConfigs = [
+    #     {
+    #       job_name = "irl";
+    #       static_configs = [
+    #         {
+    #           targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ];
+    #         }
+    #       ];
+    #     }
+    #     {
+    #       job_name = "incus";
+    #       metrics_path = "/1.0/metrics";
+    #       scheme = "http";
+    #       static_configs = [
+    #         {
+    #           targets = [ "irl.technobable.com:8444" ];
+    #         }
+    #       ];
+    #     }
+    #   ];
+    # };
 
-      globalConfig = {
-        scrape_interval = "15s";
-      };
+    # promtail = {
+    #   enable = true;
+    #   configFile = ../modules/common/files/promtail.yaml;
+    # };
 
-      # For generating the data to scrape
-      exporters = {
-        node = {
-          enable = true;
-          enabledCollectors = [ "systemd" ];
-          port = 9001;
-          extraFlags = [
-            "--collector.ethtool"
-            "--collector.softirqs"
-            "--collector.tcpstat"
-            "--collector.wifi"
-          ];
-        };
-      };
+    # ollama = {
+    #   enable = false;
+    #   acceleration = "cuda";
+    # };
 
-      scrapeConfigs = [
-        {
-          job_name = "irl";
-          static_configs = [
-            {
-              targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ];
-            }
-          ];
-        }
-        {
-          job_name = "incus";
-          metrics_path = "/1.0/metrics";
-          scheme = "http";
-          static_configs = [
-            {
-              targets = [ "irl.technobable.com:8444" ];
-            }
-          ];
-        }
-      ];
-    };
-
-    promtail = {
-      enable = true;
-      configFile = ../modules/common/files/promtail.yaml;
-    };
-
-    ollama = {
-      enable = false;
-      acceleration = "cuda";
-    };
-
-    tabby = {
-      # Another AI Interface
-      enable = false;
-      acceleration = "cuda";
-      usageCollection = false;
-    };
+    # tabby = {
+    # # Another AI Interface
+    # enable = false;
+    # acceleration = "cuda";
+    # usageCollection = false;
+    # };
 
     tailscale = {
       enable = true;
@@ -341,15 +393,16 @@
       };
     };
 
-    virt = {
-      enable = true;
-      preseed = { };
-    };
+    # virt = {
+    # enable = true;
+    # preseed = { };
+    # };
   };
 
   #######################################################################
   # Security Configuration
   # security.apparmor.enable = true;
+  security.rtkit.enable = true;
 
   #######################################################################
   # System Configuration
