@@ -2,7 +2,6 @@
 , config
 , pkgs
 , lib
-  # , currentSystem
 , currentSystemUser
 , currentSystemName
 , ...
@@ -10,7 +9,6 @@
   imports = [
     ./hardware/irl.nix
     ../modules/nixos/default.nix
-    # ../modules/nixos/monitor.nix
   ];
 
   users = {
@@ -26,57 +24,6 @@
     domain = "technobable.com";
     # dhcpcd.enable = false;
     networkmanager.enable = true;
-
-    # firewall = {
-    # enable = lib.mkForce false;
-    # allowedTCPPorts = [ 22 53 80 443 631 3000 3100 3080 5380 8443 9001 9090 9095 ];
-    # allowedUDPPorts = [ 53 67 ];
-    # };
-
-    # interfaces = {
-    #   enp36s0f0.useDHCP = lib.mkDefault true;
-    #   enp36s0f1 = {
-    #     # useDHCP = lib.mkDefault false;
-    #     ipv4.addresses = [
-    #       {
-    #         address = "192.168.2.124";
-    #         prefixLength = 24;
-    #       }
-    #     ];
-    #   };
-    #   wlp38s0.useDHCP = lib.mkDefault true;
-    # };
-    # defaultGateway = "192.168.2.1";
-    # nameservers = [ "192.168.2.124" ];
-  };
-
-  # systemd.network.networks.enp36s0f1 = {
-  #   name = "enp36s0f1";
-  #   enable = true;
-  #   dns = [ "127.0.0.1" ];
-  #   address = [ "192.168.2.124" ];
-  #   routes = [ { routeConfig = { Gateway = "192.168.2.1"; }; } ];
-  #   networkConfig = {
-  #   	Ipv6AcceptRA = "no";
-  #   };
-  # };
-
-  boot = {
-    # Be careful updating this.
-    # Use the systemd-boot EFI boot loader.
-    supportedFilesystems = [ "ntfs" ];
-    loader = {
-      # Use the systemd-boot EFI boot loader.
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-      # VMware, Parallels both only support this being 0 otherwise you see
-      # "error switching console mode" on boot.
-      systemd-boot.consoleMode = "0";
-    };
-    # kernel.sysctl = {
-    #   "vm.max_map_count" = 262144;
-    # };
-    kernelPackages = pkgs.linuxPackages_latest;
   };
 
   time.timeZone = "America/New_York";
@@ -106,11 +53,13 @@
       clinfo
       unstable.devenv
       unstable.direnv
+      dbeaver-bin
       dotnet-aspnetcore
       dotnet-sdk
       git
       google-chrome
       killall
+      ktailctl
       nil
       niv
       nixos-generators # various image generators
@@ -137,14 +86,14 @@
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
 
-    # nvidia = {
-    # modesetting.enable = true;
-    # powerManagement.enable = false;
-    # powerManagement.finegrained = false;
-    # open = true;
-    # nvidiaSettings = true;
-    # package = config.boot.kernelPackages.nvidiaPackages.production;
-    # };
+    nvidia = {
+      modesetting.enable = true;
+      powerManagement.enable = true;
+      powerManagement.finegrained = false;
+      open = false;
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.latest;
+    };
 
     graphics = {
       enable = true;
@@ -164,7 +113,7 @@
   services = {
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
-    # xserver.videoDrivers = [ "nvidia" ];
+    xserver.videoDrivers = [ "nvidia" ];
 
     # Configure keymap in X11
     xserver.xkb = {
@@ -199,6 +148,13 @@
     vscode-server.enable = true;
 
     virt.enable = true;
+    portainer = {
+      enable = true; # Default false
+      version = "latest";
+      openFirewall = true; # Default false, set to 'true'
+      port = 9443; # Sets the port number in both the firewall and
+      # the docker container port mapping itself.
+    };
 
     #unbound = {
     #  enable = true;

@@ -120,25 +120,25 @@
       #   inherit (config.services.virt) preseed;
       # };
       # lxd = lib.mkIf (! config.services.virt.incus_over_lxd) {
-      lxd = {
-        enable = true;
-        # package = pkgs.lxd-lts;
-        ui.enable = true;
-        recommendedSysctlSettings = true;
-        # inherit (config.services.virt) preseed;
-      };
+      # lxd = {
+      #   enable = true;
+      #   # package = pkgs.lxd-lts;
+      #   ui.enable = true;
+      #   recommendedSysctlSettings = true;
+      #   # inherit (config.services.virt) preseed;
+      # };
 
       # docker = {
       #   enable = true;
       #   enableOnBoot = true;
       # };
-      podman = {
-        enable = true;
-        dockerSocket.enable = true;
-        dockerCompat = true;
-        # enableNvidia = true;
-        autoPrune.enable = true;
-      };
+      # podman = {
+      #   enable = true;
+      #   dockerSocket.enable = true;
+      #   dockerCompat = true;
+      #   # enableNvidia = true;
+      #   autoPrune.enable = true;
+      # };
     };
 
     # This is to support nvidia cards on docker
@@ -150,7 +150,7 @@
 
     networking = {
       # Required for incus
-      nftables.enable = true;
+      # nftables.enable = true;
 
       # project: default
       # name: incusbr0
