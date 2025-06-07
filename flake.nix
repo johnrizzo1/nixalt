@@ -137,11 +137,11 @@
           isHypervisor = true;
         };
 
-        # wsl = mkSystem "wsl" {
-        #   system = "x86_64-linux";
-        #   user = "jrizzo";
-        #   isWSL = true;
-        # };
+        winnie = mkSystem "winnie" {
+          system = "x86_64-linux";
+          user = "jrizzo";
+          isWSL = true;
+        };
 
         # Virtual Machines & Containers
         # nixos-rebuild --flake .#vm-intel build-vm
