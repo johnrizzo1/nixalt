@@ -4,7 +4,7 @@
 }:
 {
   imports = [
-    <nixos-wsl/modules>
+    # <nixos-wsl/modules>
     ../modules/nixos
     ../modules/nixos/vscode-server.nix
   ];
@@ -32,5 +32,5 @@
   programs.nix-ld.enable = true;
   services.vscode-server.enable = true;
 
-  # system.stateVersion = "24.05";
+  system.stateVersion = "25.05";
 }
