@@ -11,7 +11,10 @@
 
   environment.systemPackages = with pkgs; [
     devenv
+    cudatoolkit
+    linuxPackages.nvidia_x11
   ];
+
 
   wsl = {
     enable = true;
@@ -29,8 +32,7 @@
     };
   };
 
-  programs.nix-ld.enable = true;
   services.vscode-server.enable = true;
-
+  programs.nix-ld.enable = true;
   system.stateVersion = "25.05";
 }

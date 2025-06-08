@@ -94,15 +94,13 @@ in
       # AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
       # AWS_CONFIG_FILE = "${configHome}/aws/config";
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
-
       NIXOS_OZONE_WL = 1;
-
-      # Make these conditional on if wsl
-      # CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
-      # CUDA_PATH = "${pkgs.cudatoolkit}";
-      # LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
-      # EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
-      # EXTRA_CCFLAGS = "-I/usr/include";
+    } // lib.optionals isWSL {
+      CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
+      CUDA_PATH = "${pkgs.cudatoolkit}";
+      LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
+      EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
+      EXTRA_CCFLAGS = "-I/usr/include";
     };
 
     shellAliases =
