@@ -33,10 +33,10 @@ in
       bottom
       comma
       devbox
+      eslint
       eza
       fd
       fh
-      freecad
       fzf
       gh
       git

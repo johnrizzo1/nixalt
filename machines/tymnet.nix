@@ -71,6 +71,7 @@
 
     taps = [
       "hashicorp/tap"
+      "nikitabobko/tap"
     ];
 
     brews = [
@@ -98,6 +99,7 @@
     casks = [
       "1password-cli"
       "1password"
+      "aerospace"
       "android-studio"
       "balenaetcher"
       "bambu-studio"
@@ -122,6 +124,7 @@
       "iterm2"
       "jan" # Offline AI Tool like LMStudio
       "krita"
+      "lm-studio"
       "microsoft-office"
       "monodraw"
       "nvidia-geforce-now"
@@ -131,6 +134,7 @@
       "parallels-virtualization-sdk"
       "parallels"
       "podman-desktop"
+      "postman"
       "pycharm-ce"
       "raspberry-pi-imager"
       "raycast"
