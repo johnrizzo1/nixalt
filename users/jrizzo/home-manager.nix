@@ -32,9 +32,11 @@ in
       bat
       bottom
       comma
+      devbox
       eza
       fd
       fh
+      freecad
       fzf
       gh
       git
@@ -44,18 +46,44 @@ in
       htop
       jq
       killall
+      kubernetes-helm
       niv
       nixd
       nmap
-      # nodejs # Node is required for Copilot.vim
+      nodejs # Node is required for Copilot.vim
       opentofu
+      podman
+      podman-compose
+      podman-tui
+      poetry
+      poetryPlugins.poetry-plugin-shell
       postman
       procs
+      (python3.withPackages (ps: with ps; [
+        black
+        flake8
+        isort
+        mypy
+        pipx
+        pip-tools
+        pylint
+        pytest
+        pytest-cov
+        pytest-xdist
+        ruff
+      ]))
+      ripgrep
+      (ruby.withPackages (ps: with ps; [
+        prettier
+        solargraph
+        rubocop
+      ]))
       spacevim
       tailscale
       terragrunt
       tmux
       tree
+      uv
       vim
       watch
       weechat
@@ -68,7 +96,6 @@ in
     #---------------------------------------------------------------------
     # Env vars and dotfiles
     #---------------------------------------------------------------------
-
     sessionPath = [
       "/opt/homebrew/bin"
       "/opt/homebrew/sbin"
@@ -76,32 +103,29 @@ in
     ];
 
     sessionVariables = {
-      LANG = "en_US.UTF-8";
-      LC_CTYPE = "en_US.UTF-8";
-      LC_ALL = "en_US.UTF-8";
+      AWS_CONFIG_FILE = "${configHome}/aws/config";
+      AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
+      DIRENV_LOG_FORMAT = ""; # Disable direnv logging
+      DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
       EDITOR = "nvim";
-      PAGER = "less -FirSwX";
-      # MANPAGER = "${manpager}/bin/manpager";
-
-      # XDG Config Dirs
       GHCUP_USE_XDG_DIRS = 1; # $HOME/.ghcup
-      PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
-      LESSHISTFILE = "${cacheHome}/less/history"; # $HOME/.lesshst
-      KDEHOME = "${configHome}/kde"; # $HOME/.kde4
-      # GTK2_RC_FILES = "${configHome}/gtk-2.0/gtkrc"; # $HOME/.gtkrc-2.0
       GNUPGHOME = "${dataHome}/gnupg"; # $HOME/.gnupg
       INPUTRC = "${configHome}/readline/inputrc"; # $HOME/.inputrc
-      # AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
-      # AWS_CONFIG_FILE = "${configHome}/aws/config";
-      DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
+      KDEHOME = "${configHome}/kde"; # $HOME/.kde4
+      LANG = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
+      LC_CTYPE = "en_US.UTF-8";
+      LESSHISTFILE = "${cacheHome}/less/history"; # $HOME/.lesshst
       NIXOS_OZONE_WL = 1;
-    } // lib.optionals isWSL {
+      PAGER = "less -FirSwX";
+      PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
+    } // (lib.optionalAttrs isWSL {
       CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
       CUDA_PATH = "${pkgs.cudatoolkit}";
-      LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
-      EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
       EXTRA_CCFLAGS = "-I/usr/include";
-    };
+      EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
+      LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
+    });
 
     shellAliases =
       {
@@ -165,8 +189,11 @@ in
       enable = true;
       enableZshIntegration = true;
       # enableFishIntegration = true;
+      # nix-direnv.enable = pkgs.stdenv.isLinux;
+      nix-direnv.enable = true;
       config = {
         load_dotenv = true;
+        hide_env_diff = true;
         whitelist = {
           exact = [ "$HOME/.envrc" ];
         };

@@ -5,21 +5,17 @@
     shell = pkgs.zsh;
   };
 
-  fonts = {
-    packages = with pkgs; [
-      cascadia-code
-      (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
-    ];
-  };
+  # fonts = {
+  #   packages = with pkgs; [
+  #     cascadia-code
+  #     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+  #   ];
+  # };
 
-  services = {
-    # activate-system.enable = true;
-    nix-daemon.enable = true;
-  };
-
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   system = {
+    primaryUser = "jrizzo";
     keyboard = {
       enableKeyMapping = true;
       remapCapsLockToControl = true;
@@ -55,7 +51,7 @@
           "/Applications/Obsidian.app"
         ];
         persistent-others = [
-          "~/Downloads"
+          "/Users/jrizzo/Downloads"
         ];
       };
 

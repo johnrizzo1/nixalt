@@ -66,8 +66,6 @@
     ];
   };
 
-  # nixpkgs.config.android_sdk.accept_license = true;
-
   homebrew = {
     enable = true;
 
@@ -82,19 +80,19 @@
     ];
 
     masApps = {
-      "1Password for Safari" = 1569813296;
-      "Actions for Obsidian" = 1659667937;
-      "Apple Configurator" = 1037126344;
-      "DS Manager" = 1435876433;
-      "Microsoft Remote Desktop" = 1295203466;
-      "Remote Desktop" = 409907375;
-      "Save to Reader" = 1640236961;
-      Canva = 897446215;
-      GarageBand = 682658836;
-      Kindle = 302584613;
-      OmniGraffle = 1142578753;
-      TestFlight = 899247664;
-      Xcode = 497799835;
+      # "1Password for Safari" = 1569813296;
+      # "Actions for Obsidian" = 1659667937;
+      # "Apple Configurator" = 1037126344;
+      # "DS Manager" = 1435876433;
+      # "Microsoft Remote Desktop" = 1295203466;
+      # "Remote Desktop" = 409907375;
+      # "Save to Reader" = 1640236961;
+      # Canva = 897446215;
+      # GarageBand = 682658836;
+      # Kindle = 302584613;
+      # OmniGraffle = 1142578753;
+      # TestFlight = 899247664;
+      # Xcode = 497799835;
     };
 
     casks = [
@@ -111,6 +109,7 @@
       "docker"
       "element"
       "figma"
+      "freecad"
       "freetube"
       "gimp"
       "gns3"
@@ -131,6 +130,7 @@
       "orcaslicer"
       "parallels-virtualization-sdk"
       "parallels"
+      "podman-desktop"
       "pycharm-ce"
       "raspberry-pi-imager"
       "raycast"
@@ -156,12 +156,6 @@
 
   services = {
     tailscale.enable = true;
-    # synergy.client = {
-    #   enable = true;
-    #   autoStart = true;
-    #   serverAddress = "coda.technobable.com:24800";
-    #   # tls.enable = true;
-    # };
   };
 
   # Set Git commit hash for darwin-version.
