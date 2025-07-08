@@ -51,34 +51,17 @@
       # home-manager
       cachix
       clinfo
-      unstable.devenv
-      unstable.direnv
       dbeaver-bin
-      dotnet-aspnetcore
-      dotnet-sdk
-      git
       google-chrome
       keymapp
-      killall
       ktailctl
-      nil
-      niv
-      nixos-generators # various image generators
       ollama
-      poetry
-      python312
-      python312Packages.pip
-      rubyPackages.prettier
       signal-desktop
-      tmux
-      uv
-      vim
+      unstable.devenv
+      unstable.direnv
       vscode
-      wget
     ];
     sessionVariables = {
-      # NIXOS_OZONE_WL = "1"; # Enable Ozone Wayland
-      # NIXOS_WAYLAND = "1";
       PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
     };
   };

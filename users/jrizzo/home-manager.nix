@@ -28,11 +28,14 @@ in
     # not a huge list.
     packages = with pkgs; [
       ansible
+      ansible-lint
       asciinema
       bat
       bottom
       comma
       devbox
+      dotnet-aspnetcore
+      dotnet-sdk
       eslint
       eza
       fd
@@ -47,11 +50,14 @@ in
       jq
       killall
       kubernetes-helm
+      nil
       niv
       nixd
+      nixos-generators
       nmap
       nodejs # Node is required for Copilot.vim
       opentofu
+      packer
       podman
       podman-compose
       podman-tui
@@ -64,8 +70,9 @@ in
         flake8
         isort
         mypy
-        pipx
+        pip
         pip-tools
+        pipx
         pylint
         pytest
         pytest-cov
@@ -75,15 +82,22 @@ in
       ripgrep
       (ruby.withPackages (ps: with ps; [
         prettier
-        solargraph
         rubocop
+        solargraph
       ]))
       spacevim
       tailscale
+      terraform
+      terraform-lsp
       terragrunt
+      tflint
+      tfsec
       tmux
       tree
+      # unstable.devenv
+      # unstable.direnv
       uv
+      vagrant
       vim
       watch
       weechat
