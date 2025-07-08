@@ -137,6 +137,11 @@
           isHypervisor = true;
         };
 
+        powerspec = mkSystem "powerspec" {
+          system = "x86_64-linux";
+          user = "jrizzo";
+        };
+
         winnie = mkSystem "winnie" {
           system = "x86_64-linux";
           user = "jrizzo";

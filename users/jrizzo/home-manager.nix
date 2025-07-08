@@ -100,6 +100,7 @@ in
       "/opt/homebrew/bin"
       "/opt/homebrew/sbin"
       # "/opt/anaconda3/bin"
+      "${configHome}/.npm-global/bin"
     ];
 
     sessionVariables = {
@@ -116,7 +117,8 @@ in
       LC_ALL = "en_US.UTF-8";
       LC_CTYPE = "en_US.UTF-8";
       LESSHISTFILE = "${cacheHome}/less/history"; # $HOME/.lesshst
-      NIXOS_OZONE_WL = 1;
+      # NIXOS_OZONE_WL = 1;
+      NPM_CONFIG_PREFIX = "${configHome}/.npm-global"; # $HOME/.npm
       PAGER = "less -FirSwX";
       PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
     } // (lib.optionalAttrs isWSL {
