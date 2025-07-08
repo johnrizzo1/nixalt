@@ -121,12 +121,19 @@ in
       NPM_CONFIG_PREFIX = "${configHome}/.npm-global"; # $HOME/.npm
       PAGER = "less -FirSwX";
       PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
+      SSH_AUTH_SOCK = "${dataHome}/.1password/agent.sock"; # $HOME/.1password/agent.sock
     } // (lib.optionalAttrs isWSL {
       CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
       CUDA_PATH = "${pkgs.cudatoolkit}";
       EXTRA_CCFLAGS = "-I/usr/include";
       EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
       LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
+    # }) // (lib.optionalAttrs isLinux {
+    #   # This is required for the 1Password CLI to work properly.
+    #   SSH_AUTH_SOCK = "${dataHome}/.1password/agent.sock"; # $HOME/.1password/agent.sock
+    }) // (lib.optionalAttrs isDarwin {
+      # This is required for the 1Password CLI to work properly.
+      SSH_AUTH_SOCK = "${dataHome}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     });
 
     shellAliases =
@@ -145,6 +152,8 @@ in
         gs = "git status";
         gt = "git tag";
         ls = "eza";
+        tf = "terraform";
+        tfc = "terraform console";
         tg = "terragrunt";
         top = "btm";
         tree = "erd --layout inverted --icons --human";
@@ -173,6 +182,7 @@ in
   # Programs
   #---------------------------------------------------------------------
   programs = {
+
     home-manager = {
       enable = true;
     };
@@ -317,6 +327,12 @@ in
         "irl" = lib.hm.dag.entryBefore [ "coda" ] {
           hostname = "irl";
           forwardAgent = true;
+          extraOptions = {
+            "IdentityAgent" = if pkgs.stdenv.isDarwin then
+              "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+            else
+              "~/.1password/agent.sock";
+          };
         };
       };
 
@@ -324,12 +340,12 @@ in
       controlMaster = "auto";
       forwardAgent = false;
       compression = true;
-
-      extraConfig =
-        if pkgs.stdenv.isDarwin then
-          "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
-        else
-          "IdentityAgent \"~/.1password/agent.sock\"";
+      # extraConfig =
+      #   if pkgs.stdenv.isDarwin then ''
+      #     IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+      #   '' else ''
+      #     IdentityAgent "/home/jrizzo/.1password/agent.sock"
+      #   '';
     };
 
     alacritty = {

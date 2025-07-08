@@ -44,8 +44,8 @@
   };
 
   # Host Specific Applications
-  environment.systemPackages =
-    with pkgs; [
+  environment = {
+    systemPackages = with pkgs; [
       _1password-cli
       _1password-gui
       # home-manager
@@ -76,9 +76,12 @@
       vscode
       wget
     ];
-  environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Enable Ozone Wayland
-  environment.sessionVariables.NIXOS_WAYLAND = "1";
-  environment.sessionVariables.PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
+    sessionVariables = {
+      # NIXOS_OZONE_WL = "1"; # Enable Ozone Wayland
+      # NIXOS_WAYLAND = "1";
+      PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
+    };
+  };
 
   #######################################################################
   # Hardware configuration
@@ -90,7 +93,7 @@
       modesetting.enable = true;
       powerManagement.enable = true;
       powerManagement.finegrained = false;
-      open = false;
+      open = true;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
@@ -121,10 +124,9 @@
       xkb = {
         layout = "us";
         variant = "";
+        options = "ctrl:nocaps"; # Disable Caps Lock
       };
-      xkbOptions = "ctrl:nocaps"; # Disable Caps Lock
     };
-
 
     displayManager.sddm.enable = true;
     desktopManager.plasma6.enable = true;
@@ -153,14 +155,7 @@
     vscode-server.enable = true;
 
     virt.enable = true;
-    portainer = {
-      enable = true; # Default false
-      version = "latest";
-      openFirewall = true; # Default false, set to 'true'
-      port = 9443; # Sets the port number in both the firewall and
-      # the docker container port mapping itself.
-    };
-
+    
     tailscale = {
       enable = true;
       # useRoutingFeatures = "server";
@@ -179,6 +174,16 @@
     # enable = true;
     # preseed = { };
     # };
+  };
+
+  #######################################################################
+  # OS Program Configuration
+  programs = {
+    _1password.enable = true;
+    _1password-gui = {
+      enable = true;
+      polkitPolicyOwners = [ "jrizzo" ];
+    };
   };
 
   #######################################################################
