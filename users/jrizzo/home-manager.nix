@@ -135,7 +135,7 @@ in
       NPM_CONFIG_PREFIX = "${configHome}/.npm-global"; # $HOME/.npm
       PAGER = "less -FirSwX";
       PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
-      SSH_AUTH_SOCK = "$HOME/.1password/agent.sock"; # $HOME/.1password/agent.sock
+      SSH_AUTH_SOCK = "/home/jrizzo/.1password/agent.sock"; # $HOME/.1password/agent.sock
     } // (lib.optionalAttrs isWSL {
       CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
       CUDA_PATH = "${pkgs.cudatoolkit}";

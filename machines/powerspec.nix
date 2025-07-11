@@ -55,6 +55,7 @@
       google-chrome
       keymapp
       ktailctl
+      lmstudio
       ollama
       signal-desktop
       unstable.devenv
