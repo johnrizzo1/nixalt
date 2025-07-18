@@ -50,6 +50,7 @@ in
       jq
       killall
       kubernetes-helm
+      lsof
       nil
       niv
       nixd
@@ -81,7 +82,6 @@ in
       ]))
       ripgrep
       (ruby.withPackages (ps: with ps; [
-        prettier
         rubocop
         solargraph
       ]))
@@ -479,4 +479,6 @@ in
       # extraConfig = (import ./vim-config.nix) { inherit sources; };
     };
   };
+
+  services.ollama.enable = true;
 }

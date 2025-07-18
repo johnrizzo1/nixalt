@@ -49,15 +49,27 @@
       _1password-cli
       _1password-gui
       # home-manager
+      beeper
       cachix
       clinfo
       dbeaver-bin
+      element-desktop
+      gimp3-with-plugins
       google-chrome
+      kdePackages.alpaka
+      kdePackages.filelight
+      kdePackages.kcalc
+      kdePackages.kdenlive
+      kdePackages.krdc
+      kdePackages.partitionmanager
       keymapp
       ktailctl
+      lens
       lmstudio
       ollama
+      orca-slicer
       signal-desktop
+      synology-drive-client
       unstable.devenv
       unstable.direnv
       vscode
