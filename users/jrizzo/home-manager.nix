@@ -47,9 +47,12 @@ in
       gnumake
       gopls
       htop
+      # jdk
+      temurin-bin
       jq
       killall
       kubernetes-helm
+      xorg.libXext
       lsof
       nil
       niv
@@ -69,6 +72,7 @@ in
       (python3.withPackages (ps: with ps; [
         black
         flake8
+        huggingface-hub
         isort
         mypy
         pip
@@ -79,6 +83,8 @@ in
         pytest-cov
         pytest-xdist
         ruff
+        torch
+        tensorflow
       ]))
       ripgrep
       (ruby.withPackages (ps: with ps; [
@@ -477,6 +483,17 @@ in
       # ]);
 
       # extraConfig = (import ./vim-config.nix) { inherit sources; };
+    };
+
+  };
+
+  #######################################################################
+  # dconf settings
+  dconf.enable = true;
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
     };
   };
 
