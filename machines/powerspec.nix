@@ -45,7 +45,7 @@
 
   nix.settings.cores = 24;
 
-  # Host Specific Applications
+  # System Environment
   environment = {
     systemPackages = with pkgs; [
       _1password-cli
@@ -222,24 +222,24 @@
   #   [registries.search]
   #   registries = ['docker.io']
   # '';
-  virtualisation.oci-containers = {
-    backend = lib.mkForce "podman";
-    containers = {
-      portainer = {
-        image = "portainer/portainer-ce:lts";
-        autoStart = true;
-        privileged = true;
-        ports = [ 
-          "8000:8000"
-          "8443:9443"
-        ];
-        volumes = [
-          "portainer_data:/data"
-          "/var/run/docker.sock:/var/run/docker.sock"
-        ];
-      };
-    };
-  };
+  # virtualisation.oci-containers = {
+  #   backend = lib.mkForce "podman";
+  #   containers = {
+  #     portainer = {
+  #       image = "portainer/portainer-ce:lts";
+  #       autoStart = true;
+  #       privileged = true;
+  #       ports = [ 
+  #         "8000:8000"
+  #         "8443:9443"
+  #       ];
+  #       volumes = [
+  #         "portainer_data:/data"
+  #         "/var/run/docker.sock:/var/run/docker.sock"
+  #       ];
+  #     };
+  #   };
+  # };
 
   #######################################################################
   # OS Program Configuration

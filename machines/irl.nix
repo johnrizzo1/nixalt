@@ -55,43 +55,40 @@
     };
   };
 
-  # Host Specific Applications
-  environment.systemPackages =
-    with pkgs; [
-      _1password-cli
-      _1password-gui
-      # home-manager
-      cachix
-      clinfo
-      dbeaver-bin
-      dotnet-aspnetcore
-      dotnet-sdk
-      git
-      google-chrome
-      killall
-      ktailctl
-      lmstudio
-      nil
-      niv
-      nixos-generators # various image generators
-      ollama
-      poetry
-      python312
-      python312Packages.pip
-      rubyPackages.prettier
-      signal-desktop
-      tmux
-      unstable.devenv
-      unstable.direnv
-      unstable.vscode
-      uv
-      vim
-      wget
-    ];
+  nix.settings.cores = 24;
 
-  environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Enable Ozone Wayland
-  environment.sessionVariables.NIXOS_WAYLAND = "1";
-  environment.sessionVariables.PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
+  # System Environment
+  environment = {
+    systemPackages =
+      with pkgs; [
+        _1password-cli
+        # home-manager
+        cachix
+        clinfo
+        unstable.devenv
+        unstable.direnv
+        dotnet-aspnetcore
+        dotnet-sdk
+        git
+        killall
+        nil
+        niv
+        nixos-generators # various image generators
+        ollama
+        poetry
+        python312
+        python312Packages.pip
+        rubyPackages.prettier
+        tmux
+        uv
+        vim
+        wget
+      ];
+
+    sessionVariables = {
+      PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
+    };
+  };
 
   #######################################################################
   # Hardware configuration
@@ -395,6 +392,37 @@
     # enable = true;
     # preseed = { };
     # };
+  };
+
+  #######################################################################
+  # Docker Services
+  # environment.etc."containers/registries.conf".text = ''
+  #   [registries.search]
+  #   registries = ['docker.io']
+  # '';
+  virtualisation.oci-containers = {
+    backend = lib.mkForce "podman";
+    containers = {
+      portainer = {
+        image = "portainer/portainer-ce:lts";
+        autoStart = true;
+        privileged = true;
+        ports = [ 
+          "8000:8000"
+          "8443:9443"
+        ];
+        volumes = [
+          "portainer_data:/data"
+          "/var/run/docker.sock:/var/run/docker.sock"
+        ];
+      };
+    };
+  };
+
+  #######################################################################
+  # OS Program Configuration
+  programs = {
+    _1password.enable = true;
   };
 
   #######################################################################
