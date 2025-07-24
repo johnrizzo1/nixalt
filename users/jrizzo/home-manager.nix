@@ -27,12 +27,17 @@ in
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
     packages = with pkgs; [
+      # jdk
       ansible
+      ansible-lint
       asciinema
       bat
       bottom
       comma
       devbox
+      dotnet-aspnetcore
+      dotnet-sdk
+      emacs
       eslint
       eza
       fd
@@ -46,44 +51,53 @@ in
       htop
       jq
       killall
-      kubernetes-helm
+      lsof
+      nil
       niv
       nixd
+      nixos-generators
       nmap
       nodejs # Node is required for Copilot.vim
-      opentofu
-      podman
-      podman-compose
-      podman-tui
+      packer
       poetry
       poetryPlugins.poetry-plugin-shell
+      postgresql
       postman
       procs
+      temurin-bin
+      xorg.libXext
       (python3.withPackages (ps: with ps; [
         black
         flake8
+        huggingface-hub
         isort
         mypy
-        pipx
+        pip
         pip-tools
+        pipx
         pylint
         pytest
         pytest-cov
         pytest-xdist
         ruff
+        tensorflow
+        torch
       ]))
       ripgrep
       (ruby.withPackages (ps: with ps; [
-        prettier
-        solargraph
         rubocop
+        solargraph
       ]))
+      # unstable.devenv
+      # unstable.direnv
       spacevim
       tailscale
-      terragrunt
+      terraform-lsp
       tmux
       tree
+      unetbootin
       uv
+      vagrant
       vim
       watch
       weechat
@@ -100,6 +114,7 @@ in
       "/opt/homebrew/bin"
       "/opt/homebrew/sbin"
       # "/opt/anaconda3/bin"
+      "${configHome}/.npm-global/bin"
     ];
 
     sessionVariables = {
@@ -116,9 +131,11 @@ in
       LC_ALL = "en_US.UTF-8";
       LC_CTYPE = "en_US.UTF-8";
       LESSHISTFILE = "${cacheHome}/less/history"; # $HOME/.lesshst
-      NIXOS_OZONE_WL = 1;
+      # NIXOS_OZONE_WL = 1;
+      NPM_CONFIG_PREFIX = "${configHome}/.npm-global"; # $HOME/.npm
       PAGER = "less -FirSwX";
       PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
+      SSH_AUTH_SOCK = "/home/jrizzo/.1password/agent.sock"; # $HOME/.1password/agent.sock
     } // (lib.optionalAttrs isWSL {
       CUDA_CACHE_PATH = "${cacheHome}/nv"; # $HOME/.nv
       CUDA_PATH = "${pkgs.cudatoolkit}";
@@ -126,6 +143,12 @@ in
       EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
       LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
       KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
+    # }) // (lib.optionalAttrs isLinux {
+    #   # This is required for the 1Password CLI to work properly.
+    #   SSH_AUTH_SOCK = "${dataHome}/.1password/agent.sock"; # $HOME/.1password/agent.sock
+    }) // (lib.optionalAttrs isDarwin {
+      # This is required for the 1Password CLI to work properly.
+      SSH_AUTH_SOCK = "${dataHome}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     });
 
     shellAliases =
@@ -144,6 +167,8 @@ in
         gs = "git status";
         gt = "git tag";
         ls = "eza";
+        tf = "terraform";
+        tfc = "terraform console";
         tg = "terragrunt";
         top = "btm";
         tree = "erd --layout inverted --icons --human";
@@ -172,6 +197,7 @@ in
   # Programs
   #---------------------------------------------------------------------
   programs = {
+
     home-manager = {
       enable = true;
     };
@@ -316,6 +342,12 @@ in
         "irl" = lib.hm.dag.entryBefore [ "coda" ] {
           hostname = "irl";
           forwardAgent = true;
+          extraOptions = {
+            "IdentityAgent" = if pkgs.stdenv.isDarwin then
+              "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+            else
+              "~/.1password/agent.sock";
+          };
         };
       };
 
@@ -323,12 +355,12 @@ in
       controlMaster = "auto";
       forwardAgent = false;
       compression = true;
-
-      extraConfig =
-        if pkgs.stdenv.isDarwin then
-          "IdentityAgent \"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
-        else
-          "IdentityAgent \"~/.1password/agent.sock\"";
+      # extraConfig =
+      #   if pkgs.stdenv.isDarwin then ''
+      #     IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+      #   '' else ''
+      #     IdentityAgent "/home/jrizzo/.1password/agent.sock"
+      #   '';
     };
 
     alacritty = {
@@ -447,5 +479,18 @@ in
 
       # extraConfig = (import ./vim-config.nix) { inherit sources; };
     };
+
   };
+
+  #######################################################################
+  # dconf settings
+  dconf.enable = true;
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
+  };
+
+  services.ollama.enable = true;
 }

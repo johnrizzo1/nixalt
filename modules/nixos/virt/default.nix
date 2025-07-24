@@ -75,27 +75,33 @@
   };
 
   config = lib.mkIf config.services.virt.enable {
-    users.users.jrizzo.extraGroups = [ "incus-admin" ];
     environment.systemPackages = with pkgs; [
-      docker-compose
+      # docker-compose
+      # swtpm-tpm2
       bridge-utils
+      gnome-boxes
+      kind
+      kubectl
+      kubernetes-helm
+      opentofu
+      OVMFFull
+      ovn
+      podman
+      podman-compose
+      podman-desktop
+      podman-tui
+      qemu_full
+      quickemu
       spice
       spice-gtk
       spice-protocol
-      virt-viewer
-      virt-manager
-      gnome-boxes
-      kubernetes-helm
-      podman-desktop
-      kubectl
-      kind
-      qemu_full
-      quickemu
       swtpm
-      # swtpm-tpm2
-      OVMFFull
-      opentofu
-      ovn
+      terraform
+      terragrunt
+      tflint
+      tfsec
+      virt-manager
+      virt-viewer
     ];
 
     virtualisation = {
@@ -111,6 +117,7 @@
         };
       };
       spiceUSBRedirection.enable = true;
+      containers.enable = true;
 
       # incus = lib.mkIf config.services.virt.incus_over_lxd {
       # incus = {
@@ -132,23 +139,24 @@
       #   enable = true;
       #   enableOnBoot = true;
       # };
-      # podman = {
-      #   enable = true;
-      #   dockerSocket.enable = true;
-      #   dockerCompat = true;
-      #   # enableNvidia = true;
-      #   autoPrune.enable = true;
-      # };
+      docker.enable = false;
+      podman = {
+        enable = true;
+        dockerSocket.enable = true;
+        # dockerCompat = true;
+        autoPrune.enable = true;
+        defaultNetwork.settings.dns_enabled = true;
+      };
     };
 
     # This is to support nvidia cards on docker
     # enable this after you create an option for cuda/rocm
     # --device=nvidia.com/gpu=all
-    # hardware.nvidia-container-toolkit.enable = true;
+    hardware.nvidia-container-toolkit.enable = true;
 
     programs.virt-manager.enable = true;
 
-    networking = {
+    # networking = {
       # Required for incus
       # nftables.enable = true;
 
@@ -186,6 +194,6 @@
 
       # networking.bridges.vmbr0.interfaces = [ "enp36s0" ];
       # networking.interfaces.vmbr0.useDHCP = lib.mkDefault true;
-    };
+    # };
   };
 }

@@ -161,13 +161,13 @@
     vscode-server.enable = true;
 
     virt.enable = true;
-    portainer = {
-      enable = true; # Default false
-      version = "latest";
-      openFirewall = true; # Default false, set to 'true'
-      port = 9443; # Sets the port number in both the firewall and
-      # the docker container port mapping itself.
-    };
+    # portainer = {
+    #   enable = true; # Default false
+    #   version = "latest";
+    #   openFirewall = true; # Default false, set to 'true'
+    #   port = 9443; # Sets the port number in both the firewall and
+    #   # the docker container port mapping itself.
+    # };
 
     # postgresql = {
     #   enable = true;
