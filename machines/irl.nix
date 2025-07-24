@@ -24,6 +24,18 @@
     domain = "technobable.com";
     # dhcpcd.enable = false;
     networkmanager.enable = true;
+
+    # K3s Kubernetes Distribution
+    firewall = {
+      allowedTCPPorts = [
+        6443 # k3s: required so that pods can reach the API server (running on port 6443 by default)
+        # 2379 # k3s, etcd clients: required if using a "High Availability Embedded etcd" configuration
+        # 2380 # k3s, etcd peers: required if using a "High Availability Embedded etcd" configuration
+      ];
+      # allowedUDPPorts = [
+        # 8472 # k3s, flannel: required if using multi-node for inter-node networking
+      # ];
+    };
   };
 
   time.timeZone = "America/New_York";
@@ -51,8 +63,6 @@
       # home-manager
       cachix
       clinfo
-      unstable.devenv
-      unstable.direnv
       dbeaver-bin
       dotnet-aspnetcore
       dotnet-sdk
@@ -60,6 +70,7 @@
       google-chrome
       killall
       ktailctl
+      lmstudio
       nil
       niv
       nixos-generators # various image generators
@@ -70,9 +81,11 @@
       rubyPackages.prettier
       signal-desktop
       tmux
+      unstable.devenv
+      unstable.direnv
+      unstable.vscode
       uv
       vim
-      unstable.vscode
       wget
     ];
 
@@ -90,7 +103,7 @@
       modesetting.enable = true;
       powerManagement.enable = true;
       powerManagement.finegrained = false;
-      open = false;
+      open = true;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
@@ -121,8 +134,8 @@
       variant = "";
     };
 
-    displayManager.sddm.enable = true;
-    desktopManager.plasma6.enable = true;
+    displayManager.sddm.enable = false;
+    desktopManager.plasma6.enable = false;
 
     # Enable CUPS to print documents.
     printing.enable = true;
@@ -155,6 +168,35 @@
       port = 9443; # Sets the port number in both the firewall and
       # the docker container port mapping itself.
     };
+
+    # postgresql = {
+    #   enable = true;
+    #   ensureDatabases = [ 
+    #     "litellm"
+    #   ];
+    #   enableTCPIP = true;
+    #   # port = 5432;
+    #   authentication = pkgs.lib.mkOverride 10 ''
+    #     #type database DBuser origin-address auth-method
+    #     local all      all     trust
+    #     host  all      all     127.0.0.1/32   trust
+    #     host  all      jrizzo  127.0.0.1/32   trust
+    #   '';
+    #   initialScript = pkgs.writeText "backend-initScript" ''
+    #     CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
+    #     CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
+    #     CREATE DATABASE litellm;
+    #     GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
+    #   '';
+    # };
+
+    #k3s = {
+    #  enable = true;
+    #  role = "server";
+    #  extraFlags = toString [
+    #    # "--debug" # Optionally add additional args to k3s
+    #  ];
+    #};
 
     #unbound = {
     #  enable = true;

@@ -125,6 +125,7 @@ in
       EXTRA_CCFLAGS = "-I/usr/include";
       EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
       LD_LIBRARY_PATH = "/usr/lib/wsl/lib:${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib:$LD_LIBRARY_PATH";
+      KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
     });
 
     shellAliases =
