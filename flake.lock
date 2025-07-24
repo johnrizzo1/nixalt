@@ -199,11 +199,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1752544374,
-        "narHash": "sha256-ReX0NG6nIAEtQQjLqeu1vUU2jjZuMlpymNtb4VQYeus=",
+        "lastModified": 1753198507,
+        "narHash": "sha256-NCG6izg+B3zsCwcT6+ssiWT3Y202jhOqGL/zh6fofa4=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "2e00ed310c218127e02ffcf28ddd4e0f669fde3e",
+        "rev": "fce051eaf881220843401df545a1444ab676520c",
         "type": "github"
       },
       "original": {
@@ -308,11 +308,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1752564969,
-        "narHash": "sha256-4858rI66/cpCFZR+iHl6sklXZQ11f9WdlHG5n/ZAS/Q=",
+        "lastModified": 1753088945,
+        "narHash": "sha256-SIPudElkFWXnrHVE2dJYyianVGtY0M9i76paqszHU5U=",
         "owner": "Mic92",
         "repo": "nix-ld",
-        "rev": "5b4edcb0357c684b69f406c808646135ee985f8a",
+        "rev": "c6298a7e607500720202221eb4e92317c900e000",
         "type": "github"
       },
       "original": {
@@ -360,11 +360,11 @@
     },
     "nixpkgs-darwin": {
       "locked": {
-        "lastModified": 1752599786,
-        "narHash": "sha256-VQ8Dd3qRHx+7fj/biRCwTnvv0zPKvopkZ+y5Y9nuBD8=",
+        "lastModified": 1753118650,
+        "narHash": "sha256-3qGG9hzkSE6Sc97iC1US7xKucFO5WgxVXHCd8Dswxnc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a72b1b4f2f68fa2dd93f5e4063bc8585ecad73d8",
+        "rev": "4978f362d3ecc18c2b111f46a65467a0e07ef923",
         "type": "github"
       },
       "original": {
@@ -376,11 +376,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1752620740,
-        "narHash": "sha256-f3pO+9lg66mV7IMmmIqG4PL3223TYMlnlw+pnpelbss=",
+        "lastModified": 1753115646,
+        "narHash": "sha256-yLuz5cz5Z+sn8DRAfNkrd2Z1cV6DaYO9JMrEz4KZo/c=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "32a4e87942101f1c9f9865e04dc3ddb175f5f32e",
+        "rev": "92c2e04a475523e723c67ef872d8037379073681",
         "type": "github"
       },
       "original": {
@@ -392,11 +392,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1752596105,
-        "narHash": "sha256-lFNVsu/mHLq3q11MuGkMhUUoSXEdQjCHvpReaGP1S2k=",
+        "lastModified": 1753151930,
+        "narHash": "sha256-XSQy6wRKHhRe//iVY5lS/ZpI/Jn6crWI8fQzl647wCg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "dab3a6e781554f965bde3def0aa2fda4eb8f1708",
+        "rev": "83e677f31c84212343f4cc553bab85c2efcad60a",
         "type": "github"
       },
       "original": {
@@ -408,11 +408,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1752599786,
-        "narHash": "sha256-VQ8Dd3qRHx+7fj/biRCwTnvv0zPKvopkZ+y5Y9nuBD8=",
+        "lastModified": 1753118650,
+        "narHash": "sha256-3qGG9hzkSE6Sc97iC1US7xKucFO5WgxVXHCd8Dswxnc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a72b1b4f2f68fa2dd93f5e4063bc8585ecad73d8",
+        "rev": "4978f362d3ecc18c2b111f46a65467a0e07ef923",
         "type": "github"
       },
       "original": {
@@ -453,26 +453,6 @@
       "original": {
         "type": "tarball",
         "url": "https://flakehub.com/f/AshleyYakeley/NixVirt/%2A.tar.gz"
-      }
-    },
-    "portainer-on-nixos": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1744390409,
-        "narHash": "sha256-C+Kw42DaTa6y2/4LDXWMMCK2/qOpEPLs6lpEg+zypWc=",
-        "owner": "cbleslie",
-        "repo": "portainer-on-nixos",
-        "rev": "8737cb91f32d6861165c84b22a5a98b198fa49b5",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "cbleslie",
-        "repo": "portainer-on-nixos",
-        "type": "gitlab"
       }
     },
     "pre-commit-hooks": {
@@ -538,7 +518,6 @@
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvirt": "nixvirt",
-        "portainer-on-nixos": "portainer-on-nixos",
         "pre-commit-hooks": "pre-commit-hooks",
         "vscode-server": "vscode-server"
       }

@@ -27,6 +27,7 @@ in
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
     packages = with pkgs; [
+      # jdk
       ansible
       ansible-lint
       asciinema
@@ -36,6 +37,7 @@ in
       devbox
       dotnet-aspnetcore
       dotnet-sdk
+      emacs
       eslint
       eza
       fd
@@ -47,12 +49,8 @@ in
       gnumake
       gopls
       htop
-      # jdk
-      temurin-bin
       jq
       killall
-      kubernetes-helm
-      xorg.libXext
       lsof
       nil
       niv
@@ -60,15 +58,14 @@ in
       nixos-generators
       nmap
       nodejs # Node is required for Copilot.vim
-      opentofu
       packer
-      podman
-      podman-compose
-      podman-tui
       poetry
       poetryPlugins.poetry-plugin-shell
+      postgresql
       postman
       procs
+      temurin-bin
+      xorg.libXext
       (python3.withPackages (ps: with ps; [
         black
         flake8
@@ -83,25 +80,22 @@ in
         pytest-cov
         pytest-xdist
         ruff
-        torch
         tensorflow
+        torch
       ]))
       ripgrep
       (ruby.withPackages (ps: with ps; [
         rubocop
         solargraph
       ]))
-      spacevim
-      tailscale
-      terraform
-      terraform-lsp
-      terragrunt
-      tflint
-      tfsec
-      tmux
-      tree
       # unstable.devenv
       # unstable.direnv
+      spacevim
+      tailscale
+      terraform-lsp
+      tmux
+      tree
+      unetbootin
       uv
       vagrant
       vim

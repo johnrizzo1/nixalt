@@ -43,20 +43,28 @@
     };
   };
 
+  nix.settings.cores = 24;
+
   # Host Specific Applications
   environment = {
     systemPackages = with pkgs; [
       _1password-cli
       _1password-gui
       # home-manager
+      airspy
+      avahi
       beeper
       cachix
       clinfo
       dbeaver-bin
       element-desktop
       gimp3-with-plugins
+      gnuradio
       google-chrome
+      gqrx
+      hackrf
       kdePackages.alpaka
+      kdePackages.dragon
       kdePackages.filelight
       kdePackages.kcalc
       kdePackages.kdenlive
@@ -66,14 +74,18 @@
       ktailctl
       lens
       lmstudio
+      obs-studio
+      obsidian
       ollama
       orca-slicer
+      rtl-sdr
       signal-desktop
       synology-drive-client
       unstable.devenv
       unstable.direnv
       vscode
     ];
+
     sessionVariables = {
       PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
     };
@@ -163,6 +175,68 @@
       settings = {
         PasswordAuthentication = true;
         PermitRootLogin = "no";
+      };
+    };
+
+    postgresql = {
+      enable = true;
+      ensureDatabases = [ 
+        "litellm"
+      ];
+      enableTCPIP = true;
+      # port = 5432;
+      authentication = pkgs.lib.mkOverride 10 ''
+        #type database DBuser origin-address auth-method
+        local all      all     trust
+        # host  all      all     127.0.0.1/32   trust
+        host  all      jrizzo  127.0.0.1/32   trust
+      '';
+      initialScript = pkgs.writeText "backend-initScript" ''
+        CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
+        CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
+        CREATE DATABASE litellm;
+        GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
+      '';
+    };
+
+    # litellm = {
+    #   enable = true;
+    #   openFirewall = true;
+    #   host = "0.0.0.0";
+    #   package = pkgs.unstable.litellm;
+    #   settings = {
+    #     environment_variables = {
+    #       LITELLM_MASTER_KEY = "wh4t3fr";
+    #       LITELLM_SALT_KEY = "sk-wh4t3fr";
+    #       DATABASE_URL = "postgresql://litellm:litellm@localhost/litellm";
+    #       # PORT = "4000";
+    #       STORE_MODEL_IN_DB = "true";
+    #     };
+    #   };
+    # };
+  };
+
+  #######################################################################
+  # Docker Services
+  # environment.etc."containers/registries.conf".text = ''
+  #   [registries.search]
+  #   registries = ['docker.io']
+  # '';
+  virtualisation.oci-containers = {
+    backend = lib.mkForce "podman";
+    containers = {
+      portainer = {
+        image = "portainer/portainer-ce:lts";
+        autoStart = true;
+        privileged = true;
+        ports = [ 
+          "8000:8000"
+          "8443:9443"
+        ];
+        volumes = [
+          "portainer_data:/data"
+          "/var/run/docker.sock:/var/run/docker.sock"
+        ];
       };
     };
   };

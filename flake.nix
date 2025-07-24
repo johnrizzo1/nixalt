@@ -70,8 +70,8 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
-    portainer-on-nixos.url = "gitlab:cbleslie/portainer-on-nixos";
-    portainer-on-nixos.inputs.nixpkgs.follows = "nixpkgs";
+    # portainer-on-nixos.url = "gitlab:cbleslie/portainer-on-nixos";
+    # portainer-on-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
     # claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
     # claude-desktop.inputs.nixpkgs.follows = "nixpkgs";

@@ -13,7 +13,7 @@
       # keep-outputs = true;
       allowed-users = [ "*" ];
       auto-optimise-store = false;
-      cores = 0;
+      cores = lib.mkDefault 0;
       experimental-features = [
         "nix-command"
         "flakes"
