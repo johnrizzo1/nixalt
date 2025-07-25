@@ -492,5 +492,4 @@ in
     };
   };
 
-  services.ollama.enable = true;
 }

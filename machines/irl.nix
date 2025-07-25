@@ -157,7 +157,6 @@
 
     vscode-server.enable = true;
 
-    virt.enable = true;
     # portainer = {
     #   enable = true; # Default false
     #   version = "latest";
@@ -362,10 +361,10 @@
     #   configFile = ../modules/common/files/promtail.yaml;
     # };
 
-    # ollama = {
-    #   enable = false;
-    #   acceleration = "cuda";
-    # };
+    ollama = {
+      enable = true;
+      acceleration = "cuda";
+    };
 
     # tabby = {
     # # Another AI Interface
@@ -388,10 +387,10 @@
       };
     };
 
-    # virt = {
-    # enable = true;
-    # preseed = { };
-    # };
+    virt = {
+      enable = true;
+      # preseed = { };
+    };
   };
 
   #######################################################################
