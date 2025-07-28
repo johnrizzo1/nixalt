@@ -46,6 +46,7 @@ in
       gh
       git
       git-lfs
+      gitflow
       gnumake
       gopls
       htop

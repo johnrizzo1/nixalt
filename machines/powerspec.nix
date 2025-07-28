@@ -53,6 +53,7 @@
       # home-manager
       airspy
       avahi
+      # beekeeper-studio
       beeper
       cachix
       clinfo
@@ -79,6 +80,8 @@
       ollama
       orca-slicer
       rtl-sdr
+      redisinsight
+      redis
       signal-desktop
       synology-drive-client
       unstable.devenv
@@ -178,26 +181,26 @@
       };
     };
 
-    postgresql = {
-      enable = true;
-      ensureDatabases = [ 
-        "litellm"
-      ];
-      enableTCPIP = true;
-      # port = 5432;
-      authentication = pkgs.lib.mkOverride 10 ''
-        #type database DBuser origin-address auth-method
-        local all      all     trust
-        # host  all      all     127.0.0.1/32   trust
-        host  all      jrizzo  127.0.0.1/32   trust
-      '';
-      initialScript = pkgs.writeText "backend-initScript" ''
-        CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
-        CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
-        CREATE DATABASE litellm;
-        GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
-      '';
-    };
+    # postgresql = {
+    #   enable = true;
+    #   ensureDatabases = [ 
+    #     "litellm"
+    #   ];
+    #   enableTCPIP = true;
+    #   # port = 5432;
+    #   authentication = pkgs.lib.mkOverride 10 ''
+    #     #type database DBuser origin-address auth-method
+    #     local all      all     trust
+    #     # host  all      all     127.0.0.1/32   trust
+    #     host  all      jrizzo  127.0.0.1/32   trust
+    #   '';
+    #   initialScript = pkgs.writeText "backend-initScript" ''
+    #     CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
+    #     CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
+    #     CREATE DATABASE litellm;
+    #     GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
+    #   '';
+    # };
 
     # litellm = {
     #   enable = true;
