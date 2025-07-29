@@ -65,6 +65,7 @@ in
       postgresql
       postman
       procs
+      puppeteer-cli
       temurin-bin
       xorg.libXext
       (python3.withPackages (ps: with ps; [

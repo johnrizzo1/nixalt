@@ -79,6 +79,7 @@
       obsidian
       ollama
       orca-slicer
+      penpot-desktop
       rtl-sdr
       redisinsight
       redis
@@ -179,6 +180,12 @@
         PasswordAuthentication = true;
         PermitRootLogin = "no";
       };
+    };
+
+    ollama = {
+	    enable = true;
+	    acceleration = "cuda";
+	    host = "0.0.0.0";
     };
 
     # postgresql = {
