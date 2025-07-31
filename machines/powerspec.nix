@@ -74,6 +74,7 @@
       keymapp
       ktailctl
       lens
+      libreoffice
       lmstudio
       obs-studio
       obsidian
