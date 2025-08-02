@@ -63,6 +63,7 @@
     systemPackages = with pkgs; [
       unstable.direnv
       unstable.devenv
+      # unstable.claude-code
     ];
   };
 
@@ -123,6 +124,7 @@
       "istat-menus"
       "iterm2"
       "jan" # Offline AI Tool like LMStudio
+      "kdenlive"
       "krita"
       "lm-studio"
       "microsoft-office"
@@ -130,6 +132,7 @@
       "nvidia-geforce-now"
       "obs"
       "obsidian"
+      "ollama"
       "orcaslicer"
       "parallels-virtualization-sdk"
       "parallels"

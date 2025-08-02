@@ -18,11 +18,6 @@ in
     # to use the old state version.
     stateVersion = "24.05";
 
-    #---------------------------------------------------------------------
-    # Packages
-    #---------------------------------------------------------------------
-    # useGlobalPkgs = true;
-
     # Packages I always want installed. Most packages I install using
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
@@ -50,6 +45,7 @@ in
       niv
       nixd
       nmap
+      unstable.node2nix
       nodejs # Node is required for Copilot.vim
       opentofu
       podman
@@ -100,6 +96,7 @@ in
       "/opt/homebrew/bin"
       "/opt/homebrew/sbin"
       # "/opt/anaconda3/bin"
+      "${cacheHome}/.npm-global/bin"
     ];
 
     sessionVariables = {
@@ -117,6 +114,7 @@ in
       LC_CTYPE = "en_US.UTF-8";
       LESSHISTFILE = "${cacheHome}/less/history"; # $HOME/.lesshst
       NIXOS_OZONE_WL = 1;
+      NPM_CONFIG_PREFIX="${cacheHome}/.npm-global";
       PAGER = "less -FirSwX";
       PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
     } // (lib.optionalAttrs isWSL {
@@ -133,8 +131,10 @@ in
         ".." = "cd ..";
         btop = "btm";
         cat = "bat -pp";
+        # claude = "/Users/jrizzo/.claude/local/claude";
         ga = "git add";
         gc = "git commit";
+        gcli = "npx https://github.com/google-gemini/gemini-cli";
         gco = "git checkout";
         gcp = "git cherry-pick";
         gdiff = "git diff";
@@ -143,6 +143,8 @@ in
         gs = "git status";
         gt = "git tag";
         ls = "eza";
+        ll = "ls -l";
+        tf = "terraform";
         tg = "terragrunt";
         top = "btm";
         tree = "erd --layout inverted --icons --human";
