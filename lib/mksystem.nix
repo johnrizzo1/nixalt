@@ -55,7 +55,9 @@ systemFunc rec {
     # (if isWSL then inputs.vscode-server.nixosModules.wsl else { })
 
     (if pkgs.stdenv.isLinux or pkgs.stdenv.isWSL then inputs.vscode-server.nixosModules.default else { })
-    (if pkgs.stdenv.isLinux then inputs.portainer-on-nixos.nixosModules.portainer else { })
+    # (if pkgs.stdenv.isLinux then inputs.portainer-on-nixos.nixosModules.portainer else { })
+
+    # (if pkgs.stdenv.isLinux or pkgs.stdenv.isWSL then inputs.nix-ld.nixosModules.nix-ld else { })
 
     machineConfig
     userOSConfig

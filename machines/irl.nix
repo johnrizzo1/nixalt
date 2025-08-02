@@ -24,6 +24,18 @@
     domain = "technobable.com";
     # dhcpcd.enable = false;
     networkmanager.enable = true;
+
+    # K3s Kubernetes Distribution
+    firewall = {
+      allowedTCPPorts = [
+        6443 # k3s: required so that pods can reach the API server (running on port 6443 by default)
+        # 2379 # k3s, etcd clients: required if using a "High Availability Embedded etcd" configuration
+        # 2380 # k3s, etcd peers: required if using a "High Availability Embedded etcd" configuration
+      ];
+      # allowedUDPPorts = [
+        # 8472 # k3s, flannel: required if using multi-node for inter-node networking
+      # ];
+    };
   };
 
   time.timeZone = "America/New_York";
@@ -43,42 +55,40 @@
     };
   };
 
-  # Host Specific Applications
-  environment.systemPackages =
-    with pkgs; [
-      _1password-cli
-      _1password-gui
-      # home-manager
-      cachix
-      clinfo
-      unstable.devenv
-      unstable.direnv
-      dbeaver-bin
-      dotnet-aspnetcore
-      dotnet-sdk
-      git
-      google-chrome
-      killall
-      ktailctl
-      nil
-      niv
-      nixos-generators # various image generators
-      ollama
-      poetry
-      python312
-      python312Packages.pip
-      rubyPackages.prettier
-      signal-desktop
-      tmux
-      uv
-      vim
-      unstable.vscode
-      wget
-    ];
+  nix.settings.cores = 24;
 
-  environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Enable Ozone Wayland
-  environment.sessionVariables.NIXOS_WAYLAND = "1";
-  environment.sessionVariables.PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
+  # System Environment
+  environment = {
+    systemPackages =
+      with pkgs; [
+        _1password-cli
+        # home-manager
+        cachix
+        clinfo
+        unstable.devenv
+        unstable.direnv
+        dotnet-aspnetcore
+        dotnet-sdk
+        git
+        killall
+        nil
+        niv
+        nixos-generators # various image generators
+        ollama
+        poetry
+        python312
+        python312Packages.pip
+        rubyPackages.prettier
+        tmux
+        uv
+        vim
+        wget
+      ];
+
+    sessionVariables = {
+      PODMAN_COMPOSE_WARNING_LOGS = "0"; # Disable podman-compose warning logs
+    };
+  };
 
   #######################################################################
   # Hardware configuration
@@ -90,7 +100,7 @@
       modesetting.enable = true;
       powerManagement.enable = true;
       powerManagement.finegrained = false;
-      open = false;
+      open = true;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
@@ -121,8 +131,8 @@
       variant = "";
     };
 
-    displayManager.sddm.enable = true;
-    desktopManager.plasma6.enable = true;
+    displayManager.sddm.enable = false;
+    desktopManager.plasma6.enable = false;
 
     # Enable CUPS to print documents.
     printing.enable = true;
@@ -147,14 +157,42 @@
 
     vscode-server.enable = true;
 
-    virt.enable = true;
-    portainer = {
-      enable = true; # Default false
-      version = "latest";
-      openFirewall = true; # Default false, set to 'true'
-      port = 9443; # Sets the port number in both the firewall and
-      # the docker container port mapping itself.
-    };
+    # portainer = {
+    #   enable = true; # Default false
+    #   version = "latest";
+    #   openFirewall = true; # Default false, set to 'true'
+    #   port = 9443; # Sets the port number in both the firewall and
+    #   # the docker container port mapping itself.
+    # };
+
+    # postgresql = {
+    #   enable = true;
+    #   ensureDatabases = [ 
+    #     "litellm"
+    #   ];
+    #   enableTCPIP = true;
+    #   # port = 5432;
+    #   authentication = pkgs.lib.mkOverride 10 ''
+    #     #type database DBuser origin-address auth-method
+    #     local all      all     trust
+    #     host  all      all     127.0.0.1/32   trust
+    #     host  all      jrizzo  127.0.0.1/32   trust
+    #   '';
+    #   initialScript = pkgs.writeText "backend-initScript" ''
+    #     CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
+    #     CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
+    #     CREATE DATABASE litellm;
+    #     GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
+    #   '';
+    # };
+
+    #k3s = {
+    #  enable = true;
+    #  role = "server";
+    #  extraFlags = toString [
+    #    # "--debug" # Optionally add additional args to k3s
+    #  ];
+    #};
 
     #unbound = {
     #  enable = true;
@@ -323,10 +361,10 @@
     #   configFile = ../modules/common/files/promtail.yaml;
     # };
 
-    # ollama = {
-    #   enable = false;
-    #   acceleration = "cuda";
-    # };
+    ollama = {
+      enable = true;
+      acceleration = "cuda";
+    };
 
     # tabby = {
     # # Another AI Interface
@@ -349,10 +387,41 @@
       };
     };
 
-    # virt = {
-    # enable = true;
-    # preseed = { };
-    # };
+    virt = {
+      enable = true;
+      # preseed = { };
+    };
+  };
+
+  #######################################################################
+  # Docker Services
+  # environment.etc."containers/registries.conf".text = ''
+  #   [registries.search]
+  #   registries = ['docker.io']
+  # '';
+  virtualisation.oci-containers = {
+    backend = lib.mkForce "podman";
+    containers = {
+      portainer = {
+        image = "portainer/portainer-ce:lts";
+        autoStart = true;
+        privileged = true;
+        ports = [ 
+          "8000:8000"
+          "8443:9443"
+        ];
+        volumes = [
+          "portainer_data:/data"
+          "/var/run/docker.sock:/var/run/docker.sock"
+        ];
+      };
+    };
+  };
+
+  #######################################################################
+  # OS Program Configuration
+  programs = {
+    _1password.enable = true;
   };
 
   #######################################################################

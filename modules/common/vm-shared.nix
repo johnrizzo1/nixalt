@@ -27,7 +27,7 @@
   security.sudo.wheelNeedsPassword = false;
 
   # Virtualization settings
-  virtualisation.docker.enable = true;
+  # virtualisation.docker.enable = true;
 
   # Select internationalisation properties.
   i18n = {

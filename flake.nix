@@ -64,14 +64,14 @@
 
     # VSCodium
     vscode-server.url = "github:nix-community/nixos-vscode-server";
-    nix-ld.url = "github:Mic92/nix-ld";
-    nix-ld.inputs.nixpkgs.follows = "nixpkgs";
+    # nix-ld.url = "github:Mic92/nix-ld";
+    # nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
 
     flake-utils.url = "github:numtide/flake-utils";
 
-    portainer-on-nixos.url = "gitlab:cbleslie/portainer-on-nixos";
-    portainer-on-nixos.inputs.nixpkgs.follows = "nixpkgs";
+    # portainer-on-nixos.url = "gitlab:cbleslie/portainer-on-nixos";
+    # portainer-on-nixos.inputs.nixpkgs.follows = "nixpkgs";
 
     # claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
     # claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
@@ -135,6 +135,11 @@
           system = "x86_64-linux";
           user = "jrizzo";
           isHypervisor = true;
+        };
+
+        powerspec = mkSystem "powerspec" {
+          system = "x86_64-linux";
+          user = "jrizzo";
         };
 
         winnie = mkSystem "winnie" {

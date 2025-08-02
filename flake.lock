@@ -455,26 +455,6 @@
         "url": "https://flakehub.com/f/AshleyYakeley/NixVirt/%2A.tar.gz"
       }
     },
-    "portainer-on-nixos": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1744390409,
-        "narHash": "sha256-C+Kw42DaTa6y2/4LDXWMMCK2/qOpEPLs6lpEg+zypWc=",
-        "owner": "cbleslie",
-        "repo": "portainer-on-nixos",
-        "rev": "8737cb91f32d6861165c84b22a5a98b198fa49b5",
-        "type": "gitlab"
-      },
-      "original": {
-        "owner": "cbleslie",
-        "repo": "portainer-on-nixos",
-        "type": "gitlab"
-      }
-    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat_4",
@@ -531,14 +511,12 @@
         "lanzaboote": "lanzaboote",
         "nix-alien": "nix-alien",
         "nix-darwin": "nix-darwin",
-        "nix-ld": "nix-ld",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvirt": "nixvirt",
-        "portainer-on-nixos": "portainer-on-nixos",
         "pre-commit-hooks": "pre-commit-hooks",
         "vscode-server": "vscode-server"
       }
