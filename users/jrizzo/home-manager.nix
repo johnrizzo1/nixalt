@@ -61,7 +61,6 @@ in
       postgresql
       postman
       procs
-      puppeteer-cli
       temurin-bin
       xorg.libXext
       (python3.withPackages (ps: with ps; [
@@ -78,8 +77,6 @@ in
         pytest-cov
         pytest-xdist
         ruff
-        tensorflow
-        torch
       ]))
       ripgrep
       (ruby.withPackages (ps: with ps; [
@@ -93,9 +90,7 @@ in
       terraform-lsp
       tmux
       tree
-      unetbootin
       uv
-      vagrant
       vim
       watch
       weechat
@@ -103,7 +98,15 @@ in
       xclip
       xsel
       zenith
-    ] ++ (lib.optionals (isLinux && !isWSL) [ ]);
+    ] ++ (lib.optionals (isLinux && !isWSL) [ 
+      puppeteer-cli
+      (python3.withPackages (ps: with ps; [
+        tensorflow
+        torch
+      ]))
+      unetbootin
+      vagrant
+    ]);
 
     #---------------------------------------------------------------------
     # Env vars and dotfiles
@@ -484,13 +487,13 @@ in
   };
 
   #######################################################################
-  # dconf settings
-  dconf.enable = true;
-  dconf.settings = {
+  # dconf settings (Linux only)
+  dconf.enable = isLinux;
+  dconf.settings = lib.optionalAttrs isLinux {
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
     };
   };
-
+  
 }
