@@ -77,7 +77,11 @@ in
         pytest-cov
         pytest-xdist
         ruff
-      ]))
+      ] ++ lib.optionals (isLinux && !isWSL) [
+          tensorflow
+          torch
+        ]
+      ))
       ripgrep
       (ruby.withPackages (ps: with ps; [
         rubocop
@@ -98,15 +102,10 @@ in
       xclip
       xsel
       zenith
-    ] ++ (lib.optionals (isLinux && !isWSL) [ 
-      puppeteer-cli
-      (python3.withPackages (ps: with ps; [
-        tensorflow
-        torch
-      ]))
-      unetbootin
-      vagrant
-    ]);
+      (if pkgs.stdenv.isLinux then puppeteer-cli else null)
+      (if pkgs.stdenv.isLinux then unetbootin else null)
+      (if pkgs.stdenv.isLinux then vagrant else null)
+    ]; # ++ (lib.optionals (isLinux && !isWSL) [ ]);
 
     #---------------------------------------------------------------------
     # Env vars and dotfiles
