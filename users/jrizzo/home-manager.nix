@@ -32,6 +32,7 @@ in
       devbox
       dotnet-aspnetcore
       dotnet-sdk
+      (if pkgs.stdenv.isLinux then dmidecode else {})
       emacs
       eslint
       eza
@@ -56,6 +57,7 @@ in
       unstable.node2nix
       nodejs # Node is required for Copilot.vim
       packer
+      (if pkgs.stdenv.isLinux then pciutils else {})
       poetry
       poetryPlugins.poetry-plugin-shell
       postgresql
@@ -120,6 +122,7 @@ in
     sessionVariables = {
       AWS_CONFIG_FILE = "${configHome}/aws/config";
       AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
+      # CACHIX_AUTH_TOKEN = "";
       DIRENV_LOG_FORMAT = ""; # Disable direnv logging
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
       EDITOR = "nvim";

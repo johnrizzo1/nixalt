@@ -58,6 +58,7 @@
       cachix
       clinfo
       dbeaver-bin
+      discord
       element-desktop
       gimp3-with-plugins
       gnuradio
