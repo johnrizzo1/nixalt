@@ -45,6 +45,7 @@ in
       gnumake
       gopls
       htop
+      hugo
       jq
       killall
       lsof

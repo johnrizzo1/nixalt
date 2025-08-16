@@ -109,7 +109,7 @@
       "cleanshot"
       "dbeaver-community"
       "discord"
-      "docker"
+      # "docker"
       "element"
       "figma"
       "freecad"
