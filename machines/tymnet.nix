@@ -95,6 +95,7 @@
       # OmniGraffle = 1142578753;
       # TestFlight = 899247664;
       # Xcode = 497799835;
+      Tailscale = 1475387142;
     };
 
     casks = [
@@ -127,12 +128,13 @@
       "kdenlive"
       "krita"
       "lm-studio"
+      "mactex"
       "microsoft-office"
       "monodraw"
       "nvidia-geforce-now"
       "obs"
       "obsidian"
-      "ollama"
+      "ollama-app"
       "orcaslicer"
       "parallels-virtualization-sdk"
       "parallels"
@@ -151,7 +153,7 @@
       "sourcetree"
       "spotify"
       "synology-drive"
-      "tailscale"
+      # "tailscale"
       "transmission"
       "vagrant"
       "visual-studio-code"
