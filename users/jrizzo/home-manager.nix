@@ -42,6 +42,7 @@ in
       git-lfs
       gitflow
       gnumake
+      go
       gopls
       htop
       hugo
@@ -151,7 +152,7 @@ in
     #   SSH_AUTH_SOCK = "${dataHome}/.1password/agent.sock"; # $HOME/.1password/agent.sock
     }) // (lib.optionalAttrs isDarwin {
       # This is required for the 1Password CLI to work properly.
-      SSH_AUTH_SOCK = "${dataHome}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+      SSH_AUTH_SOCK = "/Users/jrizzo/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     });
 
     shellAliases =

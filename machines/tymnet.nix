@@ -63,6 +63,8 @@
     systemPackages = with pkgs; [
       unstable.direnv
       unstable.devenv
+      # texlivePackages.chktex
+      texliveFull
       # unstable.claude-code
     ];
   };
