@@ -59,12 +59,16 @@
       clinfo
       dbeaver-bin
       discord
+      docker
+      docker-compose
       element-desktop
       gimp3-with-plugins
       gnuradio
       google-chrome
       gqrx
       hackrf
+      hplipWithPlugin
+      iat
       kdePackages.alpaka
       kdePackages.dragon
       kdePackages.filelight
@@ -72,6 +76,7 @@
       kdePackages.kdenlive
       kdePackages.krdc
       kdePackages.partitionmanager
+      kdePackages.isoimagewriter 
       keymapp
       ktailctl
       lens
@@ -82,13 +87,16 @@
       ollama
       orca-slicer
       penpot-desktop
-      rtl-sdr
+      rclone
       redisinsight
       redis
+      rtl-sdr
       signal-desktop
+      slack
       synology-drive-client
       unstable.devenv
       unstable.direnv
+      urh
       vscode
     ];
 
@@ -146,7 +154,20 @@
     desktopManager.plasma6.enable = true;
 
     # Enable CUPS to print documents.
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = with pkgs; [
+        cups-filters
+        cups-browsed
+        hplipWithPlugin
+      ];
+    };
+    
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+    };
 
     # Enable sound with pipewire.
     pulseaudio.enable = false;

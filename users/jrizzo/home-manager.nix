@@ -44,6 +44,7 @@ in
       git-lfs
       gitflow
       gnumake
+      go
       gopls
       htop
       jq
