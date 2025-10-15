@@ -22,7 +22,6 @@ in
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
     packages = with pkgs; [
-      # jdk
       ansible
       ansible-lint
       asciinema
@@ -47,6 +46,7 @@ in
       go
       gopls
       htop
+      hugo
       jq
       killall
       lsof
@@ -55,7 +55,6 @@ in
       nixd
       nixos-generators
       nmap
-      unstable.node2nix
       nodejs # Node is required for Copilot.vim
       packer
       (if pkgs.stdenv.isLinux then pciutils else {})
@@ -65,6 +64,7 @@ in
       postman
       procs
       temurin-bin
+      unstable.node2nix
       xorg.libXext
       (python3.withPackages (ps: with ps; [
         black
@@ -83,8 +83,7 @@ in
       ] ++ lib.optionals (isLinux && !isWSL) [
           tensorflow
           torch
-        ]
-      ))
+      ]))
       ripgrep
       (ruby.withPackages (ps: with ps; [
         rubocop
@@ -105,10 +104,14 @@ in
       xclip
       xsel
       zenith
-      (if pkgs.stdenv.isLinux then puppeteer-cli else null)
-      (if pkgs.stdenv.isLinux then unetbootin else null)
-      (if pkgs.stdenv.isLinux then vagrant else null)
-    ]; # ++ (lib.optionals (isLinux && !isWSL) [ ]);
+      # (if pkgs.stdenv.isLinux then puppeteer-cli else null)
+      # (if pkgs.stdenv.isLinux then unetbootin else null)
+      # (if pkgs.stdenv.isLinux then vagrant else null)
+    ] ++ (lib.optionals isLinux [
+      puppeteer-cli
+      unetbootin
+      vagrant
+    ]);
 
     #---------------------------------------------------------------------
     # Env vars and dotfiles
@@ -152,7 +155,7 @@ in
     #   SSH_AUTH_SOCK = "${dataHome}/.1password/agent.sock"; # $HOME/.1password/agent.sock
     }) // (lib.optionalAttrs isDarwin {
       # This is required for the 1Password CLI to work properly.
-      SSH_AUTH_SOCK = "${dataHome}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+      SSH_AUTH_SOCK = "/Users/jrizzo/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     });
 
     shellAliases =
@@ -351,7 +354,7 @@ in
           forwardAgent = true;
           extraOptions = {
             "IdentityAgent" = if pkgs.stdenv.isDarwin then
-              "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+              "~/Library/Group\\ Containers/2BUA8C4S2C.com.1password/t/agent.sock"
             else
               "~/.1password/agent.sock";
           };

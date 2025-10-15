@@ -63,6 +63,8 @@
     systemPackages = with pkgs; [
       unstable.direnv
       unstable.devenv
+      # texlivePackages.chktex
+      texliveFull
       # unstable.claude-code
     ];
   };
@@ -95,6 +97,7 @@
       # OmniGraffle = 1142578753;
       # TestFlight = 899247664;
       # Xcode = 497799835;
+      Tailscale = 1475387142;
     };
 
     casks = [
@@ -109,7 +112,7 @@
       "cleanshot"
       "dbeaver-community"
       "discord"
-      "docker"
+      # "docker"
       "element"
       "figma"
       "freecad"
@@ -127,12 +130,13 @@
       "kdenlive"
       "krita"
       "lm-studio"
+      "mactex"
       "microsoft-office"
       "monodraw"
       "nvidia-geforce-now"
       "obs"
       "obsidian"
-      "ollama"
+      "ollama-app"
       "orcaslicer"
       "parallels-virtualization-sdk"
       "parallels"
@@ -151,7 +155,7 @@
       "sourcetree"
       "spotify"
       "synology-drive"
-      "tailscale"
+      # "tailscale"
       "transmission"
       "vagrant"
       "visual-studio-code"
