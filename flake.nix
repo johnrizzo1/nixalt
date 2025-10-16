@@ -64,8 +64,8 @@
 
     # VSCodium
     vscode-server.url = "github:nix-community/nixos-vscode-server";
-    nix-ld.url = "github:Mic92/nix-ld";
-    nix-ld.inputs.nixpkgs.follows = "nixpkgs";
+    # nix-ld.url = "github:Mic92/nix-ld";
+    # nix-ld.inputs.nixpkgs.follows = "nixpkgs";
     nix-alien.url = "github:thiagokokada/nix-alien";
 
     flake-utils.url = "github:numtide/flake-utils";

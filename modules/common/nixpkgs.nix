@@ -44,6 +44,7 @@
           "nvidia-x11"
           "nvidia-settings"
           "obsidian"
+          "redisinsight"
           "synology-drive-client"
           "vscode"
           "zoom"

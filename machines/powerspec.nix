@@ -53,16 +53,22 @@
       # home-manager
       airspy
       avahi
+      # beekeeper-studio
       beeper
       cachix
       clinfo
       dbeaver-bin
+      discord
+      docker
+      docker-compose
       element-desktop
       gimp3-with-plugins
       gnuradio
       google-chrome
       gqrx
       hackrf
+      hplipWithPlugin
+      iat
       kdePackages.alpaka
       kdePackages.dragon
       kdePackages.filelight
@@ -70,19 +76,27 @@
       kdePackages.kdenlive
       kdePackages.krdc
       kdePackages.partitionmanager
+      kdePackages.isoimagewriter 
       keymapp
       ktailctl
       lens
+      libreoffice
       lmstudio
       obs-studio
       obsidian
       ollama
       orca-slicer
+      penpot-desktop
+      rclone
+      redisinsight
+      redis
       rtl-sdr
       signal-desktop
+      slack
       synology-drive-client
       unstable.devenv
       unstable.direnv
+      urh
       vscode
     ];
 
@@ -140,7 +154,20 @@
     desktopManager.plasma6.enable = true;
 
     # Enable CUPS to print documents.
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = with pkgs; [
+        cups-filters
+        cups-browsed
+        hplipWithPlugin
+      ];
+    };
+    
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+    };
 
     # Enable sound with pipewire.
     pulseaudio.enable = false;
@@ -178,26 +205,32 @@
       };
     };
 
-    postgresql = {
-      enable = true;
-      ensureDatabases = [ 
-        "litellm"
-      ];
-      enableTCPIP = true;
-      # port = 5432;
-      authentication = pkgs.lib.mkOverride 10 ''
-        #type database DBuser origin-address auth-method
-        local all      all     trust
-        # host  all      all     127.0.0.1/32   trust
-        host  all      jrizzo  127.0.0.1/32   trust
-      '';
-      initialScript = pkgs.writeText "backend-initScript" ''
-        CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
-        CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
-        CREATE DATABASE litellm;
-        GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
-      '';
+    ollama = {
+	    enable = true;
+	    acceleration = "cuda";
+	    host = "0.0.0.0";
     };
+
+    # postgresql = {
+    #   enable = true;
+    #   ensureDatabases = [ 
+    #     "litellm"
+    #   ];
+    #   enableTCPIP = true;
+    #   # port = 5432;
+    #   authentication = pkgs.lib.mkOverride 10 ''
+    #     #type database DBuser origin-address auth-method
+    #     local all      all     trust
+    #     # host  all      all     127.0.0.1/32   trust
+    #     host  all      jrizzo  127.0.0.1/32   trust
+    #   '';
+    #   initialScript = pkgs.writeText "backend-initScript" ''
+    #     CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
+    #     CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
+    #     CREATE DATABASE litellm;
+    #     GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
+    #   '';
+    # };
 
     # litellm = {
     #   enable = true;

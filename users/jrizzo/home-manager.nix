@@ -18,16 +18,10 @@ in
     # to use the old state version.
     stateVersion = "24.05";
 
-    #---------------------------------------------------------------------
-    # Packages
-    #---------------------------------------------------------------------
-    # useGlobalPkgs = true;
-
     # Packages I always want installed. Most packages I install using
     # per-project flakes sourced with direnv and nix-shell, so this is
     # not a huge list.
     packages = with pkgs; [
-      # jdk
       ansible
       ansible-lint
       asciinema
@@ -37,6 +31,7 @@ in
       devbox
       dotnet-aspnetcore
       dotnet-sdk
+      (if pkgs.stdenv.isLinux then dmidecode else {})
       emacs
       eslint
       eza
@@ -46,9 +41,12 @@ in
       gh
       git
       git-lfs
+      gitflow
       gnumake
+      go
       gopls
       htop
+      hugo
       jq
       killall
       lsof
@@ -59,12 +57,14 @@ in
       nmap
       nodejs # Node is required for Copilot.vim
       packer
+      (if pkgs.stdenv.isLinux then pciutils else {})
       poetry
       poetryPlugins.poetry-plugin-shell
       postgresql
       postman
       procs
       temurin-bin
+      unstable.node2nix
       xorg.libXext
       (python3.withPackages (ps: with ps; [
         black
@@ -80,8 +80,9 @@ in
         pytest-cov
         pytest-xdist
         ruff
-        tensorflow
-        torch
+      ] ++ lib.optionals (isLinux && !isWSL) [
+          tensorflow
+          torch
       ]))
       ripgrep
       (ruby.withPackages (ps: with ps; [
@@ -95,9 +96,7 @@ in
       terraform-lsp
       tmux
       tree
-      unetbootin
       uv
-      vagrant
       vim
       watch
       weechat
@@ -105,7 +104,14 @@ in
       xclip
       xsel
       zenith
-    ] ++ (lib.optionals (isLinux && !isWSL) [ ]);
+      # (if pkgs.stdenv.isLinux then puppeteer-cli else null)
+      # (if pkgs.stdenv.isLinux then unetbootin else null)
+      # (if pkgs.stdenv.isLinux then vagrant else null)
+    ] ++ (lib.optionals isLinux [
+      puppeteer-cli
+      unetbootin
+      vagrant
+    ]);
 
     #---------------------------------------------------------------------
     # Env vars and dotfiles
@@ -114,12 +120,13 @@ in
       "/opt/homebrew/bin"
       "/opt/homebrew/sbin"
       # "/opt/anaconda3/bin"
-      "${configHome}/.npm-global/bin"
+      "${cacheHome}/.npm-global/bin"
     ];
 
     sessionVariables = {
       AWS_CONFIG_FILE = "${configHome}/aws/config";
       AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
+      # CACHIX_AUTH_TOKEN = "";
       DIRENV_LOG_FORMAT = ""; # Disable direnv logging
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
       EDITOR = "nvim";
@@ -131,8 +138,8 @@ in
       LC_ALL = "en_US.UTF-8";
       LC_CTYPE = "en_US.UTF-8";
       LESSHISTFILE = "${cacheHome}/less/history"; # $HOME/.lesshst
-      # NIXOS_OZONE_WL = 1;
-      NPM_CONFIG_PREFIX = "${configHome}/.npm-global"; # $HOME/.npm
+      NIXOS_OZONE_WL = 1;
+      NPM_CONFIG_PREFIX="${cacheHome}/.npm-global";
       PAGER = "less -FirSwX";
       PYTHONSTARTUP = "${configHome}/python/pythonrc.py"; # $HOME/.python_history
       SSH_AUTH_SOCK = "/home/jrizzo/.1password/agent.sock"; # $HOME/.1password/agent.sock
@@ -148,7 +155,7 @@ in
     #   SSH_AUTH_SOCK = "${dataHome}/.1password/agent.sock"; # $HOME/.1password/agent.sock
     }) // (lib.optionalAttrs isDarwin {
       # This is required for the 1Password CLI to work properly.
-      SSH_AUTH_SOCK = "${dataHome}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+      SSH_AUTH_SOCK = "/Users/jrizzo/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     });
 
     shellAliases =
@@ -157,8 +164,10 @@ in
         ".." = "cd ..";
         btop = "btm";
         cat = "bat -pp";
+        # claude = "/Users/jrizzo/.claude/local/claude";
         ga = "git add";
         gc = "git commit";
+        gcli = "npx https://github.com/google-gemini/gemini-cli";
         gco = "git checkout";
         gcp = "git cherry-pick";
         gdiff = "git diff";
@@ -167,6 +176,7 @@ in
         gs = "git status";
         gt = "git tag";
         ls = "eza";
+        ll = "ls -l";
         tf = "terraform";
         tfc = "terraform console";
         tg = "terragrunt";
@@ -344,7 +354,7 @@ in
           forwardAgent = true;
           extraOptions = {
             "IdentityAgent" = if pkgs.stdenv.isDarwin then
-              "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+              "~/Library/Group\\ Containers/2BUA8C4S2C.com.1password/t/agent.sock"
             else
               "~/.1password/agent.sock";
           };
@@ -483,13 +493,13 @@ in
   };
 
   #######################################################################
-  # dconf settings
-  dconf.enable = true;
-  dconf.settings = {
+  # dconf settings (Linux only)
+  dconf.enable = isLinux;
+  dconf.settings = lib.optionalAttrs isLinux {
     "org/virt-manager/virt-manager/connections" = {
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
     };
   };
-
+  
 }
