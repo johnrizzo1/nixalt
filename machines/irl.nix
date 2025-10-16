@@ -174,12 +174,13 @@
     #   # port = 5432;
     #   authentication = pkgs.lib.mkOverride 10 ''
     #     #type database DBuser origin-address auth-method
-    #     local all      all     trust
+    #     local all      all                    trust
     #     host  all      all     127.0.0.1/32   trust
-    #     host  all      jrizzo  127.0.0.1/32   trust
+    #     host  all      jrizzo  0.0.0.0/0      scram-sha-256
+    #     host  litellm  litellm 0.0.0.0/0      trust
     #   '';
     #   initialScript = pkgs.writeText "backend-initScript" ''
-    #     CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
+    #     CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr!' CREATEDB;
     #     CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
     #     CREATE DATABASE litellm;
     #     GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
