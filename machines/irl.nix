@@ -71,6 +71,7 @@
         dotnet-sdk
         git
         killall
+        nvidia-container-toolkit
         nil
         niv
         nixos-generators # various image generators
@@ -105,6 +106,9 @@
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
 
+    nvidia-container-toolkit.enable = true;
+    nvidia-container-toolkit.mount-nvidia-executables = true;
+
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -123,7 +127,10 @@
   services = {
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
-    xserver.videoDrivers = [ "nvidia" ];
+    xserver = {
+      enable = false;
+      videoDrivers = [ "nvidia" ];
+    };
 
     # Configure keymap in X11
     xserver.xkb = {
@@ -362,10 +369,10 @@
     #   configFile = ../modules/common/files/promtail.yaml;
     # };
 
-    ollama = {
-      enable = true;
-      acceleration = "cuda";
-    };
+    # ollama = {
+      # enable = true;
+      # acceleration = "cuda";
+    # };
 
     # tabby = {
     # # Another AI Interface
@@ -400,24 +407,24 @@
   #   [registries.search]
   #   registries = ['docker.io']
   # '';
-  virtualisation.oci-containers = {
-    backend = lib.mkForce "podman";
-    containers = {
-      portainer = {
-        image = "portainer/portainer-ce:lts";
-        autoStart = true;
-        privileged = true;
-        ports = [ 
-          "8000:8000"
-          "8443:9443"
-        ];
-        volumes = [
-          "portainer_data:/data"
-          "/var/run/docker.sock:/var/run/docker.sock"
-        ];
-      };
-    };
-  };
+  # virtualisation.oci-containers = {
+  #   backend = lib.mkForce "podman";
+  #   containers = {
+  #     portainer = {
+  #       image = "portainer/portainer-ce:lts";
+  #       autoStart = true;
+  #       privileged = true;
+  #       ports = [ 
+  #         "8000:8000"
+  #         "8443:9443"
+  #       ];
+  #       volumes = [
+  #         "portainer_data:/data"
+  #         "/var/run/docker.sock:/var/run/docker.sock"
+  #       ];
+  #     };
+  #   };
+  # };
 
   #######################################################################
   # OS Program Configuration
