@@ -38,6 +38,18 @@
     ];
   };
 
+  qt = {
+    enable = true;
+    # platformTheme = "qtct";
+    platformTheme = "gnome";
+    style = "adwaita-dark";
+  };
+
+  # xdg.configFile = {
+    # "Kvantum/ArcDark".source = "${pkgs.arc-kde-theme}/share/Kvantum/ArcDark";
+    # "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ArcDark";
+  # };
+
   # nixpkgs.overlays = import ../../lib/overlays.nix ++ [
   #   (import ./vim.nix { inherit inputs; })
   # ];

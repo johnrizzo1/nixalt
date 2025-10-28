@@ -22,8 +22,12 @@
   networking = {
     hostName = currentSystemName;
     domain = "technobable.com";
+    hosts = {
+      "127.0.0.1" = [ "localhost" currentSystemName "awx.local" ];
+    };
     # dhcpcd.enable = false;
     networkmanager.enable = true;
+    firewall.allowedTCPPorts = [ 6443 ]; # for k3s api-server
   };
 
   time.timeZone = "America/New_York";
@@ -63,7 +67,10 @@
       docker-compose
       element-desktop
       gimp3-with-plugins
+      adwaita-icon-theme
       gnuradio
+      gnome-tweaks
+      gdm-settings
       google-chrome
       gqrx
       hackrf
@@ -82,6 +89,7 @@
       lens
       libreoffice
       lmstudio
+      nvidia-container-toolkit
       obs-studio
       obsidian
       ollama
@@ -90,6 +98,7 @@
       rclone
       redisinsight
       redis
+      refine
       rtl-sdr
       signal-desktop
       slack
@@ -120,6 +129,9 @@
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
 
+    nvidia-container-toolkit.enable = true;
+    nvidia-container-toolkit.mount-nvidia-executables = true;
+
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -140,7 +152,7 @@
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
     xserver = {
-      enable = true;
+      enable = false;
       videoDrivers = [ "nvidia" ];
       # Configure keymap in X11
       xkb = {
@@ -148,9 +160,11 @@
         variant = "";
         options = "ctrl:nocaps"; # Disable Caps Lock
       };
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
     };
 
-    displayManager.sddm.enable = true;
+    # displayManager.sddm.enable = true;
     desktopManager.plasma6.enable = true;
 
     # Enable CUPS to print documents.
@@ -206,9 +220,14 @@
     };
 
     ollama = {
-	    enable = true;
-	    acceleration = "cuda";
-	    host = "0.0.0.0";
+      enable = true;
+      acceleration = "cuda";
+      host = "0.0.0.0";
+    };
+
+    k3s = {
+      enable = true;
+      role = "server";
     };
 
     # postgresql = {
@@ -282,6 +301,12 @@
       enable = true;
       polkitPolicyOwners = [ "jrizzo" ];
     };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = "adwaita-dark";
   };
 
 
