@@ -1,7 +1,6 @@
 # This function creates a NixOS system based on our VM setup for a
 # particular architecture.
-{ nixpkgs
-, overlays
+{ overlays
 , inputs
 ,
 }:
@@ -13,7 +12,17 @@ name:
 ,
 }:
 let
-  pkgs = import nixpkgs { inherit system; };
+  sourceNixpkgs =
+    if builtins.elem system [ "x86_64-darwin" "aarch64-darwin" ]
+    then inputs.nixpkgs-darwin
+    else inputs.nixpkgs-stable;
+
+  sourceLib = sourceNixpkgs.lib;
+
+  pkgs = import sourceNixpkgs {
+    inherit system;
+    overlays = overlays;
+  };
 
   # The config files for this system.
   machineConfig = ../machines/${name}.nix;
@@ -24,7 +33,7 @@ let
   systemFunc =
     if pkgs.stdenv.isDarwin
     then inputs.nix-darwin.lib.darwinSystem
-    else nixpkgs.lib.nixosSystem;
+    else sourceLib.nixosSystem;
   home-manager =
     if pkgs.stdenv.isDarwin
     then inputs.home-manager.darwinModules

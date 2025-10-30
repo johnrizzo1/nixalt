@@ -48,6 +48,7 @@
           "synology-drive-client"
           "vscode"
           "zoom"
+	  "zoom-6.5.7.3298"
         ];
     };
   };

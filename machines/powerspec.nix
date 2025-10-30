@@ -70,6 +70,7 @@
       adwaita-icon-theme
       gnuradio
       gnome-tweaks
+      gnome-shell-extensions
       gdm-settings
       google-chrome
       gqrx
@@ -107,6 +108,7 @@
       unstable.direnv
       urh
       vscode
+      zoom-us
     ];
 
     sessionVariables = {
@@ -165,7 +167,10 @@
     };
 
     # displayManager.sddm.enable = true;
-    desktopManager.plasma6.enable = true;
+    # desktopManager.plasma6.enable = true;
+
+    # displayManager.cosmic-greeter.enable = true;
+    # desktopManager.cosmic.enable = true;
 
     # Enable CUPS to print documents.
     printing = {
@@ -314,6 +319,14 @@
   # Security Configuration
   # security.apparmor.enable = true;
   security.rtkit.enable = true;
+
+  virtualisation.vmVariant = {
+    hardware.nvidia.datacenter.enable = lib.mkForce false;
+    hardware.nvidia-container-toolkit.enable = lib.mkForce false;
+    hardware.nvidia-container-toolkit.mount-nvidia-executables = lib.mkForce false;
+    services.xserver.videoDrivers = lib.mkForce [ ];
+    virtualisation.diskSize = lib.mkForce 65536;
+  };
 
   #######################################################################
   # System Configuration

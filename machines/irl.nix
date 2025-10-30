@@ -139,7 +139,9 @@
     };
 
     displayManager.sddm.enable = false;
-    desktopManager.plasma6.enable = false;
+    # displayManager.cosmic-greeter.enable = true;
+    # desktopManager.plasma6.enable = false;
+    # desktopManager.cosmic.enable = true;
 
     # Enable CUPS to print documents.
     printing.enable = true;
