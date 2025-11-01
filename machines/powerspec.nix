@@ -104,6 +104,8 @@
       signal-desktop
       slack
       synology-drive-client
+      telegram-desktop
+      texlive.combined.scheme-full
       unstable.devenv
       unstable.direnv
       urh
@@ -154,7 +156,7 @@
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
     xserver = {
-      enable = false;
+      enable = true;
       videoDrivers = [ "nvidia" ];
       # Configure keymap in X11
       xkb = {
@@ -162,15 +164,20 @@
         variant = "";
         options = "ctrl:nocaps"; # Disable Caps Lock
       };
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
+      # displayManager.gdm.enable = true;
+      # desktopManager.gnome.enable = true;
+
+      # displayManager.lightdm.enable = true;
+      # desktopManager.budgie.enable = true;
+      # desktopManager.cinnamon.enable = true;
+      # desktopManager.mate.enable = true;
     };
 
     # displayManager.sddm.enable = true;
     # desktopManager.plasma6.enable = true;
 
-    # displayManager.cosmic-greeter.enable = true;
-    # desktopManager.cosmic.enable = true;
+    displayManager.cosmic-greeter.enable = true;
+    desktopManager.cosmic.enable = true;
 
     # Enable CUPS to print documents.
     printing = {
