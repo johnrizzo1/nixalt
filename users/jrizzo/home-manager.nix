@@ -29,8 +29,12 @@ in
       bottom
       comma
       devbox
+      docker
+      docker-compose
+      docker-credential-helpers
       dotnet-aspnetcore
       dotnet-sdk
+      drawio
       emacs
       eslint
       eza
@@ -48,6 +52,8 @@ in
       hugo
       jq
       killall
+      kubectl
+      kubernetes-helm
       lsof
       nil
       niv
