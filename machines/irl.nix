@@ -71,6 +71,7 @@
         dotnet-sdk
         git
         killall
+        nvidia-container-toolkit
         nil
         niv
         nixos-generators # various image generators
@@ -105,6 +106,9 @@
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
 
+    nvidia-container-toolkit.enable = true;
+    nvidia-container-toolkit.mount-nvidia-executables = true;
+
     graphics = {
       enable = true;
       enable32Bit = true;
@@ -123,7 +127,10 @@
   services = {
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
-    xserver.videoDrivers = [ "nvidia" ];
+    xserver = {
+      enable = false;
+      videoDrivers = [ "nvidia" ];
+    };
 
     # Configure keymap in X11
     xserver.xkb = {
@@ -132,7 +139,9 @@
     };
 
     displayManager.sddm.enable = false;
-    desktopManager.plasma6.enable = false;
+    # displayManager.cosmic-greeter.enable = true;
+    # desktopManager.plasma6.enable = false;
+    # desktopManager.cosmic.enable = true;
 
     # Enable CUPS to print documents.
     printing.enable = true;
@@ -174,25 +183,26 @@
     #   # port = 5432;
     #   authentication = pkgs.lib.mkOverride 10 ''
     #     #type database DBuser origin-address auth-method
-    #     local all      all     trust
+    #     local all      all                    trust
     #     host  all      all     127.0.0.1/32   trust
-    #     host  all      jrizzo  127.0.0.1/32   trust
+    #     host  all      jrizzo  0.0.0.0/0      scram-sha-256
+    #     host  litellm  litellm 0.0.0.0/0      trust
     #   '';
     #   initialScript = pkgs.writeText "backend-initScript" ''
-    #     CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr' CREATEDB;
+    #     CREATE ROLE jrizzo WITH PASSWORD 'wh4t3fr!' CREATEDB;
     #     CREATE ROLE litellm WITH LOGIN PASSWORD 'litellm' CREATEDB;
     #     CREATE DATABASE litellm;
     #     GRANT ALL PRIVILEGES ON DATABASE litellm TO litellm;
     #   '';
     # };
 
-    #k3s = {
-    #  enable = true;
-    #  role = "server";
+    k3s = {
+      enable = true;
+      role = "server";
     #  extraFlags = toString [
     #    # "--debug" # Optionally add additional args to k3s
     #  ];
-    #};
+    };
 
     #unbound = {
     #  enable = true;
@@ -361,10 +371,10 @@
     #   configFile = ../modules/common/files/promtail.yaml;
     # };
 
-    ollama = {
-      enable = true;
-      acceleration = "cuda";
-    };
+    # ollama = {
+      # enable = true;
+      # acceleration = "cuda";
+    # };
 
     # tabby = {
     # # Another AI Interface
@@ -399,24 +409,24 @@
   #   [registries.search]
   #   registries = ['docker.io']
   # '';
-  virtualisation.oci-containers = {
-    backend = lib.mkForce "podman";
-    containers = {
-      portainer = {
-        image = "portainer/portainer-ce:lts";
-        autoStart = true;
-        privileged = true;
-        ports = [ 
-          "8000:8000"
-          "8443:9443"
-        ];
-        volumes = [
-          "portainer_data:/data"
-          "/var/run/docker.sock:/var/run/docker.sock"
-        ];
-      };
-    };
-  };
+  # virtualisation.oci-containers = {
+  #   backend = lib.mkForce "podman";
+  #   containers = {
+  #     portainer = {
+  #       image = "portainer/portainer-ce:lts";
+  #       autoStart = true;
+  #       privileged = true;
+  #       ports = [ 
+  #         "8000:8000"
+  #         "8443:9443"
+  #       ];
+  #       volumes = [
+  #         "portainer_data:/data"
+  #         "/var/run/docker.sock:/var/run/docker.sock"
+  #       ];
+  #     };
+  #   };
+  # };
 
   #######################################################################
   # OS Program Configuration

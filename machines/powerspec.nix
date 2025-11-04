@@ -22,8 +22,12 @@
   networking = {
     hostName = currentSystemName;
     domain = "technobable.com";
+    hosts = {
+      "127.0.0.1" = [ "localhost" currentSystemName "awx.local" ];
+    };
     # dhcpcd.enable = false;
     networkmanager.enable = true;
+    firewall.allowedTCPPorts = [ 6443 ]; # for k3s api-server
   };
 
   time.timeZone = "America/New_York";
@@ -58,12 +62,21 @@
       cachix
       clinfo
       dbeaver-bin
+      discord
+      docker
+      docker-compose
       element-desktop
       gimp3-with-plugins
+      adwaita-icon-theme
       gnuradio
+      gnome-tweaks
+      gnome-shell-extensions
+      gdm-settings
       google-chrome
       gqrx
       hackrf
+      hplipWithPlugin
+      iat
       kdePackages.alpaka
       kdePackages.dragon
       kdePackages.filelight
@@ -71,24 +84,33 @@
       kdePackages.kdenlive
       kdePackages.krdc
       kdePackages.partitionmanager
+      kdePackages.isoimagewriter 
       keymapp
       ktailctl
       lens
       libreoffice
       lmstudio
+      nvidia-container-toolkit
       obs-studio
       obsidian
       ollama
       orca-slicer
       penpot-desktop
-      rtl-sdr
+      rclone
       redisinsight
       redis
+      refine
+      rtl-sdr
       signal-desktop
+      slack
       synology-drive-client
+      telegram-desktop
+      texlive.combined.scheme-full
       unstable.devenv
       unstable.direnv
+      urh
       vscode
+      zoom-us
     ];
 
     sessionVariables = {
@@ -110,6 +132,9 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
+
+    nvidia-container-toolkit.enable = true;
+    nvidia-container-toolkit.mount-nvidia-executables = true;
 
     graphics = {
       enable = true;
@@ -139,13 +164,36 @@
         variant = "";
         options = "ctrl:nocaps"; # Disable Caps Lock
       };
+      # displayManager.gdm.enable = true;
+      # desktopManager.gnome.enable = true;
+
+      # displayManager.lightdm.enable = true;
+      # desktopManager.budgie.enable = true;
+      # desktopManager.cinnamon.enable = true;
+      # desktopManager.mate.enable = true;
     };
 
-    displayManager.sddm.enable = true;
-    desktopManager.plasma6.enable = true;
+    # displayManager.sddm.enable = true;
+    # desktopManager.plasma6.enable = true;
+
+    displayManager.cosmic-greeter.enable = true;
+    desktopManager.cosmic.enable = true;
 
     # Enable CUPS to print documents.
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = with pkgs; [
+        cups-filters
+        cups-browsed
+        hplipWithPlugin
+      ];
+    };
+    
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+    };
 
     # Enable sound with pipewire.
     pulseaudio.enable = false;
@@ -184,9 +232,14 @@
     };
 
     ollama = {
-	    enable = true;
-	    acceleration = "cuda";
-	    host = "0.0.0.0";
+      enable = true;
+      acceleration = "cuda";
+      host = "0.0.0.0";
+    };
+
+    k3s = {
+      enable = true;
+      role = "server";
     };
 
     # postgresql = {
@@ -262,11 +315,25 @@
     };
   };
 
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = "adwaita-dark";
+  };
+
 
   #######################################################################
   # Security Configuration
   # security.apparmor.enable = true;
   security.rtkit.enable = true;
+
+  virtualisation.vmVariant = {
+    hardware.nvidia.datacenter.enable = lib.mkForce false;
+    hardware.nvidia-container-toolkit.enable = lib.mkForce false;
+    hardware.nvidia-container-toolkit.mount-nvidia-executables = lib.mkForce false;
+    services.xserver.videoDrivers = lib.mkForce [ ];
+    virtualisation.diskSize = lib.mkForce 65536;
+  };
 
   #######################################################################
   # System Configuration

@@ -29,6 +29,7 @@
       "wheel"
       "kvm"
       "podman"
+      "plugdev"
     ];
     shell = pkgs.zsh;
     hashedPassword = "$y$j9T$b5Q1pCL/pua.UUsOV3TKi/$8nkwFkKrHjUu5cr8b4TQnFgSpcYbVuFW63w88UppUF1";
@@ -36,6 +37,18 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIRWDuga9nU4wD0HFVQ1Xe66qSGZExVqWfhXWD7fk9E2"
     ];
   };
+
+  qt = {
+    enable = true;
+    # platformTheme = "qtct";
+    platformTheme = "gnome";
+    style = "adwaita-dark";
+  };
+
+  # xdg.configFile = {
+    # "Kvantum/ArcDark".source = "${pkgs.arc-kde-theme}/share/Kvantum/ArcDark";
+    # "Kvantum/kvantum.kvconfig".text = "[General]\ntheme=ArcDark";
+  # };
 
   # nixpkgs.overlays = import ../../lib/overlays.nix ++ [
   #   (import ./vim.nix { inherit inputs; })

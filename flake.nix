@@ -21,8 +21,7 @@
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
@@ -92,8 +91,14 @@
       overlays = import ./overlays { inherit inputs; };
 
       mkSystem = import ./lib/mksystem.nix {
-        inherit overlays nixpkgs inputs;
+        inherit overlays inputs;
       };
+
+      nixpkgsFor =
+        system:
+        if builtins.elem system [ "x86_64-darwin" "aarch64-darwin" ]
+        then inputs.nixpkgs-darwin
+        else inputs.nixpkgs-stable;
 
       supportedSystems = [
         "x86_64-linux"
@@ -106,7 +111,7 @@
         nixpkgs.lib.genAttrs supportedSystems (
           system:
           f {
-            pkgs = import nixpkgs { inherit system; };
+            pkgs = import (nixpkgsFor system) { inherit system; };
           }
         );
       forAllSystems =
