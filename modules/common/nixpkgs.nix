@@ -30,6 +30,7 @@
           "cuda_profiler_api"
           "cuda_sanitizer_api"
           "cuda-merged"
+          "drawio"
           "discord"
           "gitkraken"
           "libcublas"

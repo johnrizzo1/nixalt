@@ -66,6 +66,7 @@
       # texlivePackages.chktex
       texliveFull
       # unstable.claude-code
+      transmission_4-qt6
     ];
   };
 
@@ -112,7 +113,7 @@
       "cleanshot"
       "dbeaver-community"
       "discord"
-      # "docker"
+      "drawio"
       "element"
       "figma"
       "freecad"
@@ -133,6 +134,7 @@
       "mactex"
       "microsoft-office"
       "monodraw"
+      "monokle"
       "nvidia-geforce-now"
       "obs"
       "obsidian"
@@ -143,6 +145,7 @@
       "podman-desktop"
       "postman"
       "pycharm-ce"
+      "rancher"
       "raspberry-pi-imager"
       "raycast"
       "rectangle"
@@ -155,7 +158,6 @@
       "sourcetree"
       "spotify"
       "synology-drive"
-      # "tailscale"
       "transmission"
       "vagrant"
       "visual-studio-code"

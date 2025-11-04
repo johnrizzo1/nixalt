@@ -29,8 +29,12 @@ in
       bottom
       comma
       devbox
+      docker
+      docker-compose
+      docker-credential-helpers
       dotnet-aspnetcore
       dotnet-sdk
+      drawio
       (if pkgs.stdenv.isLinux then dmidecode else {})
       emacs
       eslint
@@ -49,6 +53,8 @@ in
       hugo
       jq
       killall
+      kubectl
+      kubernetes-helm
       lsof
       nil
       niv
