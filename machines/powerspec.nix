@@ -156,7 +156,7 @@
     hardware.bolt.enable = true;
     # services.secureboot.enable = true;
     xserver = {
-      enable = true;
+      enable = false;
       videoDrivers = [ "nvidia" ];
       # Configure keymap in X11
       xkb = {
@@ -164,8 +164,8 @@
         variant = "";
         options = "ctrl:nocaps"; # Disable Caps Lock
       };
-      # displayManager.gdm.enable = true;
-      # desktopManager.gnome.enable = true;
+      displayManager.gdm.enable = true;
+      desktopManager.gnome.enable = true;
 
       # displayManager.lightdm.enable = true;
       # desktopManager.budgie.enable = true;
@@ -176,8 +176,8 @@
     # displayManager.sddm.enable = true;
     # desktopManager.plasma6.enable = true;
 
-    displayManager.cosmic-greeter.enable = true;
-    desktopManager.cosmic.enable = true;
+    # displayManager.cosmic-greeter.enable = true;
+    # desktopManager.cosmic.enable = true;
 
     # Enable CUPS to print documents.
     printing = {
