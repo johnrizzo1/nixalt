@@ -61,6 +61,7 @@
     #
     # Packages
     systemPackages = with pkgs; [
+      gitea
       unstable.direnv
       unstable.devenv
       # texlivePackages.chktex
@@ -98,7 +99,7 @@
       # OmniGraffle = 1142578753;
       # TestFlight = 899247664;
       # Xcode = 497799835;
-      Tailscale = 1475387142;
+      # Tailscale = 1475387142;
     };
 
     casks = [
@@ -117,6 +118,7 @@
       "element"
       "figma"
       "freecad"
+      "freelens"
       "freetube"
       "gimp"
       "gns3"
@@ -161,7 +163,6 @@
       "transmission"
       "vagrant"
       "visual-studio-code"
-      "yubico-yubikey-manager"
       "zoom"
     ];
     onActivation.cleanup = "zap";

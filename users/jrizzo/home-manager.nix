@@ -35,7 +35,6 @@ in
       dotnet-aspnetcore
       dotnet-sdk
       drawio
-      (if pkgs.stdenv.isLinux then dmidecode else {})
       emacs
       eslint
       eza
@@ -63,7 +62,6 @@ in
       nmap
       nodejs # Node is required for Copilot.vim
       packer
-      (if pkgs.stdenv.isLinux then pciutils else {})
       poetry
       poetryPlugins.poetry-plugin-shell
       postgresql
@@ -72,24 +70,27 @@ in
       temurin-bin
       unstable.node2nix
       xorg.libXext
-      (python3.withPackages (ps: with ps; [
-        black
-        flake8
-        huggingface-hub
-        isort
-        mypy
-        pip
-        pip-tools
-        pipx
-        pylint
-        pytest
-        pytest-cov
-        pytest-xdist
-        ruff
-      ] ++ lib.optionals (isLinux && !isWSL) [
-          tensorflow
-          torch
-      ]))
+    #   (python3.withPackages (ps: with ps; [
+    #     black
+    #     flake8
+    #     huggingface-hub
+    #     isort
+    #     mypy
+    #     pip
+    #     pip-tools
+    #     pipx
+    #     pylint
+    #     pytest
+    #     pytest-cov
+    #     pytest-xdist
+    #     ruff
+    #   ] ++ lib.optionals (isLinux && !isWSL) [
+    #       keras
+    #       tensorflow
+    #       torch
+    #       torchvision
+    #       torchaudio
+    #   ]))
       ripgrep
       (ruby.withPackages (ps: with ps; [
         rubocop
@@ -110,10 +111,9 @@ in
       xclip
       xsel
       zenith
-      # (if pkgs.stdenv.isLinux then puppeteer-cli else null)
-      # (if pkgs.stdenv.isLinux then unetbootin else null)
-      # (if pkgs.stdenv.isLinux then vagrant else null)
     ] ++ (lib.optionals isLinux [
+      dmidecode
+      pciutils
       puppeteer-cli
       unetbootin
       vagrant
@@ -130,14 +130,15 @@ in
     ];
 
     sessionVariables = {
+      # CACHIX_AUTH_TOKEN = "";
       AWS_CONFIG_FILE = "${configHome}/aws/config";
       AWS_SHARED_CREDENTIALS_FILE = "${configHome}/aws/credentials";
-      # CACHIX_AUTH_TOKEN = "";
       DIRENV_LOG_FORMAT = ""; # Disable direnv logging
       DOCKER_CONFIG = "${configHome}/docker"; # $HOME/.docker
       EDITOR = "nvim";
       GHCUP_USE_XDG_DIRS = 1; # $HOME/.ghcup
       GNUPGHOME = "${dataHome}/gnupg"; # $HOME/.gnupg
+      GOPATH = "${dataHome}/go"; # $HOME/go
       INPUTRC = "${configHome}/readline/inputrc"; # $HOME/.inputrc
       KDEHOME = "${configHome}/kde"; # $HOME/.kde4
       LANG = "en_US.UTF-8";
