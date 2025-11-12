@@ -36,6 +36,7 @@ in
       dotnet-sdk
       drawio
       emacs
+      erdtree
       eslint
       eza
       fd
@@ -67,6 +68,7 @@ in
       postgresql
       postman
       procs
+      pwgen
       temurin-bin
       unstable.node2nix
       xorg.libXext

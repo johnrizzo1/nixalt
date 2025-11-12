@@ -144,6 +144,7 @@
       "orcaslicer"
       "parallels-virtualization-sdk"
       "parallels"
+      "plex"
       "podman-desktop"
       "postman"
       "pycharm-ce"
