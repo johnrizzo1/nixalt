@@ -166,6 +166,8 @@
 
     vscode-server.enable = true;
 
+    alloy.enable = true;
+
     # portainer = {
     #   enable = true; # Default false
     #   version = "latest";
