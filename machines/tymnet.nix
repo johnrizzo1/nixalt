@@ -161,6 +161,7 @@
       "sourcetree"
       "spotify"
       "synology-drive"
+      "tor-browser"
       "transmission"
       "vagrant"
       "visual-studio-code"
